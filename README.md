@@ -1,1 +1,1 @@
-# IR_Analysis_Synthesis# This repository is under construction - check back soon if code is missing or broken or contact James Traer (jtraer@mit.edu) if you have anu urgent requests or issues - 2016/Nov/08
+# IR_Analysis_Synthesis# This repository is under construction - check back soon if code is missing or broken or contact James Traer (jtraer@mit.edu) if you have any urgent requests or issues - 2016/Nov/08

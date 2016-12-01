@@ -34,6 +34,14 @@ end
 
 %* == Write file (Scaling by 0.9999 suppresses a warning message about clipping) ==
 %** Specify Filename
-fnm=sprintf('golay_%dkHz_N%d_%dmin_%dbits.wav',round(fs/1e3),round(log2(length(a))),round(length(ab)/fs/60),Bts);
+fnm=sprintf('golay_%dkHz_N%d_%dmin_%dbits',round(fs/1e3),round(log2(length(a))),round(length(ab)/fs/60),Bts);
 %** Write Audio
-audiowrite(fnm,ab*0.9999,fs,'BitsPerSample',Bts);
+audiowrite([fnm '.wav'],ab*0.9999,fs,'BitsPerSample',Bts);
+%** Save metadata in a structure
+G.fs=fs;
+G.Ng=length(a); % Number of data points in a single sequence
+G.Nrp=Nrp;
+G.Bts=Bts;
+G.Name=fnm;
+G.DateCreated=date;
+save([fnm '.mat'],'G');

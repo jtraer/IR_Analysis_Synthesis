@@ -1,0 +1,36 @@
+Plan:
+- try writing to org mode to see that it works before we invest too much in it.
+- a set of wrappers "IR_do_something" which are plug and play.  They scroll through folders and operate on all contents to create structures.
+- a set of modular functions "hDoSmthng" which do most of the heavy work but can be rearranged easily. They can be used individually on structures.
+- Structires should be heirarchical:
+>> audio: ts,fs
+>> Broadband_prps: 
+>> Subband_prps: Cgram stuff
+>> apparatus: Mic, Volume
+>> emvironment: 
+- print useful data to the command prompt
+- move stretches in wrappers we use over and over again into little subroutines in tools
+- finish the code before writing the README
+- add some examples (use our new AC measurementsand add some photos) 
+- use this to add otehr data sets to webpage
+- ask for feedback
+
+Some specific tools:
+- CatenateMeasurements.m
+==> take two back to back recordings and catenate them into a single recording
+
+Sketch out outlines of modular codes
+- IR_Extract.m (hExtrct.m)
+==> return individual audio folders
+==> return folder full of audio
+- IR_Analysis.m (hPrp.m,hExtrct)
+==> populate individual folders with new data
+==> if an audio file exists that hasn't  been extracted run hExtrct.m
+==> write a folder full of filtered audio
+- IR_Statistics.m (hPltStts,hPrp,hExtrct)
+==> plot statistics of all IRs
+==> write an HTML file (that can have photos; also should include a header and a logical ordering scheme)
+==> can be run on calibration IRs as well as on data
+==> saves a single .mat file that can be opened for later plotting
+- IR_Plot.m 
+==> loads the big .mat file from IR_Statistics.mand runs hPltStts.m

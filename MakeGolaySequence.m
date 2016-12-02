@@ -1,5 +1,6 @@
 %* == MakeGolaySequence.m == 
 %Generates a time series of interleaved Golay-complementary sequences (i.i. ABABABAB.... etc.) and saves it to a .wav file
+%** Written by James Traer (jtraer@mit.edu) - March 2013
 
 %* == Specify Inputs ==
 %** Sampling frequency in Hz 
@@ -38,6 +39,8 @@ fnm=sprintf('golay_%dkHz_N%d_%dmin_%dbits',round(fs/1e3),round(log2(length(a))),
 %** Write Audio
 audiowrite([fnm '.wav'],ab*0.9999,fs,'BitsPerSample',Bts);
 %** Save metadata in a structure
+G.a=a;
+G.b=b;
 G.fs=fs;
 G.Ng=length(a); % Number of data points in a single sequence
 G.Nrp=Nrp;

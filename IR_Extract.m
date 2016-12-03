@@ -80,4 +80,6 @@ for jh=1:length(Dh);
 	end
 end % jh=1:length(Dh);
 
-%* == Save details about CPU run time
+%* == Save details about code and CPU run time ==
+
+SummarizeCode(mfilename('fullpath'))

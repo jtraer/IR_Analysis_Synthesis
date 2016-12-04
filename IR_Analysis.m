@@ -1,9 +1,9 @@
 %* == IR_Analysis.m == 
-% Analyzes the IRs extracted by IR_Extract.m
-% This makes use of the following functions:
-% - hExtrct.m	: extracts the IR time series
-% - hPrp.m 	: measures the properties of the IR time series
-% - GtMtDt.m	: Reads metadata about recording from a textfile
+%** Analyzes the IRs extracted by IR_Extract.m
+%** This makes use of the following functions:
+%*** - hExtrct.m	: extracts the IR time series
+%*** - hPrp.m 	: measures the properties of the IR time series
+%*** - GtMtDt.m	: Reads metadata about recording from a textfile
 
 %* == Preamble ==
 clear all; close all; clc
@@ -11,12 +11,11 @@ path(path,'Tools')
 
 %* == Specify Inputs == 
 
-%** = Path to recording of recorded broadcast =
-% (wildcards accepted to process multiple files in a single run)
-Rpth='RecordedAudio/*Hallway*.wav'
-%** = Path to equipment calibration files (Optional, but recommended) =
+%** = File with IRs extracted by IR_Extract.m =
+Rpth='H_raw_FirstTest_Box_2IRs_04-Dec-2016'
+%** = File with Calibration IRs (Optional, but recommended) =
 % These are re-recorded broadcasts (as in the measurements) but in as close to anechoic conditions as possible. These are required to ensure we are recording the properties of the space, not of the speaker/microphone/soundcard.
-Cpth='CalibrationRecordings'
+Cpth='';
 %** = Number of cochlear subbands for analysis =
 Nbnds=[14];
 %** = Time to be considered for analysis in s =
@@ -36,52 +35,52 @@ mcnt=mcnt+1;Mt{mcnt}='Env.Material';
 
 %* == Calibrate Apparatus ==
 %** search for calibration files 
-Dc=dir(sprintf('%s/*.wav',Cpth));
-%** scroll through the available files
-if ~isempty(Dc)
-	ccnt=0;
-	for jc=1:length(Dc);
-		%*** => extract a filename for this measurement
-		cnm=Dc(jc).name(1:end-4);
-		%*** => if an IR already exists then open it
-		if exist(sprintf('%s/%s/H.mat'),Cpth,cnm)==2;
-			load(sprintf('%s/%s/H.mat')); %H
-		%*** => otherwise we extract it
-		else
-			% load the recording
-			[rc,fr]=audioread([Dc(jc).name '.wav']);
-			% check that the original sequence and re-recorded broadcast have teh same sampling frequency
-			ChckSm(fr,G.fs,'Sampling frequencies of raw golay and recorded audio');
-			% extract the IR time series 
-			H=hExtrct(rc,G,Tlim);
-			% Process the IR to measure it's properties
-			H=hPrp(H,Nbnds);
-		end % if processed IR already exists
-		%*** => if metadata exists open it, otherwise query user
-		H=GtMtDt(H,sprintf('%s/%s/Meta.txt',Cpth,cnm),'Mic','Gain','Speaker','Vol','Recorder','PolarAngle','Azimuth','Distance');
-		%*** => add to a structure of all calibration measurements
-		C(ccnt)=H;
-	end % for jc=1:length(Dc)
-	%** interpolate spatial power spectrum
-	th=[C.PolarAngle];
-	ph=[C.Azimuth];
-	%*** scroll through all calibration measurements
-	for jc=1:length(C)
-		%*** => record subband power for each measurement
-		Pwr(jc,:)=C(jc).P_k.';	
-	end
-	%*** scroll through subbands
-	nth=linspace(0,180,100);
-	nph=linspace(-180,180,200);
-	for jbnd=1:(Nbds+2);
-		%*** => interpolate a map of directional power
-		SpkrPwr(:,:,jbnd)=interp2(th,ph,Pwr(:,jbnd),nth,nph);
-	end
-	%** save plots of calibration information
-	%*** Scroll through calibration measurements
-	%*** plot Equipment IRs
-	%*** 
-end % if ~isempty(Dc)
+%Dc=dir(sprintf('%s/*.wav',Cpth));
+%%** scroll through the available files
+%if ~isempty(Dc)
+%	ccnt=0;
+%	for jc=1:length(Dc);
+%		%*** => extract a filename for this measurement
+%		cnm=Dc(jc).name(1:end-4);
+%		%*** => if an IR already exists then open it
+%		if exist(sprintf('%s/%s/H.mat'),Cpth,cnm)==2;
+%			load(sprintf('%s/%s/H.mat')); %H
+%		%*** => otherwise we extract it
+%		else
+%			% load the recording
+%			[rc,fr]=audioread([Dc(jc).name '.wav']);
+%			% check that the original sequence and re-recorded broadcast have teh same sampling frequency
+%			ChckSm(fr,G.fs,'Sampling frequencies of raw golay and recorded audio');
+%			% extract the IR time series 
+%			H=hExtrct(rc,G,Tlim);
+%			% Process the IR to measure it's properties
+%			H=hPrp(H,Nbnds);
+%		end % if processed IR already exists
+%		%*** => if metadata exists open it, otherwise query user
+%		H=GtMtDt(H,sprintf('%s/%s/Meta.txt',Cpth,cnm),'Mic','Gain','Speaker','Vol','Recorder','PolarAngle','Azimuth','Distance');
+%		%*** => add to a structure of all calibration measurements
+%		C(ccnt)=H;
+%	end % for jc=1:length(Dc)
+%	%** interpolate spatial power spectrum
+%	th=[C.PolarAngle];
+%	ph=[C.Azimuth];
+%	%*** scroll through all calibration measurements
+%	for jc=1:length(C)
+%		%*** => record subband power for each measurement
+%		Pwr(jc,:)=C(jc).P_k.';	
+%	end
+%	%*** scroll through subbands
+%	nth=linspace(0,180,100);
+%	nph=linspace(-180,180,200);
+%	for jbnd=1:(Nbds+2);
+%		%*** => interpolate a map of directional power
+%		SpkrPwr(:,:,jbnd)=interp2(th,ph,Pwr(:,jbnd),nth,nph);
+%	end
+%	%** save plots of calibration information
+%	%*** Scroll through calibration measurements
+%	%*** plot Equipment IRs
+%	%*** 
+%end % if ~isempty(Dc)
 
 %* == Extract IRs == 
 %** Find all audio files

@@ -10,14 +10,16 @@ path(path,'Tools')
 
 %* == Specify Inputs == 
 
+%** = Name =
+Nm='FirstTest_Box';
 %** = Path to recording of recorded broadcast =
 % (wildcards accepted to process multiple files in a single run)
-Rpth='RecordedAudio/*Hallway*.wav'
-%Rpth='CalibrationRecordings'
+Rpth='RecordedAudio/*Box*.wav';
+%Rpth='CalibrationRecordings/*.wav'
 %** = Path to Golay Code used in the broadcast =
 Gpth='RawGolay';
 %** = Name of golay code =
-Gnm='golay_N19_44kHz_24bits';
+Gnm='golay_44kHz_N19_3min_24bits';
 %** = Specify MetaData we want to record (these can be added or removed arbitrarily) =
 mcnt=0;
 mcnt=mcnt+1;Mt{mcnt}='App.Mic';
@@ -38,46 +40,68 @@ Dh=dir(Rpth);
 %** Save stem of path 
 PthStm=GtPthStm(Rpth);
 %** Scroll through them
+hcnt=0;
 for jh=1:length(Dh);
 	%*** => get filename 
 	fnm=Dh(jh).name(1:end-4);
-	eval(spriintf('!mkdir -p %s/%s',PthStm,fnm))
+    Fllnm=sprintf('%s/%s',PthStm,fnm);
+	eval(sprintf('!mkdir -p %s',Fllnm));
+    fprintf('Extracting %s\n',Fllnm);
 	%*** => read the audio file
 	[rc,fr]=audioread(sprintf('%s/%s.wav',PthStm,fnm));
 	%*** => Check golay and recorded audio have the same sampling frequency
 	ChckSm(fr,G.fs,'fs of Golay and recording');
 	%*** => Extract
-	for jch=1:2;
-		tH(jch)=hExtrct(rc(:,jch),G);
+	for jch=1:size(rc,2); hcnt=hcnt+1;
+        Fllnm_ch=sprintf('%s/ch%d',Fllnm,jch);
+        eval(sprintf('!mkdir -p %s',Fllnm_ch));
+		tH=hExtrct(rc(:,jch),G,Fllnm_ch);
 		tH.Name=fnm;
+		tH.Path=Fllnm;
 		tH.Channel=jch;
 		%*** => Load (or query) MetaData
-		tH=GtMtDt(tH,sprintf('%s/%s/Meta.txt',Cpth,cnm),Mt);
-		%*** => save audio
-		tpth=sprintf('%s/%s/ch%d',jch);
-		eval(sprintf('!mkdir -p %s',tpth))
-		audiowrite(sprintf('%s/h.wav',tpth),tH.h,tH.fs,'BitsPerSample',24));
+		M=GtMtDt([Fllnm '/Meta.txt'],Mt);
+        %*** => re-order fields for consistency
+        M=orderfields(M);
+        tH.Meta=M;
+		%*** => normalize and save audio
+        h=tH.h;
+        tH.MaxAmp=max(abs(h));
+        h=h/tH.MaxAmp*(1-1e-6);
+		audiowrite(sprintf('%s/h.wav',Fllnm_ch),h,tH.fs,'BitsPerSample',24);
+		%*** => save structure
+        save(sprintf('%s/H.mat',Fllnm_ch),'tH');
 		%*** => save plot of time series
-		figure(1);
-		h=tH.h;
-		plot([1:length(h)]/tH.fs,sign(h).*abs(sign).^0.3);
-		xlabel('Time (s)');
-		ylabel('Compressed amplitude');
-		title(fnm)
-		set(gca,'xscale','log');
-		saveas(gcf,sprintf('%s/ts.epsc',tpth,fnm));
-		set(gca,'xscale','lin');
-		saveas(gcf,sprintf('%s/ts_LinTime.epsc',tpth));
-		figure(2);
-		plot([1:length(h)]/tH.fs,20*log10(abs(h)));
-		xlabel('Time (s)');
-		ylabel('Amplitude (dB)');
-		title(fnm)
-		set(gca,'xscale','log');
-		saveas(gcf,sprintf('%s/ts_dB.epsc',tpth));
-		set(gca,'xscale','lin');
-		saveas(gcf,sprintf('%s/ts_dB_LinTime.epsc',tpth));
-	end
+		%figure(1);
+		%h=tH.h;
+		%plot([1:length(h)]/tH.fs,sign(h).*abs(h).^0.3);
+		%xlabel('Time (s)');
+		%ylabel('Compressed amplitude');
+		%title(Fllnm)
+		%set(gca,'xscale','log');
+		%saveas(gcf,sprintf('%s/ts.jpg',Fllnm_ch));
+		%set(gca,'xscale','lin');
+		%saveas(gcf,sprintf('%s/ts_LinTime.epsc',tpth));
+		%figure(2);
+		%plot([1:length(h)]/tH.fs,20*log10(abs(h)));
+		%xlabel('Time (s)');
+		%ylabel('Amplitude (dB)');
+		%title(fnm)
+		%set(gca,'xscale','log');
+		%saveas(gcf,sprintf('%s/ts_dB.epsc',tpth));
+		%set(gca,'xscale','lin');
+		%saveas(gcf,sprintf('%s/ts_dB_LinTime.epsc',tpth));
+        
+        %** => add to big structure
+        H(hcnt)=tH;
+        clear tH
+	end % jch
 end % jh=1:length(Dh);
 
-%* == Save details about CPU run time
+%* == Save all data ==
+save(sprintf('H_raw_%s_%dIRs_%s',Nm,length(H),date),'H')
+fprintf('Data saved to H_raw_%s_%dIRs_%s',Nm,length(H),date);
+
+%* == Save details about code and CPU run time ==
+
+SummarizeCode(mfilename('fullpath'))

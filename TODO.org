@@ -1,5 +1,10 @@
+Now:
+- get one decent working code tested and up.
+=> IR_Analysis.m
+==> get it to work in any way
+==> add the calibration information
+
 Plan:
-- try writing to org mode to see that it works before we invest too much in it.
 - a set of wrappers "IR_do_something" which are plug and play.  They scroll through folders and operate on all contents to create structures.
 - a set of modular functions "hDoSmthng" which do most of the heavy work but can be rearranged easily. They can be used individually on structures.
 - Structires should be heirarchical:

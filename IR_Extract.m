@@ -11,15 +11,15 @@ path(path,'Tools')
 %* == Specify Inputs == 
 
 %** = Name =
-Nm='FirstTest_Box';
+Nm='FirstTest_Marble';
 %** = Path to recording of recorded broadcast =
 % (wildcards accepted to process multiple files in a single run)
-Rpth='RecordedAudio/*Box*.wav';
-%Rpth='CalibrationRecordings/*.wav'
+Rpth='RecordedAudio/*FR6*.wav';
+%Rpth='CalibrationRecordings/*Woofit*Rode*.wav'
 %** = Path to Golay Code used in the broadcast =
 Gpth='RawGolay';
 %** = Name of golay code =
-Gnm='golay_44kHz_N19_3min_24bits';
+Gnm='golay_44kHz_N16_2min_24bits';
 %** = Specify MetaData we want to record (these can be added or removed arbitrarily) =
 mcnt=0;
 mcnt=mcnt+1;Mt{mcnt}='App.Mic';
@@ -57,7 +57,7 @@ for jh=1:length(Dh);
         eval(sprintf('!mkdir -p %s',Fllnm_ch));
 		tH=hExtrct(rc(:,jch),G,Fllnm_ch);
 		tH.Name=fnm;
-		tH.Path=Fllnm;
+		tH.Path=sprintf('%s/ch%d',Fllnm,jch);
 		tH.Channel=jch;
 		%*** => Load (or query) MetaData
 		M=GtMtDt([Fllnm '/Meta.txt'],Mt);
@@ -100,7 +100,7 @@ end % jh=1:length(Dh);
 
 %* == Save all data ==
 save(sprintf('H_raw_%s_%dIRs_%s',Nm,length(H),date),'H')
-fprintf('Data saved to H_raw_%s_%dIRs_%s',Nm,length(H),date);
+fprintf('Data saved to H_raw_%s_%dIRs_%s\n',Nm,length(H),date);
 
 %* == Save details about code and CPU run time ==
 

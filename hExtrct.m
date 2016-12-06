@@ -54,6 +54,7 @@ H.h_var=std(h_snp,[],2);
 H.h_snps=h_snp;
 H.fs=G.fs;
 
+
 %* Estimate the region that likely contains signal (beginning and end are usually noise)
 %** Plot and query user for the start and end times of the IR
 figure; 
@@ -70,6 +71,12 @@ eval(sprintf('xlm(2)=%s;',M.End_index))
 H.h=H.h([xlm(1):xlm(2)]);
 H.h_var=H.h_var([xlm(1):xlm(2)]);
 H.h_snps=H.h_snps([xlm(1):xlm(2)],:);
+
+%* Measure spectra
+nft=2^ceil(log2(length(H.h)));
+spc=fft(H.h,nft);
+H.spc=spc(1:end/2);
+H.ff=[1:nft/2]*H.fs/nft;
 
 %* Save metadata
 H.DateCreated=date;
@@ -129,5 +136,16 @@ if length(Pth)>0;
     title([Pth ': Raw IR snapshots'])
     %saveas(gcf,sprintf('%s/Raw_IR_Snapshots',Pth),'fig');
     saveas(gcf,sprintf('%s/Raw_IR_Snapshots',Pth),'jpg');
+    
+    %** => plot spectrum
+    figure(4)
+    %*** => scroll through snaphsots
+    plot(20*log10(abs(H.spc)),H.ff/1e3);
+    xlabel('Power (db)');
+    ylabel('Frequency (kHz)')
+    set(gca,'yscale','log')
+    title([Pth ': Raw IR spectra'])
+    %saveas(gcf,sprintf('%s/Raw_IR_Snapshots',Pth),'fig');
+    saveas(gcf,sprintf('%s/Raw_IR_Spc',Pth),'jpg');
 end
 

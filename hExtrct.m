@@ -76,7 +76,7 @@ H.h_snps=H.h_snps([xlm(1):xlm(2)],:);
 nft=2^ceil(log2(length(H.h)));
 spc=fft(H.h,nft);
 H.spc=spc(1:end/2);
-H.ff=[1:nft/2]*H.fs/nft;
+H.Spcff=[1:nft/2]*H.fs/nft;
 
 %* Save metadata
 H.DateCreated=date;
@@ -140,7 +140,7 @@ if length(Pth)>0;
     %** => plot spectrum
     figure(4)
     %*** => scroll through snaphsots
-    plot(20*log10(abs(H.spc)),H.ff/1e3);
+    plot(20*log10(abs(H.spc)),H.Spcff/1e3);
     xlabel('Power (db)');
     ylabel('Frequency (kHz)')
     set(gca,'yscale','log')

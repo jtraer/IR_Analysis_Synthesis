@@ -1,14 +1,25 @@
 Now:
-- get one decent working code tested and up.
 => IR_Analysis.m
-==> need hPrp.m
-===> get it to work in any way
-===> make sure we can calibrate
-===> fix FtPlyDcy.m
+==> make sure we can calibrate
+===> compile multiple angles of speaker microphone to estimate volume vs direct
+===> adjust volume using volume and gain
+===> if no calibration is specified use a delta function
+===> compute H.spc after removing the noise floor
+===> take into account amplitudes
+==> Naming convention with folders of Nbnds and flmz 
+==> Put good comments in hPrp.m
+==> fix FtPlyDcy.m
+==> bootstrap variability in subband properties
+==> check for pre-computed files to make sure we don't repeat the same computations over and over again
+
+- move plots from "h<blah>" to "IR_<blah>"
+- upload IR_Extract and hExtrct only
 
 Plan:
-- a set of wrappers "IR_do_something" which are plug and play.  They scroll through folders and operate on all contents to create structures.
-- a set of modular functions "hDoSmthng" which do most of the heavy work but can be rearranged easily. They can be used individually on structures.
+-- Code to compile IR statistics 
+-- Code to write all IRs to an HTML
+
+
 - Structires should be heirarchical:
 >> audio: ts,fs
 >> Broadband_prps: 

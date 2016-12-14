@@ -11,7 +11,8 @@ path(path,'Tools')
 %* == Specify Inputs == 
 
 %** = Name =
-Nm='FirstTest_Marble';
+Nm='TryBox';
+%Nm='Cal';
 %** = Path to recording of recorded broadcast =
 % (wildcards accepted to process multiple files in a single run)
 Rpth='RecordedAudio/*FR6*.wav';

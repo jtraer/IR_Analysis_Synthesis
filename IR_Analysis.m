@@ -12,57 +12,54 @@ path(path,'Tools')
 %* == Specify Inputs == 
 
 %** = File with IRs extracted by IR_Extract.m =
-Hpth='H_raw_FirstTest_Box_3IRs_05-Dec-2016'
-Hpth='H_raw_FirstTest_Marble_1IRs_06-Dec-2016'
+Hpth='H_raw_TryBox_1IRs_12-Dec-2016'
+%Hpth='H_raw_FirstTest_Marble_1IRs_06-Dec-2016'
 %** = File with Calibration IRs (Optional, but recommended) =
 % These are re-recorded broadcasts (as in the measurements) but in as close to anechoic conditions as possible. These are required to ensure we are recording the properties of the space, not of the speaker/microphone/soundcard.
-Cpth='';
+Cpth='H_raw_Cal_1IRs_12-Dec-2016';
 %** = Number of cochlear subbands for analysis =
-Nbnds=[14];
+Nbnds=[30];
 %** = Frequency limits in Hz =
-flm=[20 20e3];
+flm=[100 20e3];
 %** = Frequency of subband envelopes in Hz =
 Sb_fs=100;
 
 %** = Specify MetaData we want to record (these can be added or removed arbitrarily) =
-mcnt=0;
-mcnt=mcnt+1;Mt{mcnt}='App.Mic';
-mcnt=mcnt+1;Mt{mcnt}='App.Recorder';
-mcnt=mcnt+1;Mt{mcnt}='App.Gain';
-mcnt=mcnt+1;Mt{mcnt}='App.Speaker';
-mcnt=mcnt+1;Mt{mcnt}='App.Volume';
-mcnt=mcnt+1;Mt{mcnt}='Env.Class';
-mcnt=mcnt+1;Mt{mcnt}='Env.Size';
-mcnt=mcnt+1;Mt{mcnt}='Env.Material';
+%mcnt=0;
+%mcnt=mcnt+1;Mt{mcnt}='App.Mic';
+%mcnt=mcnt+1;Mt{mcnt}='App.Recorder';
+%mcnt=mcnt+1;Mt{mcnt}='App.Gain';
+%mcnt=mcnt+1;Mt{mcnt}='App.Speaker';
+%mcnt=mcnt+1;Mt{mcnt}='App.Volume';
+%mcnt=mcnt+1;Mt{mcnt}='Env.Class';
+%mcnt=mcnt+1;Mt{mcnt}='Env.Size';
+%mcnt=mcnt+1;Mt{mcnt}='Env.Material';
 
 %* == Calibrate Apparatus ==
 %** search for calibration files 
-%Dc=dir(sprintf('%s/*.wav',Cpth));
-%%** scroll through the available files
-%if ~isempty(Dc)
-%	ccnt=0;
-%	for jc=1:length(Dc);
-%		%*** => extract a filename for this measurement
-%		cnm=Dc(jc).name(1:end-4);
-%		%*** => if an IR already exists then open it
-%		if exist(sprintf('%s/%s/H.mat'),Cpth,cnm)==2;
-%			load(sprintf('%s/%s/H.mat')); %H
-%		%*** => otherwise we extract it
-%		else
-%			% load the recording
-%			[rc,fr]=audioread([Dc(jc).name '.wav']);
-%			% check that the original sequence and re-recorded broadcast have teh same sampling frequency
-%			ChckSm(fr,G.fs,'Sampling frequencies of raw golay and recorded audio');
-%			% extract the IR time series 
-%			H=hExtrct(rc,G,Tlim);
-%			% Process the IR to measure it's properties
-%			H=hPrp(H,Nbnds);
-%		end % if processed IR already exists
+Dc=dir(sprintf('%s*.mat',Cpth));
+%** scroll through the available files
+if ~isempty(Dc)
+	ccnt=0;
+	for jc=1:length(Dc);
+        load(Dc(jc).name);
+        tC=H;
+        %*** => Check to see if the IR is already analyzes...
+        %*** TODO add this so we don't repeat analyses unnecessarily
+        %*** => Analyze
+        tC=hPrp(tC,[],Nbnds,flm,Sb_fs);
+        
+        
+        if jc==1;
+            C=tC;
+        else
+            C=[C tC];
+        end
 %		%*** => if metadata exists open it, otherwise query user
 %		H=GtMtDt(H,sprintf('%s/%s/Meta.txt',Cpth,cnm),'Mic','Gain','Speaker','Vol','Recorder','PolarAngle','Azimuth','Distance');
 %		%*** => add to a structure of all calibration measurements
 %		C(ccnt)=H;
-%	end % for jc=1:length(Dc)
+	end % for jc=1:length(Dc)
 %	%** interpolate spatial power spectrum
 %	th=[C.PolarAngle];
 %	ph=[C.Azimuth];
@@ -82,7 +79,7 @@ mcnt=mcnt+1;Mt{mcnt}='Env.Material';
 %	%*** Scroll through calibration measurements
 %	%*** plot Equipment IRs
 %	%*** 
-%end % if ~isempty(Dc)
+end % if ~isempty(Dc)
 
 %* == Extract IRs == 
 %** load IRs
@@ -91,16 +88,21 @@ load(Hpth); %H
 for jh=1:length(H);
     tH=H(jh);
     %*** => Analyze
-    tH=hPrp(tH,[],Nbnds,flm,Sb_fs);
+    tH=hPrp(tH,C,Nbnds,flm,Sb_fs);
     %*** => save plots of IR information
     %*** => save audio
+    h=tH.nh;
+    MaxAmp=max(abs(h));
+    h=h/MaxAmp*(1-1e-6);
+    audiowrite(sprintf('%s/h_denoised_%03d.wav',tH.Path,Nbnds),h,tH.fs,'BitsPerSample',24);
+    save(sprintf('%s/H_%03d.mat',tH.Path,Nbnds),'tH');
+    if jh==1;
+        H=tH;
+    else
+        H=[H tH];
+    end
 end
 
-%* Compile IR statistics
-
-%* Save IRs into an HTML
-%** Data
-%** Calibration measurements
 
 %* == Save details about CPU run time
 

@@ -11,7 +11,7 @@ path(path,'Tools')
 %* == Specify Inputs == 
 
 %** = Name =
-Nm='TryBox';
+Nm='OldBoxRecordings';
 %Nm='Cal';
 %** = Path to recording of recorded broadcast =
 % (wildcards accepted to process multiple files in a single run)
@@ -25,9 +25,9 @@ Gnm='golay_44kHz_N16_2min_24bits';
 mcnt=0;
 mcnt=mcnt+1;Mt{mcnt}='App.Mic';
 mcnt=mcnt+1;Mt{mcnt}='App.Recorder';
-mcnt=mcnt+1;Mt{mcnt}='App.Gain';
+%mcnt=mcnt+1;Mt{mcnt}='App.Gain';
 mcnt=mcnt+1;Mt{mcnt}='App.Speaker';
-mcnt=mcnt+1;Mt{mcnt}='App.Volume';
+%mcnt=mcnt+1;Mt{mcnt}='App.Volume';
 mcnt=mcnt+1;Mt{mcnt}='Env.Class';
 mcnt=mcnt+1;Mt{mcnt}='Env.Size';
 mcnt=mcnt+1;Mt{mcnt}='Env.Material';

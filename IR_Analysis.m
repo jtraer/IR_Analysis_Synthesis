@@ -141,7 +141,7 @@ if ~isempty(Cpth)
         SldAngl=SldAngl(find(NaNcols==0));
         V.DRR=sum(vDRR.*(ones(Nf,1)*SldAngl(:).'),2)/sum(SldAngl(:));
         if length(C)==1;
-            V.DRR=zeros(size(V.DRR));
+            V.DRR=mean(V.DRR)*ones(size(V.DRR));
         end
     %	%** save plots of calibration information
         clear C

@@ -1,32 +1,44 @@
-Now:
+-- Immediately --
 => IR_Analysis.m
-==> make sure we can calibrate
-===> compile multiple angles of speaker microphone to estimate volume vs direct
-===> adjust volume using volume and gain
-===> if no calibration is specified use a delta function
-===> compute H.spc after removing the noise floor
-===> take into account amplitudes
-==> Naming convention with folders of Nbnds and flmz 
+=> fix that relabeling bug on line 163
+=> clean up and comment the section where we make direct and volume components
+==> when we adjust the DRR in hPrp we should really use the power, not the DRRs
+==> move analysis plots from hPrp in IR_Analysis and save them in the folder specified by OtPth 
+===> Naming convention with folders of Nbnds and flmz 
+==> if that folder already exists no need to calibrate again
+==> do something about right and left channel in calibration
+
+-- Next time --
+=> IR_Analysis.m
+==> we should use higher sampling frequencies to fit the polynomial decays
+==> adjust volume using volume and gain
+==> if no calibration is specified use a delta function
+==> compute H.spc after removing the noise floor
 ==> Put good comments in hPrp.m
 ==> fix FtPlyDcy.m
 ==> bootstrap variability in subband properties
-==> check for pre-computed files to make sure we don't repeat the same computations over and over again
+==> print useful data to the command prompt
 
 - move plots from "h<blah>" to "IR_<blah>"
 - upload IR_Extract and hExtrct only
 
-Plan:
--- Code to compile IR statistics 
--- Code to write all IRs to an HTML
+-- Eventually --
+=> Code to compile IR statistics 
+- IR_Statistics.m (hPltStts,hPrp,hExtrct)
+=> Code to write all IRs to an HTML
+==> plot statistics of all IRs
+==> write an HTML file (that can have photos; also should include a header and a logical ordering scheme)
+==> can be run on calibration IRs as well as on data
+==> saves a single .mat file that can be opened for later plotting
+- IR_Plot.m 
+==> loads the big .mat file from IR_Statistics.mand runs hPltStts.m
 
-
-- Structires should be heirarchical:
+=> Structires should be heirarchical:
 >> audio: ts,fs
 >> Broadband_prps: 
 >> Subband_prps: Cgram stuff
 >> apparatus: Mic, Volume
->> emvironment: 
-- print useful data to the command prompt
+>> environment: 
 - move stretches in wrappers we use over and over again into little subroutines in tools
 - finish the code before writing the README
 - add some examples (use our new AC measurementsand add some photos) 
@@ -37,18 +49,3 @@ Some specific tools:
 - CatenateMeasurements.m
 ==> take two back to back recordings and catenate them into a single recording
 
-Sketch out outlines of modular codes
-- IR_Extract.m (hExtrct.m)
-==> return individual audio folders
-==> return folder full of audio
-- IR_Analysis.m (hPrp.m,hExtrct)
-==> populate individual folders with new data
-==> if an audio file exists that hasn't  been extracted run hExtrct.m
-==> write a folder full of filtered audio
-- IR_Statistics.m (hPltStts,hPrp,hExtrct)
-==> plot statistics of all IRs
-==> write an HTML file (that can have photos; also should include a header and a logical ordering scheme)
-==> can be run on calibration IRs as well as on data
-==> saves a single .mat file that can be opened for later plotting
-- IR_Plot.m 
-==> loads the big .mat file from IR_Statistics.mand runs hPltStts.m

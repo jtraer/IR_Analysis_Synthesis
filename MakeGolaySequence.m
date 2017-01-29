@@ -11,7 +11,7 @@ fs=44100;
 Lg=1;
 %** Number of repetitions
 % Noise floor in IRs due to background noise and electrical noise should decrease as \sqrt{Nrp}
-Nrp=8*6;
+Nrp=8*3;
 %** Bits per sample
 %must be compatible with playback/recording hardware
 Bts=24;
@@ -32,6 +32,9 @@ ab=[a b]; oab=ab;
 for jrp=1:(Nrp-1)
     ab=[ab oab];
 end
+%** make stereo
+ab=[ab; ab];
+ab=ab.';
 
 %* == Write file (Scaling by 0.9999 suppresses a warning message about clipping) ==
 %** Specify Filename

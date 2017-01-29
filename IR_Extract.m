@@ -11,26 +11,45 @@ path(path,'Tools')
 %* == Specify Inputs == 
 
 %** = Name =
-Nm='OldBoxRecordings';
+Nm='Slt_Crt';
 %Nm='Cal';
 %** = Path to recording of recorded broadcast =
 % (wildcards accepted to process multiple files in a single run)
 Rpth='RecordedAudio/*FR6*.wav';
+Rpth='RecordedAudio/RoomReverb/VolumeSet/*.wav';
+Rpth='RecordedAudio/Boards/Foam.wav';
+Rpth='RecordedAudio/ContactMicTests/Slate_Crt.wav';
+%Rpth='RecordedAudio/ContactMicTests/CAL_Crt.wav';
+%Rpth='RecordedAudio/Boards/Plywood.wav';
+%Rpth='RecordedAudio/Boards/Particleboard.wav';
+%Rpth='RecordedAudio/Boards/fibreboard.wav';
+%Rpth='RecordedAudio/Boards/PVCboard.wav';
+%Rpth='RecordedAudio/Boards/MetalSheet_50x30cm.wav';
+%Rpth='RecordedAudio/Boards/MetalSheet_50x10cm.wav';
+%Rpth='RecordedAudio/Boards/Slate.wav';
+%Rpth='RecordedAudio/Boards/Granite.wav';
+%Rpth='RecordedAudio/Boards/ContactSpeakerCalibration.wav';
 %Rpth='CalibrationRecordings/*Woofit*Rode*.wav'
+%Rpth='CalibrationRecordings/ZIPP-TASCAM/*.wav'
 %** = Path to Golay Code used in the broadcast =
 Gpth='RawGolay';
 %** = Name of golay code =
 Gnm='golay_44kHz_N16_2min_24bits';
+Gnm='golay_44kHz_N19_3min_24bits';
+Gnm='golay_44kHz_N16_1min_24bits';
 %** = Specify MetaData we want to record (these can be added or removed arbitrarily) =
 mcnt=0;
-mcnt=mcnt+1;Mt{mcnt}='App.Mic';
-mcnt=mcnt+1;Mt{mcnt}='App.Recorder';
+%mcnt=mcnt+1;Mt{mcnt}='App.Mic';
+%mcnt=mcnt+1;Mt{mcnt}='App.Recorder';
 %mcnt=mcnt+1;Mt{mcnt}='App.Gain';
-mcnt=mcnt+1;Mt{mcnt}='App.Speaker';
+%mcnt=mcnt+1;Mt{mcnt}='App.Speaker';
 %mcnt=mcnt+1;Mt{mcnt}='App.Volume';
-mcnt=mcnt+1;Mt{mcnt}='Env.Class';
+%mcnt=mcnt+1;Mt{mcnt}='Env.Class';
 mcnt=mcnt+1;Mt{mcnt}='Env.Size';
 mcnt=mcnt+1;Mt{mcnt}='Env.Material';
+%mcnt=mcnt+1;Mt{mcnt}='App.PolarAngle_fromTop';
+%mcnt=mcnt+1;Mt{mcnt}='App.AzimuthalAngle_fromFront';
+
 
 %* == Load golay sequence ==
 load(sprintf('%s/%s.mat',Gpth,Gnm)); %G
@@ -69,6 +88,7 @@ for jh=1:length(Dh);
         h=tH.h;
         tH.MaxAmp=max(abs(h));
         h=h/tH.MaxAmp*(1-1e-6);
+        h=[zeros(ceil(tH.fs/5),1); h];
 		audiowrite(sprintf('%s/h.wav',Fllnm_ch),h,tH.fs,'BitsPerSample',24);
 		%*** => save structure
         save(sprintf('%s/H.mat',Fllnm_ch),'tH');

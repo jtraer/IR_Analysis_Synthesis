@@ -12,74 +12,163 @@ path(path,'Tools')
 %* == Specify Inputs == 
 
 %** = File with IRs extracted by IR_Extract.m =
-Hpth='H_raw_TryBox_1IRs_12-Dec-2016'
+Hpth='H_raw_RoomReverb_2IRs_19-Dec-2016';
+Hpth='H_raw_Foam_Board_2IRs_24-Jan-2017';
+Hpth='H_raw_Board_2IRs_25-Jan-2017';
+Hpth='H_raw_Slt_Crt_1IRs_29-Jan-2017';
 %Hpth='H_raw_FirstTest_Marble_1IRs_06-Dec-2016'
 %** = File with Calibration IRs (Optional, but recommended) =
 % These are re-recorded broadcasts (as in the measurements) but in as close to anechoic conditions as possible. These are required to ensure we are recording the properties of the space, not of the speaker/microphone/soundcard.
-Cpth='H_raw_Cal_1IRs_12-Dec-2016';
+%Cpth='H_raw_Cal_1IRs_12-Dec-2016';
+%Cpth='H_raw_Cal_Zipp-DR40_14IRs_19-Dec-2016';
+Cpth='H_raw_Cal_Contact_2IRs_24-Jan-2017';
+Cpth='H_raw_CAL_Crt_1IRs_29-Jan-2017';
+%Cpth=[];
 %** = Number of cochlear subbands for analysis =
-Nbnds=[30];
+Nbnds=[40];
 %** = Frequency limits in Hz =
 flm=[100 20e3];
 %** = Frequency of subband envelopes in Hz =
-Sb_fs=100;
+Sb_fs=1e3;
 
 %** = Specify MetaData we want to record (these can be added or removed arbitrarily) =
 %mcnt=0;
 %mcnt=mcnt+1;Mt{mcnt}='App.Mic';
-%mcnt=mcnt+1;Mt{mcnt}='App.Recorder';
-%mcnt=mcnt+1;Mt{mcnt}='App.Gain';
-%mcnt=mcnt+1;Mt{mcnt}='App.Speaker';
-%mcnt=mcnt+1;Mt{mcnt}='App.Volume';
-%mcnt=mcnt+1;Mt{mcnt}='Env.Class';
-%mcnt=mcnt+1;Mt{mcnt}='Env.Size';
-%mcnt=mcnt+1;Mt{mcnt}='Env.Material';
 
 %* == Calibrate Apparatus ==
 %** search for calibration files 
-Dc=dir(sprintf('%s*.mat',Cpth));
-%** scroll through the available files
-if ~isempty(Dc)
-	ccnt=0;
-	for jc=1:length(Dc);
-        load(Dc(jc).name);
-        tC=H;
-        %*** => Check to see if the IR is already analyzes...
-        %*** TODO add this so we don't repeat analyses unnecessarily
-        %*** => Analyze
-        tC=hPrp(tC,[],Nbnds,flm,Sb_fs);
-        
-        
-        if jc==1;
-            C=tC;
-        else
-            C=[C tC];
+if ~isempty(Cpth)
+    load(Cpth); %H
+    %*** => Check to see if the IR is already analyzed
+    Pth=GtPthStm(GtPthStm(H(1).Path)); % A path to save the calibration files
+    Pth=sprintf('%s/Cal_%03dBnds_%05d-%05dHz_ft%05dHz',Pth,Nbnds,flm(1),flm(2),Sb_fs);
+    if exist(sprintf('%s/H.mat',Pth));
+        load(sprintf('%s/H.mat',Pth));
+    %*** => If not scroll through IRs
+    else
+        ccnt=0;
+        for jc=1:length(H);
+            tC=H(jc);
+            %*** TODO add this so we don't repeat analyses unnecessarily
+            %*** => Analyze
+            tC=hPrp(tC,[],Nbnds,flm,Sb_fs);
+            %*** => compile into a structure
+            if jc==1;
+                C=tC;
+                %*** save some useful info
+                Nf=length(tC.ff); % number of frequency bins
+                OtPth=GtPthStm(GtPthStm(tC.Path)); % A path to save the calibration files
+                OtPth=sprintf('%s/Cal_%03dBnds_%05d-%05dHz_ft%05dHz',OtPth,Nbnds,flm(1),flm(2),Sb_fs);
+                unix(sprintf('mkdir -p %s',OtPth));
+            else
+                C=[C tC];
+            end
+        end % for jc=1:length(Dc)
+        C_Left=C(find([C.Channel]==1));
+        C=C_Left; % This is a HACK!!!!
+    %	%** interpolate spatial power spectrum
+        for jc=1:length(C);
+            th(jc)=str2num(C(jc).Meta.App.PolarAngle_fromTop);
+            ph(jc)=str2num(C(jc).Meta.App.AzimuthalAngle_fromFront);
+            DRR(jc,:)=C(jc).DRR;
         end
-%		%*** => if metadata exists open it, otherwise query user
-%		H=GtMtDt(H,sprintf('%s/%s/Meta.txt',Cpth,cnm),'Mic','Gain','Speaker','Vol','Recorder','PolarAngle','Azimuth','Distance');
-%		%*** => add to a structure of all calibration measurements
-%		C(ccnt)=H;
-	end % for jc=1:length(Dc)
-%	%** interpolate spatial power spectrum
-%	th=[C.PolarAngle];
-%	ph=[C.Azimuth];
-%	%*** scroll through all calibration measurements
-%	for jc=1:length(C)
-%		%*** => record subband power for each measurement
-%		Pwr(jc,:)=C(jc).P_k.';	
-%	end
-%	%*** scroll through subbands
-%	nth=linspace(0,180,100);
-%	nph=linspace(-180,180,200);
-%	for jbnd=1:(Nbds+2);
-%		%*** => interpolate a map of directional power
-%		SpkrPwr(:,:,jbnd)=interp2(th,ph,Pwr(:,jbnd),nth,nph);
-%	end
-%	%** save plots of calibration information
-%	%*** Scroll through calibration measurements
-%	%*** plot Equipment IRs
-%	%*** 
+        %*** find direct 
+        ndx1=find(th==0);
+        ndx2=find(ph==0);
+        Drct_ndx=intersect(ndx1,ndx2);
+        if length(C)==1; Drct_ndx=1; end
+        D=C(Drct_ndx);
+        %** sort these into montonically increasing vectors and make a mesh of polar and azimuthal angles
+        [th2,ndx_th]=sort(unique(th));
+        [ph2,ndx_ph]=sort(unique(ph));
+        th2=[0:10:180];
+        ph2=[0:10:350];
+        [thh,phh]=meshgrid(th2,ph2);
+        %** compute the solid angle associated with each grid-point
+        dth=180/(length(th2)+1);
+        dph=360/(length(ph2)+1);
+        %*** scroll through the polar angles
+        for jph=1:size(thh,2);
+            %**** => for each polar angle compute the band over which this value applies - check the edges are 0 and 180
+            th_min=thh(1,jph)-dth/2;
+            th_max=thh(1,jph)+dth/2;
+            if th_min<0; 
+                th_min=th_min+dth/2; 
+            end
+            if th_max>pi; 
+                th_max=th_max-dth/2; 
+            end
+            %**** => for each band avergae over interpolated gridpoints 
+            tmp=sum(sin(pi/180*linspace(th_min,th_max,1e3)))/1e3;
+            %**** => store a matrix of solid angles
+            dS(:,jph)=tmp*ones(size(thh,1),1);
+        end
+        SldAngl=dth*dph*dS*(pi/180)^2;
+        %** scroll through grid and assign values for each grid point
+        for jgrd=1:length(thh(:));
+            th_j=thh(jgrd);
+            ph_j=phh(jgrd);
+            %*** => compute distance between this gridpoint and all the data
+            th_df=abs(th-th_j);
+            ph_df=abs(ph-ph_j);
+            ph_df(find(ph_df)>180)=180-ph_df(find(ph_df)>180);
+            %*** if this aligns with a measurement use that
+            sm_ndx=find(th_df+ph_df==0);
+            sm_ndx2=find(th_df==0);
+            sm_ndx=unique([sm_ndx sm_ndx2]);
+            if ~isempty(sm_ndx)
+                df_ndx=sm_ndx;
+                df=zeros(size(df_ndx));
+            end
+            %*** if not average the closest 3 measurements
+            if isempty(sm_ndx);
+                %**** find the closest three measurements
+                df=sqrt((th_df).^2+(ph_df*sin(pi/180*th_j)).^2);
+                [df,df_ndx]=sort(df);
+                Nct=min([5 length(df)]);
+                ndx=find(df==df(Nct));
+                Nct=max(ndx);
+                df=df(1:Nct); 
+                df_ndx=df_ndx(1:Nct);
+            end
+            vDRR(:,jgrd)=sum(DRR(df_ndx,:).*((180-df(:))*ones(1,Nf)),1)/sum(180-df);
+        end
+
+        %** scroll through frequencies and interpolate calibration measures for each frequency
+        V=C(Drct_ndx); D=C(Drct_ndx); 
+        NaNcols=sum(isnan(vDRR));
+        vDRR=vDRR(:,find(NaNcols==0));
+        SldAngl=SldAngl(find(NaNcols==0));
+        V.DRR=sum(vDRR.*(ones(Nf,1)*SldAngl(:).'),2)/sum(SldAngl(:));
+        if length(C)==1;
+            V.DRR=zeros(size(V.DRR));
+        end
+    %	%** save plots of calibration information
+        clear C
+        C(1)=D; 
+        C(1).Name='Direct';
+        C(2)=V;
+        C(2).Name='Omnidirectional';
+        for jj=1:2;
+            C(jj).Path=OtPth;
+        end
+        save(sprintf('%s/H.mat',OtPth),'C');
+        %*** Plot direct vs volume DRRs
+        figure(1);
+        plot(D.DRR,D.ff);
+        hold on
+        plot(V.DRR,D.ff,'r--');
+        hold off
+        legend({'Direct';'Omnidirectional'})
+        xlabel('DRR (s)');
+        ylabel('Frequency (kHz)');
+        title([OtPth ': Cochleagram']);
+        saveas(gcf,sprintf('%s/Cgram',OtPth),'jpg');
+    end % if ~exist(Precomputed Data File)
+else
+    C=[];
 end % if ~isempty(Dc)
+clear H 
 
 %* == Extract IRs == 
 %** load IRs
@@ -94,15 +183,19 @@ for jh=1:length(H);
     h=tH.nh;
     MaxAmp=max(abs(h));
     h=h/MaxAmp*(1-1e-6);
+    h=[zeros(ceil(tH.fs/5),1); h];
     audiowrite(sprintf('%s/h_denoised_%03d.wav',tH.Path,Nbnds),h,tH.fs,'BitsPerSample',24);
     save(sprintf('%s/H_%03d.mat',tH.Path,Nbnds),'tH');
     if jh==1;
-        H=tH;
+        nH=tH;
+        %*** save some useful info
+        OtPth=sprintf('%s/Cal_%03dBnds_%05d-%05dHz_ft%05dHz',tH.Path,Nbnds,flm(1),flm(2),Sb_fs); % A path to save the calibration files
     else
-        H=[H tH];
+        nH=[nH tH];
     end
 end
-
+% rename
+H=nH;
 
 %* == Save details about CPU run time
 

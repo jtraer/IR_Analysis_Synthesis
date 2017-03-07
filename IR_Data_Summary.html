@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"" rel="stylesheet">
+  <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+  <script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
+  <script   src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"   integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="   crossorigin="anonymous"></script>
+  <script src="IRMAudio/IRdata.json"></script>
+  <style type="text/css" media="screen">
+    #container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    #controls {
+      position: fixed;
+      left: 89%;
+      top: 5%;
+      /*height: 50px;*/
+      width: 10%;
+      /*background: gray;*/
+      border: 2px solid blue;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    #dialog {
+      display: none;
+      position: fixed;
+      left: 0%;
+      bottom: 0%;
+      height: 20%;
+      width: 100%;
+      text-align: center;
+      background-color: black;
+    }
+
+    #dialogImg {
+      position: relative;
+      top: 10px;
+    }
+
+    button {
+      opacity: 1.0;
+      margin: 2px;
+    }
+
+    .stimulus_div {
+      padding: 2px;
+      margin: 2px;
+      border: 2px solid black;
+    }
+
+    .IRTimeSeries {
+      position: relative;
+      height: 200px;
+      width: 300px;
+    }
+
+    .EcoTimeSeries {
+      position: relative;
+      height: 200px;
+      width: 300px;
+    }
+
+    .RT60 {
+      //display: none;
+      height: 200px;
+      width: 300px;
+    }
+
+    .Spc {
+      //display: none;
+      height: 200px;
+      width: 300px;
+    }
+
+    .Cgrm {
+      //display: none;
+      height: 200px;
+      width: 300px;
+    }
+
+    .EcoCgrm {
+      //display: none;
+      height: 200px;
+      width: 300px;
+    }
+
+    .signal {
+      display: none;
+      height: 100px;
+      width: 300px;
+    }
+
+    .metadata {
+      display: block;
+    }
+
+    .tooltip {
+      display:none;
+      background: black;
+      font-size:12px;
+      height:10px;
+      width:80px;
+      padding:10px;
+      color:#f35;
+      z-index: 990;
+      bottom: 10px;
+      border: 2px solid red;
+ opacity:0.8;
+ /* for IE */
+ filter:alpha(opacity=90);
+    }
+
+    .ui-tooltip {
+      padding: 10px;
+      background: black;
+      color: white;
+      border-radius: 5px;
+      font-family: Verdana, sans-serif;
+      font-size: 12px;
+      text-transform: none;
+      opacity: 1.0;
+      z-index: 990;
+    }
+  </style>
+  <script>
+    var isPlaying = false;
+    var playInterval;
+    var playCtr = 0;
+
+    $(function(){
+      // add stimulus data to page
+      for (var i = 0; i < stimList.length; i++) {
+        render_stimuli_element(stimList[i]);
+      }
+
+      // bind events
+      //$('.stimulus_div').click(handle_cochleagram_click);
+      // $('.cochleagram_human').hover(handle_cochleagram_hover);
+      //$('#toggleHumanCochleagramsButton').click(toggle_human_cochleagrams);
+      //$('#toggleFerretCochleagramsButton').click(toggle_ferret_cochleagrams);
+      $('#toggleRT60Button').click(toggle_RT60);
+      $('#toggleSpcButton').click(toggle_Spc);
+      $('#toggleCgrmButton').click(toggle_Cgrm);
+      $('#toggleEcoCgrmButton').click(toggle_EcoCgrm);
+      $('#toggleEcoButton').click(toggle_Eco);
+      //$('#toggleSignalsButton').click(toggle_signals);
+      $('#playAllButton').click(play_all);
+      $('#stopAllButton').click(stop_all);
+    });
+
+    function render_stimuli_element(stim_id) {
+      $('#container').append(
+            '<div id="'+stim_id.id+'" class="stimulus_div">'+
+              '<b>Name</b>: ' + stim_id.Name+'<br/>'+
+              '<a href="#" title="'+stim_id.id+'" name="'+stim_id.id+'">'+
+              '<img class="IRTimeSeries" src="' + stim_id.TimeSeries + '">'+
+              '</a>'+
+              '<br/>'+
+              '<audio controls style="width: 250px;"><source src="' + stim_id.sound  + '" type="audio/wav"> </audio>'+
+              '<br/>'+
+              '<audio controls style="width: 250px;"><source src="' + stim_id.sound_Eco  + '" type="audio/wav"> </audio>'+
+              '<br/>'+
+              '<audio controls style="width: 250px;"><source src="' + stim_id.speech + '" type="audio/wav"> </audio>'+
+              '<br/>'+
+              '<img class="EcoTimeSeries" src="' + stim_id.Eco_TimeSeries + '">'+
+              '<br/>'+
+              '<img class="Cgrm" src="' + stim_id.Cgrm + '">'+
+              '<br/>'+
+              '<img class="EcoCgrm" src="' + stim_id.Cgrm_Eco + '">'+
+              '<br/>'+
+              '<img class="RT60" src="' + stim_id.RT60 + '">'+
+              '<br/>'+
+              '<img class="Spc" src="' + stim_id.Spc + '">'+
+              '<br/>'+
+              //'<img class="signal" src="' + stim_id.fn_signal + '">'+
+              //'<audio id="' + stim_id.id + '_sound">'+
+              //  '<source src="' + stim_id.sound + '" type="audio/wav">'+
+              //  'Your browser does not support the audio element.'+
+              //'</audio>'+
+              //'<div id="'+stim_id.id+'_metadata" class="metadata">'+'<b>label</b>: ' + stim_id.label+'<br/>'+
+                '<b>Name</b>: ' + stim_id.Name+'<br/>'+
+                '<b>No. of subbands</b>: ' + stim_id.Nbnds+'<br/>'+
+                '<b>T0</b>: ' + cheap_round(stim_id.T0, 2)+'<br/>'+
+                '<b>Tgs</b>: ' + cheap_round(stim_id.Tgs, 2)+'<br/>'+
+                // '<b>T0</b>: ' + stim_id.T0+'<br/>'+
+                '<b>Material</b>: ' + stim_id.Material +'<br/>'+
+                '<b>Hardness</b>: ' + stim_id.Hardness +'<br/>'+
+                '<b>Shape</b>: ' + stim_id.Shape +'<br/>'+
+                '<b>Speaker</b>: ' + stim_id.Speaker +'<br/>'+
+                '<b>Mic</b>: ' + stim_id.Mic +'<br/>'+
+                '<b>Ch</b>: ' + stim_id.ch +'<br/>'+
+              '</div>'+
+            '</div>');
+    }
+
+   // function handle_cochleagram_click(evt) {
+   //   evt.preventDefault(); // otherwise, it auto scrolls to the top of page
+   //   // console.log(evt.currentTarget);
+   //   var src = $(evt.currentTarget).prop("id");
+   //   console.log(src);
+   //   var filename = src.split('/').pop();
+   //   // filename = filename.split('_cochleagram')[0] + '_sound';
+   //   // console.log('playing' + filename);
+   //   //filename = src + '_sound';
+   //   $('#'+filename)[0].play();
+   // }
+
+   // function handle_cochleagram_hover(evt) {
+   //   console.log(evt.currentTarget.src);
+   //   $('#dialogImg').prop('src', evt.currentTarget.src);
+   // }
+
+    function toggle_RT60() {
+      $('.RT60').toggle();
+    }
+    function toggle_Spc() {
+      $('.Spc').toggle();
+    }
+    function toggle_Cgrm() {
+      $('.Cgrm').toggle();
+    }
+    function toggle_Eco() {
+      $('.EcoTimeSeries').toggle();
+    }
+    function toggle_EcoCgrm() {
+      $('.EcoCgrm').toggle();
+    }
+
+    //function toggle_human_cochleagrams() {
+    //  $('.cochleagram_human').toggle();
+    //}
+
+    //function toggle_ferret_cochleagrams() {
+    //  $('.cochleagram_ferret').toggle();
+    //}
+
+    //function toggle_signals() {
+    //  $('.signal').toggle();
+    //}
+
+    function play_all() {
+      if (isPlaying) {
+        $('#playAllButton').html('Resume');
+        clearInterval(playInterval);
+        isPlaying = false;
+      }
+      else {
+        isPlaying = true;
+        $('#playAllButton').html('Pause');
+        $('#'+stimList[playCtr].id).css('border', '6px solid blue');
+        $('#'+stimList[playCtr].id)[0].scrollIntoView();
+        $('#'+stimList[playCtr].id).click();
+
+        playInterval = setInterval(function () {
+          $('#'+stimList[playCtr].id).css('border', '2px solid black');
+          playCtr++;
+          $('#'+stimList[playCtr].id).css('border', '6px solid blue');
+          $('#'+stimList[playCtr].id)[0].scrollIntoView();
+          $('#dialogImg').prop('src', stimList[playCtr].fn_cochleagram_ferret);
+          $('#'+stimList[playCtr].id).click();
+        }, 500);
+      }
+    }
+
+    function stop_all() {
+        clearInterval(playInterval);
+        $('#'+stimList[playCtr].id).css('border', '2px solid black');
+        $('#playAllButton').html('Play All');
+        playCtr = 0;
+        isPlaying = false;
+    }
+
+    function cheap_round(val, n_decimals) {
+      n_decimals = n_decimals >= 0 ? n_decimals : 0;
+      mul_factor = Math.pow(10, n_decimals);
+      return Math.round(mul_factor * val) / mul_factor;
+    }
+  </script>
+</head>
+<body>
+  
+  <div id="Stats">
+    <img src="IRMAudio/Meta.Env.Distance/RT60.png">
+    <img src="IRMAudio/Meta.Env.Distance/NoIRs.png">
+    <img src="IRMAudio/Meta.Env.Distance/DRR.png">
+    <img src="IRMAudio/Meta.Env.Distance/Amp.png">
+    <img src="IRMAudio/Meta.Env.Size/RT60.png">
+    <img src="IRMAudio/Meta.Env.Size/NoIRs.png">
+    <img src="IRMAudio/Meta.Env.Size/DRR.png">
+    <img src="IRMAudio/Meta.Env.Size/Amp.png">
+    
+
+  </div>
+
+  <div id="outer">
+    <div id="container"></div>
+    <div id="controls">
+      <!--button id="toggleHumanCochleagramsButton" type="button">Toggle Human Cochleagrams</button>
+      <button id="toggleFerretCochleagramsButton" type="button">Toggle Ferret Cochleagrams</button-->
+      <button id="toggleEcoButton" type="button">Toggle Eco Synth</button>
+      <button id="toggleCgrmButton" type="button">Toggle C-gram</button>
+      <button id="toggleEcoCgrmButton" type="button">Toggle Eco C-gram</button>
+      <button id="toggleRT60Button" type="button">Toggle RT60</button>
+      <button id="toggleSpcButton" type="button">Toggle Spectrum</button>
+      <!--button id="toggleSignalsButton" type="button">Toggle Signals</button-->`
+      <!--button id="playAllButton" type="button">Play All</button>
+      <button id="stopAllButton" type="button">Reset Playback</button-->
+    </div>
+    <div id="dialog" title="Basic dialog">
+      <img id="dialogImg" src="">
+    </div>
+  </div>
+
+</body>
+</html>

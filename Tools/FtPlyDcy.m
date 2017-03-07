@@ -18,11 +18,6 @@ function [bt,NsFlr,Test,FVE,Init]=FtPlyDcy(x,tt,NPly,Qswtch,Init0);
 if Qswtch==0; DBsw=1; itnm=1e4; else; DBsw=0; itnm=1e2; end
 if nargin<5; Init0=[]; end
 
-% find the starting maximum and remove spurious zero values in front of it
-%[~,mxdx]=max(abs(x(1:ceil(end/8))));
-%x=x(mxdx:end); Nx=length(x);    
-%tt=tt(mxdx:end));
-
 % Iteratively smooth all oscillations to yield a monotonic function 
 % after each smoothing save a time series and a downsampled time vector
 smx=x; smt=tt; xmns=ones(1,2*length(x)); cnt=0;   
@@ -82,15 +77,12 @@ for jft=1:length(smrc);
             ws = warning('off','all');  % Turn off warning
             Ft=polyfit(ttrc{jft}(1:gather(Ndx0)),20*log10(abs(smrc{jft}(1:gather(Ndx0)))),NPly);
             warning(ws)  % Turn it back on.
-            % get decay rate (b0) and dry-wet balance (a0)
-            %b0=-Ft(1); a0=Ft(2); 
             % save the initializing parameters  
             fInit=[Tinf0 Ft]; 
             % use a least-mean squares fitting algorithm and save the LMS error to
             % that fit from the unsmoothed data (x)
             ftcnt=ftcnt+1; rcndx(ftcnt)=jft; 
             txx=20*log10(abs(smrc{jft}(1:Lrc(jft))));
-            %-------- this is unstable ------- txx=(abs(smrc{jft}(1:Lrc(jft))));
             t3=ttrc{jft}(1:Lrc(jft));	
             t3=t3(~isnan(txx)); txx=txx(~isnan(txx));
             mnvl=[t3(2) -inf*ones(1,length(fInit)-1)]; mnvl(end-1)=-5e3;
@@ -98,7 +90,6 @@ for jft=1:length(smrc);
             best_fit{ftcnt}=fminsearchbnd(@(fit) PlyNsFlrFt(gather(txx),t3,fit), [gather(fInit)],mnvl,mxvl,optimset('MaxFunEvals',itnm,'MaxIter',itnm,'Display','off'));
             % now compute the actual error to the raw (UNSMOOTHED) data
             err(ftcnt)=PlyNsFlrFt(20*log10(abs(x)),tt,best_fit{ftcnt});
-            %---- unstabe ----- err(ftcnt)=PlyNsFlrFt((abs(x)),tt,best_fit{ftcnt});
             % and if a starting value has been recommended try with that too
             if isempty(Init0)==0
                 fprintf('Double check that FtPltDcy.m is doing what you want.  This seems dubious -- I thought we had migrated everything to an arbitrary polynomial fitter but here we have a linear model.  It is in an if statement that is probably defunct but if yous ee this message printed... it is being used\n.')

@@ -2,18 +2,18 @@ function M=GtMtDt(Pth,Mt)
 %* == GtMtDt.m i.e. Get Meta Data ==
 %* Checks for Meta Data (in file specified by Pth) and if not all data is present the user is queried and the Metadata file is written
 
+M.Path=Pth;
 %* check for the existence of a text-file (Meta.txt) and read it if possible
-if exist(Pth);
+if exist(Pth)==2;
     [tmp1,tmp2]=textread(Pth,'%s\t%s');
     %** Scroll through variables and add them to structure M if they are lsited in Mt
     for jt=1:min([length(tmp1) length(tmp2)]);
-        if ~isempty(intersect(Mt,tmp1{1}));
+        if ~isempty(intersect(Mt,tmp1{jt}));
             eval(sprintf('M.%s=''%s'';',tmp1{jt},tmp2{jt}));
         end
     end
 else
     % If no file exists preallocate a structure with a dummy variable and write the file
-    M.blah='';
     fid=fopen(Pth,'w'); 
     fclose(fid);
 end
@@ -31,16 +31,13 @@ for jp=1:length(Mt)
     %*** => if structure is nested we need to ensure the whole tree of variables exists
     if ~isempty(ptndx);
         cnt=0;
-        ptndx=[1 ptndx];
+        ptndx=[0 ptndx];
         %*** => scroll through levels
         for jpt=1:(length(ptndx)-1);
             %**** ==> extract the name at this level
-            Fstr_this_level=Fstr(ptndx(jpt):(ptndx(jpt+1)-1));
+            Fstr_this_level=Fstr((ptndx(jpt)+1):(ptndx(jpt+1)-1));
             %**** ==> if this level doesn't exist make it.
-            eval(sprintf('Mvr=%s;',Mstr));
-            if ~isfield(Mvr,Fstr_this_level);
-                eval(sprintf('%s.%s=[];',Mstr,Fstr_this_level));
-            end
+            eval(sprintf('if ~isfield(%s,''%s''); %s.%s=[]; end',Mstr,Fstr_this_level,Mstr,Fstr_this_level))
             %**** ==> relabel the structure
             Mstr=sprintf('%s.%s',Mstr,Fstr_this_level);
             %**** ==> if this is the last level save the end variable name

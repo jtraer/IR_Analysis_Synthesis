@@ -10,45 +10,55 @@ path(path,'Tools')
 
 %* == Specify Inputs == 
 
-%** = Name =
-Nm='Slt_Crt';
-%Nm='Cal';
-%** = Path to recording of recorded broadcast =
+%** = Name and Path to recording of recorded broadcast =
 % (wildcards accepted to process multiple files in a single run)
-Rpth='RecordedAudio/*FR6*.wav';
-Rpth='RecordedAudio/RoomReverb/VolumeSet/*.wav';
-Rpth='RecordedAudio/Boards/Foam.wav';
-Rpth='RecordedAudio/ContactMicTests/Slate_Crt.wav';
-%Rpth='RecordedAudio/ContactMicTests/CAL_Crt.wav';
-%Rpth='RecordedAudio/Boards/Plywood.wav';
-%Rpth='RecordedAudio/Boards/Particleboard.wav';
-%Rpth='RecordedAudio/Boards/fibreboard.wav';
-%Rpth='RecordedAudio/Boards/PVCboard.wav';
-%Rpth='RecordedAudio/Boards/MetalSheet_50x30cm.wav';
-%Rpth='RecordedAudio/Boards/MetalSheet_50x10cm.wav';
-%Rpth='RecordedAudio/Boards/Slate.wav';
-%Rpth='RecordedAudio/Boards/Granite.wav';
-%Rpth='RecordedAudio/Boards/ContactSpeakerCalibration.wav';
-%Rpth='CalibrationRecordings/*Woofit*Rode*.wav'
-%Rpth='CalibrationRecordings/ZIPP-TASCAM/*.wav'
+
+Rpth='RecordedAudio/Boards/Crt-Edge/CAL/*.wav'; Nm='CAL_Crt';
+Rpth='RecordedAudio/Boards/Crt-Edge/*.wav'; Nm='Crt-Edge';
+Rpth='RecordedAudio/Boards/LED4-Center/CAL/*.wav'; Nm='CAL_LED4';
+Rpth='RecordedAudio/Boards/LED4-Center/CAL/*.wav'; Nm='CAL_LED4';
+Rpth='RecordedAudio/Boards/LED4-Center/SbSt/*.wav'; Nm='LED4-Center_Sb';
+%Rpth='RecordedAudio/Boards/LED8-Corner/CAL/*.wav'; Nm='CAL_LED8';
+%Rpth='RecordedAudio/Boards/LED8-Corner/*.wav'; Nm='LED8-Corner';
+%Rpth='RecordedAudio/Boards/Rd-Ext/CAL/CAL*.wav'; Nm='CAL_Rd';
+%Rpth='RecordedAudio/Boards/Rd-Ext/*.wav'; Nm='Rd-Ext';
+
+%Rpth='RecordedAudio/RoomReverb/Tst/*.wav'; Nm='RoomRvrb_tst';
+%Rpth='RecordedAudio/RoomReverb/Distance_RoomSize/*.wav'; Nm='RoomRvrb_RmDst';
+%Rpth='RecordedAudio/RoomReverb/Location/*.wav'; Nm='RoomRvrb_Loc';
+%Rpth='RecordedAudio/RoomReverb/Empty_vs_Full/*.wav'; Nm='RoomRvrb_EmptyOrFull';
+%Rpth='CalibrationRecordings/ZIPP-TASCAM/*.wav'; Nm='CAL_ZP-TSCM';
+
 %** = Path to Golay Code used in the broadcast =
 Gpth='RawGolay';
 %** = Name of golay code =
 Gnm='golay_44kHz_N16_2min_24bits';
-Gnm='golay_44kHz_N19_3min_24bits';
-Gnm='golay_44kHz_N16_1min_24bits';
+%Gnm='golay_44kHz_N19_3min_24bits';
+%Gnm='golay_44kHz_N16_1min_24bits';
+%Gnm='golay_44kHz_N16_3min_24bits';
 %** = Specify MetaData we want to record (these can be added or removed arbitrarily) =
 mcnt=0;
-%mcnt=mcnt+1;Mt{mcnt}='App.Mic';
-%mcnt=mcnt+1;Mt{mcnt}='App.Recorder';
-%mcnt=mcnt+1;Mt{mcnt}='App.Gain';
-%mcnt=mcnt+1;Mt{mcnt}='App.Speaker';
-%mcnt=mcnt+1;Mt{mcnt}='App.Volume';
-%mcnt=mcnt+1;Mt{mcnt}='Env.Class';
-mcnt=mcnt+1;Mt{mcnt}='Env.Size';
-mcnt=mcnt+1;Mt{mcnt}='Env.Material';
-%mcnt=mcnt+1;Mt{mcnt}='App.PolarAngle_fromTop';
-%mcnt=mcnt+1;Mt{mcnt}='App.AzimuthalAngle_fromFront';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.App.Mic';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.App.Recorder';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.App.Gain';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.App.Speaker';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.App.Volume';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Class';
+
+
+%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Size';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Location';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Distance';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.NoPeople';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Door';
+
+%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Size';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Material';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Location';
+%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Damping';
+
+mcnt=mcnt+1;Mt{mcnt}='Meta.App.PolarAngle_fromTop';
+mcnt=mcnt+1;Mt{mcnt}='Meta.App.AzimuthalAngle_fromFront';
 
 
 %* == Load golay sequence ==
@@ -76,6 +86,7 @@ for jh=1:length(Dh);
         Fllnm_ch=sprintf('%s/ch%d',Fllnm,jch);
         eval(sprintf('!mkdir -p %s',Fllnm_ch));
 		tH=hExtrct(rc(:,jch),G,Fllnm_ch);
+        %tH=rmfield(tH,'h_snps');
 		tH.Name=fnm;
 		tH.Path=sprintf('%s/ch%d',Fllnm,jch);
 		tH.Channel=jch;
@@ -83,7 +94,8 @@ for jh=1:length(Dh);
 		M=GtMtDt([Fllnm '/Meta.txt'],Mt);
         %*** => re-order fields for consistency
         M=orderfields(M);
-        tH.Meta=M;
+        tH.Meta=M.Meta;
+        tH.Meta.Path=M.Path;
 		%*** => normalize and save audio
         h=tH.h;
         tH.MaxAmp=max(abs(h));

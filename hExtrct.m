@@ -4,6 +4,8 @@ function H=hExtrct(rc,G,Pth);
 %** If no path is specified make it an empty string
 if nargin<3; Pth=''; end
 
+set(0,'DefaultFigureVisible','off');
+
 %* Match lengths of audio
 %** Find numberof completed Golay cycles and truncate accordingly
 Nrps=floor(length(rc)/G.Ng/2);
@@ -16,7 +18,7 @@ for jrp=1:Nrps
 	
 	%** Truncate large peaks in recorded audio
     %*** IRs recorded in absence of noise have kurtosis ~3 (empirically determined).  Higher values are likely due to extraneous noise -- which can be more sparse.
-    cnt=0; 
+    cnt=0; fprintf('Rep %d: Removing large peaks...',jrp)
     while kurtosis(sc)>5; 
         cnt=cnt+1;
         %*** => find peaks (probably due to noise)
@@ -24,7 +26,7 @@ for jrp=1:Nrps
         I=find(abs(sc)>thrsh); 
         %*** => decrease magnitude of peaks ito the median value so that the noise is reduced 
         sc(I)=sign(sc(I)).*rand(size(I))*prctile(abs(sc),50);  
-    end
+    end; fprintf('done\n')
     %** save sections to reconstitute a de-noised time-series
     rc_dn((jrp-1)*2*G.Ng+[1:2*G.Ng])=sc;
 
@@ -112,6 +114,8 @@ if length(Pth)>0;
     hold on
     plot([1:length(H.h)]/H.fs,h_var1,':');
     plot([1:length(H.h)]/H.fs,h_var2,':');
+    %*** => plot markers for trimming
+    plot([10 30 100]/H.fs,h([10 30 100]),'d');
     xlabel('Time (s)');
     ylabel('Waveform amplitude (compressed)')
     set(gca,'xscale','log')

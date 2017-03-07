@@ -11,7 +11,7 @@ fs=44100;
 Lg=1;
 %** Number of repetitions
 % Noise floor in IRs due to background noise and electrical noise should decrease as \sqrt{Nrp}
-Nrp=8*3;
+Nrp=8*8;
 %** Bits per sample
 %must be compatible with playback/recording hardware
 Bts=24;

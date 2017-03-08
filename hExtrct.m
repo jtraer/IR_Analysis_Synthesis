@@ -5,6 +5,7 @@ function H=hExtrct(rc,G,Pth);
 if nargin<3; Pth=''; end
 
 set(0,'DefaultFigureVisible','off');
+set(0,'DefaultFigureVisible','on');
 
 %* Match lengths of audio
 %** Find numberof completed Golay cycles and truncate accordingly

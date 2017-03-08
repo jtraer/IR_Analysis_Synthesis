@@ -29,11 +29,13 @@ Rpth='RecordedAudio/Boards/LED4-Center/SbSt/*.wav'; Nm='LED4-Center_Sb';
 %Rpth='RecordedAudio/RoomReverb/Empty_vs_Full/*.wav'; Nm='RoomRvrb_EmptyOrFull';
 %Rpth='CalibrationRecordings/ZIPP-TASCAM/*.wav'; Nm='CAL_ZP-TSCM';
 
+Rpth='RecordedAudio/SurveyData/*.wav'; Nm='Srvy';
+
 %** = Path to Golay Code used in the broadcast =
 Gpth='RawGolay';
 %** = Name of golay code =
-Gnm='golay_44kHz_N16_2min_24bits';
-%Gnm='golay_44kHz_N19_3min_24bits';
+%Gnm='golay_44kHz_N16_2min_24bits';
+Gnm='golay_44kHz_N19_3min_24bits';
 %Gnm='golay_44kHz_N16_1min_24bits';
 %Gnm='golay_44kHz_N16_3min_24bits';
 %** = Specify MetaData we want to record (these can be added or removed arbitrarily) =

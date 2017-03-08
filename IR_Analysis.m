@@ -17,8 +17,8 @@ Hpth='RecordedAudio/RoomReverb/H_raw_RoomRvrb_RmDst_24IRs_26-Feb-2017'; Cpth='Ca
 Hpth='RecordedAudio/RoomReverb/H_raw_RoomRvrb_Loc_18IRs_27-Feb-2017'; Cpth='CalibrationRecordings/H_raw_CAL_ZP-TSCM_12IRs_26-Feb-2017';
 Hpth='RecordedAudio/RoomReverb/H_raw_RoomRvrb_Loc_26IRs_27-Feb-2017'; Cpth='CalibrationRecordings/H_raw_CAL_ZP-TSCM_12IRs_26-Feb-2017';
 
-Hpth='H_raw_LED4-Center_21IRs_05-Feb-2017'; Cpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_05-Feb-2017';
-Hpth='RecordedAudio/Boards/LED4-Center/SbSt/H_raw_LED4-Center_Sb_9IRs_06-Mar-2017'; Cpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_05-Feb-2017';
+%Hpth='H_raw_LED4-Center_21IRs_05-Feb-2017'; Cpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_05-Feb-2017';
+%Hpth='RecordedAudio/Boards/LED4-Center/SbSt/H_raw_LED4-Center_Sb_9IRs_06-Mar-2017'; Cpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_05-Feb-2017';
 %Hpth='H_raw_LED4-Center_21IRs_12-Feb-2017'; Cpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_05-Feb-2017';
 %Hpth='H_raw_LED8-Corner_21IRs_05-Feb-2017'; Cpth='RecordedAudio/Boards/LED8-Corner/CAL/H_raw_CAL_LED8_1IRs_05-Feb-2017';
 %Hpth='H_raw_Crt-Edge_21IRs_05-Feb-2017'; Cpth='RecordedAudio/Boards/Crt-Edge/CAL/H_raw_CAL_Crt_1IRs_05-Feb-2017';
@@ -27,7 +27,7 @@ Hpth='RecordedAudio/Boards/LED4-Center/SbSt/H_raw_LED4-Center_Sb_9IRs_06-Mar-201
 % These are re-recorded broadcasts (as in the measurements) but in as close to anechoic conditions as possible. These are required to ensure we are recording the properties of the space, not of the speaker/microphone/soundcard.
 %Cpth=[];
 %** = Number of cochlear subbands for analysis =
-Nbnds=[40];
+Nbnds=[35];
 %** = Frequency limits in Hz =
 flm=[300 20e3];
 %** = Frequency of subband envelopes in Hz =

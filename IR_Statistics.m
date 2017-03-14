@@ -13,7 +13,8 @@ path(path,'Tools')
 % (wildcards accepted to process multiple files in a single run)
 pcnt=0;
 %pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/H_raw_RoomRvrb_tst_12IRs_26-Feb-2017_5Bnds';
-pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/H_raw_RoomRvrb_RmDst_24IRs_26-Feb-2017_35Bnds';
+%pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/H_raw_RoomRvrb_RmDst_24IRs_26-Feb-2017_35Bnds';
+pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/SurveyData/H_raw_Srvy_38IRs_07-Mar-2017_5Bnds';
 %pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/H_raw_RoomRvrb_Loc_18IRs_27-Feb-2017_35Bnds';
 %pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/H_raw_RoomRvrb_Loc_26IRs_27-Feb-2017_35Bnds';
 %** Specify Rejection Criteria
@@ -21,11 +22,13 @@ rcnt=0;
 rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H(cnt).DateCreated)<datenum(''12-May-2016'')';
 %** Specify Paramters to be plotted
 pcnt=0;
-pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Size';
-pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Distance';
+%pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Size';
+%pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Distance';
 %pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Location';
 %pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.NoPeople';
 %pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Door';
+pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Class';
+
 
 %* ==== Load data  ====
 

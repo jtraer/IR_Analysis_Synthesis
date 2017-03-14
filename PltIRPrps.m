@@ -1,6 +1,5 @@
-function hfg=PltIRPrps(H);
+function PltIRPrps(H);
 
-hfg=figure;
 ps=get(gcf,'position');
 set(gcf,'position',[ps(1:2) ps(3)*3 ps(4)/2]);
 %* Plot Time series

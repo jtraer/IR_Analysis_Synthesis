@@ -5,7 +5,6 @@ function H=hExtrct(rc,G,Pth);
 if nargin<3; Pth=''; end
 
 set(0,'DefaultFigureVisible','off');
-set(0,'DefaultFigureVisible','on');
 
 %* Match lengths of audio
 %** Find numberof completed Golay cycles and truncate accordingly
@@ -60,13 +59,16 @@ H.fs=G.fs;
 
 %* Estimate the region that likely contains signal (beginning and end are usually noise)
 %** Plot and query user for the start and end times of the IR
+if exist(sprintf('%s/IR_StartEnd.txt',Pth))~=2; 
+    set(0,'DefaultFigureVisible','on');
+end
 figure; 
 plot(20*log10(abs(H.h))); 
 hold on;
 plot(20*log10(abs(H.h+sign(H.h).*H.h_var)),':'); 
 plot(20*log10(abs(H.h-sign(H.h).*H.h_var)),':'); 
 title('Manually extract start and end of IR');
-drawnow;
+drawnow; 
 M=GtMtDt(sprintf('%s/IR_StartEnd.txt',Pth),{'Start_index';'End_index'});
 eval(sprintf('xlm(1)=%s;',M.Start_index))
 eval(sprintf('xlm(2)=%s;',M.End_index))
@@ -87,6 +89,7 @@ H.No_of_snapshots=Nrps;
 H.Golay_Code=G.Name;
 
 %* Plot and save (if a path was given)
+set(0,'DefaultFigureVisible','off');
 if length(Pth)>0;
     close all
     %** => plot recording

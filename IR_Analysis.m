@@ -182,6 +182,7 @@ load(Hpth); %H
 for jh=1:length(H);
     tH=H(jh);
     %*** => Analyze
+    keyboard
     tH=hPrp(tH,C,Nbnds,flm,Sb_fs,ftp);
     %*** => Make synthetic IRs
     tH=hSynth(tH,ftp);

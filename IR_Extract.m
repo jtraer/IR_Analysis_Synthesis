@@ -29,7 +29,8 @@ Rpth='RecordedAudio/Boards/LED4-Center/SbSt/*.wav'; Nm='LED4-Center_Sb';
 %Rpth='RecordedAudio/RoomReverb/Empty_vs_Full/*.wav'; Nm='RoomRvrb_EmptyOrFull';
 %Rpth='CalibrationRecordings/ZIPP-TASCAM/*.wav'; Nm='CAL_ZP-TSCM';
 
-Rpth='RecordedAudio/SurveyData/*.wav'; Nm='Srvy';
+%Rpth='RecordedAudio/SurveyData/*.wav'; Nm='Srvy';
+Rpth='RecordedAudio/Balls/Smll/*.wav'; Nm='Srvy';
 
 %** = Path to Golay Code used in the broadcast =
 Gpth='RawGolay';

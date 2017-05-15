@@ -73,7 +73,7 @@ for jIR=[1:length(BH)]
 
     %*** => convolve with a TIMIT sentence
     if length(Ds)>0;
-        [y,~,fy]=RIRcnv(TMT(1).s,TMT(1).fs,BH(jIR).nh,BH(jIR).fs,1);
+        [y,fy]=RIRcnv(TMT(1).s,TMT(1).fs,BH(jIR).nh,BH(jIR).fs,1);
         audiowrite(sprintf('%s/tmt1.wav',FldrNm),y,fy);
         fprintf(fid2,',\n"speech":\t"%s/tmt1.wav"',FldrNm);
     end

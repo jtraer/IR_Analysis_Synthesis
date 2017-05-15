@@ -54,7 +54,7 @@ hold on;
 plot([1 length(krt)]/H(1).fs*1e3,3*ones(1,2),'k--');
 %plot(H.Tgs*1e3,3,'k+')
 %hold off;
-set(gca,'xlim',[0 100]);
+set(gca,'xlim',[0 300]);
 set(gca,'yscale','log')
 xlabel('Time (ms)');
 ylabel('Kurtosis');
@@ -74,7 +74,7 @@ for jj=1:length(Mt);
         plt=plt+tmp/length(ttH);
     end
     % plot
-    hp=plot(plt,ttH(1).Attck(3).ff/1e3); hold on
+    hp=plot(20*log10(abs(plt)),ttH(1).Attck(3).ff/1e3); hold on
     set(hp,'color',cmpMt(ceil(length(cmpMt)*jj/length(Mt)),:));
 end
 hold on;
@@ -99,7 +99,7 @@ for jj=1:length(Mt);
         plt=plt+tmp/length(ttH);
     end
     % plot
-    hp=plot(plt,ttH(1).Attck(6).ff/1e3); hold on
+    hp=plot(20*log10(abs(plt)),ttH(1).Attck(6).ff/1e3); hold on
     set(hp,'color',cmpMt(ceil(length(cmpMt)*jj/length(Mt)),:));
 end
 hold on;

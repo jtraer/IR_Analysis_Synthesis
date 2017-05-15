@@ -6,6 +6,7 @@
 %* == Preamble ==
 clear all; close all; clc
 path(path,'Tools')
+set(0,'DefaultFigureVisible','On');
 
 %* == Specify Inputs == 
 
@@ -13,10 +14,22 @@ path(path,'Tools')
 % (wildcards accepted to process multiple files in a single run)
 pcnt=0;
 %pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/H_raw_RoomRvrb_tst_12IRs_26-Feb-2017_5Bnds';
-%pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/H_raw_RoomRvrb_RmDst_24IRs_26-Feb-2017_35Bnds';
-pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/SurveyData/H_raw_Srvy_38IRs_07-Mar-2017_5Bnds';
+%pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/H_raw_RoomRvrb_RmDst_24IRs_27-Mar-2017_30Bnds';
+%pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/FullSurvey/H_raw_Srvy_390IRs_29-Mar-2017_5Bnds';
+%%pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_30IRs_08-May-2017_10Bnds';
+pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_30IRs_09-May-2017_10Bnds';
+pltcnt=0;
+pltcnt=pltcnt+1; PltPrms{pltcnt}='Meta.Env.Distance';
+%pltcnt=pltcnt+1; PltPrms{pltcnt}='Meta.Env.Size';
+
 %pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/H_raw_RoomRvrb_Loc_18IRs_27-Feb-2017_35Bnds';
 %pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/RoomReverb/H_raw_RoomRvrb_Loc_26IRs_27-Feb-2017_35Bnds';
+
+%pcnt=pcnt+1; IRpth{pcnt}='RecordedAudio/Boards/LED4-Center/SbSt/H_raw_LED4-Center_Sb_9IRs_25-Apr-2017_40Bnds';
+%pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Material';
+%pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.YoungsMod';
+%pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Density';
+
 %** Specify Rejection Criteria
 rcnt=0;
 rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H(cnt).DateCreated)<datenum(''12-May-2016'')';
@@ -27,8 +40,7 @@ pcnt=0;
 %pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Location';
 %pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.NoPeople';
 %pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Door';
-pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Class';
-
+%pcnt=pcnt+1; PltPrms{pcnt}='Meta.Env.Class';
 
 %* ==== Load data  ====
 

@@ -167,13 +167,39 @@ for jPrm=1:length(PltPrms)
     hold off
     set(gca,'yscale','log')
     set(gca,'ylim',[50 15e3])
-    set(gca,'xlim',[0 1]);
+    set(gca,'xlim',[0 2]);
     xlabel('RT60 (s)')
     ylabel('Frequency (Hz)')
     title(PltPrms{jPrm})
     saveas(gcf,sprintf('IRMAudio/%s/RT60',PltPrms{jPrm}),'epsc');
     saveas(gcf,sprintf('IRMAudio/%s/RT60',PltPrms{jPrm}),'png');
 
+    % Plot Modes
+    figure
+    PltIRStts_MdRT60(H,PltPrms{jPrm},Mt,MrkMt,cmpMt);
+    saveas(gcf,sprintf('IRMAudio/%s/ModeRT60',PltPrms{jPrm}),'epsc');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeRT60',PltPrms{jPrm}),'png');
+    PltIRStts_MdRT60Pk(H,PltPrms{jPrm},Mt,MrkMt,cmpMt);
+    saveas(gcf,sprintf('IRMAudio/%s/ModeRT60Pk',PltPrms{jPrm}),'epsc');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeRT60Pk',PltPrms{jPrm}),'png');
+    figure
+    figure
+    PltIRStts_MdOnPwr(H,PltPrms{jPrm},Mt,MrkMt,cmpMt);
+    saveas(gcf,sprintf('IRMAudio/%s/ModeOnPwr',PltPrms{jPrm}),'epsc');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeOnPwr',PltPrms{jPrm}),'png');
+    figure
+    PltIRStts_MdFrqHst(H,PltPrms{jPrm},Mt,MrkMt,cmpMt);
+    saveas(gcf,sprintf('IRMAudio/%s/ModeHst',PltPrms{jPrm}),'epsc');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeHst',PltPrms{jPrm}),'png');
+    figure
+    PltIRStts_MdOPvsRT60(H,PltPrms{jPrm},Mt,MrkMt,cmpMt);
+    saveas(gcf,sprintf('IRMAudio/%s/ModeOPvsRT60',PltPrms{jPrm}),'epsc');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeOPvsRT60',PltPrms{jPrm}),'png');
+    figure
+    PltIRStts_MdSpcs(H,PltPrms{jPrm},Mt,MrkMt,cmpMt);
+    saveas(gcf,sprintf('IRMAudio/%s/ModeSpc',PltPrms{jPrm}),'epsc');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeSpc',PltPrms{jPrm}),'png');
+    
     % Plot DRR
     tH=H; tMt=Mt; tMrkMt=MrkMt;
     %RmvLst={'??';'Crevice';'Open';'OpenSpace';'Plank';'Handle';'Other';'Rocky';'RockyBowl';'Canyon';'Alcove';'Forest'};
@@ -221,6 +247,7 @@ for jPrm=1:length(PltPrms)
     title(PltPrms{jPrm})
     saveas(gcf,sprintf('IRMAudio/%s/DRR',PltPrms{jPrm}),'epsc');
     saveas(gcf,sprintf('IRMAudio/%s/DRR',PltPrms{jPrm}),'png');
+
 %    
 %    % Plot spcER
 %    tH=H; tMt=Mt; tMrkMt=MrkMt;

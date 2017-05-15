@@ -1,4 +1,4 @@
-function PltIRDRR(H,C);
+function PltIRDRR(H,C,raw_aa);
 
 hp=plot(H.DRR,H.ff/1e3);
 pclr=get(hp,'color');

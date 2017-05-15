@@ -16,42 +16,49 @@ path(path,'Tools')
 Rpth='RecordedAudio/Boards/Crt-Edge/CAL/*.wav'; Nm='CAL_Crt';
 Rpth='RecordedAudio/Boards/Crt-Edge/*.wav'; Nm='Crt-Edge';
 Rpth='RecordedAudio/Boards/LED4-Center/CAL/*.wav'; Nm='CAL_LED4';
-Rpth='RecordedAudio/Boards/LED4-Center/CAL/*.wav'; Nm='CAL_LED4';
-Rpth='RecordedAudio/Boards/LED4-Center/SbSt/*.wav'; Nm='LED4-Center_Sb';
+%Rpth='RecordedAudio/Boards/LED4-Center/CAL/*.wav'; Nm='CAL_LED4';
+%Rpth='RecordedAudio/Boards/LED4-Center/SbSt/*.wav'; Nm='LED4-Center_Sb';
+%Rpth='RecordedAudio/Balls/Smll/*.wav'; Nm='Balls';
+%Rpth='RecordedAudio/Balls/CAL/*.wav'; Nm='Balls_CAL';
 %Rpth='RecordedAudio/Boards/LED8-Corner/CAL/*.wav'; Nm='CAL_LED8';
 %Rpth='RecordedAudio/Boards/LED8-Corner/*.wav'; Nm='LED8-Corner';
 %Rpth='RecordedAudio/Boards/Rd-Ext/CAL/CAL*.wav'; Nm='CAL_Rd';
 %Rpth='RecordedAudio/Boards/Rd-Ext/*.wav'; Nm='Rd-Ext';
+%Rpth='RecordedAudio/Tweeter/*.wav'; Nm='Twt';
 
 %Rpth='RecordedAudio/RoomReverb/Tst/*.wav'; Nm='RoomRvrb_tst';
 %Rpth='RecordedAudio/RoomReverb/Distance_RoomSize/*.wav'; Nm='RoomRvrb_RmDst';
 %Rpth='RecordedAudio/RoomReverb/Location/*.wav'; Nm='RoomRvrb_Loc';
 %Rpth='RecordedAudio/RoomReverb/Empty_vs_Full/*.wav'; Nm='RoomRvrb_EmptyOrFull';
-%Rpth='CalibrationRecordings/ZIPP-TASCAM/*.wav'; Nm='CAL_ZP-TSCM';
+Rpth='CalibrationRecordings/ZIPP-TASCAM/*.wav'; Nm='CAL_ZP-TSCM'; Gnm='golay_44kHz_N19_3min_24bits';
+Rpth='RecordedAudio/RoomReverb/OfficeDistanceTest/O*.wav'; Nm='OffcDst'; Gnm='golay_44kHz_N19_3min_24bits';
+%Rpth='RecordedAudio/RoomReverb/OfficeDistanceTest/CAL*.wav'; Nm='OffcDstCAL'; Gnm='golay_44kHz_N16_3min_24bits';
 
 %Rpth='RecordedAudio/SurveyData/*.wav'; Nm='Srvy';
-Rpth='RecordedAudio/Balls/Smll/*.wav'; Nm='Srvy';
+
 
 %** = Path to Golay Code used in the broadcast =
 Gpth='RawGolay';
 %** = Name of golay code =
 %Gnm='golay_44kHz_N16_2min_24bits';
-Gnm='golay_44kHz_N19_3min_24bits';
+%Gnm='golay_96kHz_N17_3min_24bits';
 %Gnm='golay_44kHz_N16_1min_24bits';
 %Gnm='golay_44kHz_N16_3min_24bits';
 %** = Specify MetaData we want to record (these can be added or removed arbitrarily) =
 mcnt=0;
-%mcnt=mcnt+1;Mt{mcnt}='Meta.App.Mic';
-%mcnt=mcnt+1;Mt{mcnt}='Meta.App.Recorder';
-%mcnt=mcnt+1;Mt{mcnt}='Meta.App.Gain';
-%mcnt=mcnt+1;Mt{mcnt}='Meta.App.Speaker';
-%mcnt=mcnt+1;Mt{mcnt}='Meta.App.Volume';
-%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Class';
+mcnt=mcnt+1;Mt{mcnt}='Meta.App.Mic';
+mcnt=mcnt+1;Mt{mcnt}='Meta.App.Recorder';
+mcnt=mcnt+1;Mt{mcnt}='Meta.App.Gain';
+mcnt=mcnt+1;Mt{mcnt}='Meta.App.Speaker';
+mcnt=mcnt+1;Mt{mcnt}='Meta.App.Volume';
+mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Class';
 
+mcnt=mcnt+1;Mt{mcnt}='Meta.App.PolarAngle_fromTop';
+mcnt=mcnt+1;Mt{mcnt}='Meta.App.AzimuthalAngle_fromFront';
 
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Size';
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Location';
-%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Distance';
+mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Distance';
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.NoPeople';
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Door';
 
@@ -60,8 +67,6 @@ mcnt=0;
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Location';
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Damping';
 
-mcnt=mcnt+1;Mt{mcnt}='Meta.App.PolarAngle_fromTop';
-mcnt=mcnt+1;Mt{mcnt}='Meta.App.AzimuthalAngle_fromFront';
 
 
 %* == Load golay sequence ==

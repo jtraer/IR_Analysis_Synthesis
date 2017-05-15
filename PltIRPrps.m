@@ -5,12 +5,13 @@ set(gcf,'position',[ps(1:2) ps(3)*3 ps(4)/2]);
 %* Plot Time series
 T0=median(H.RT60);
 tlm=[-T0*0.1 T0]*1e3;
-subplot(1,6,1)
-plot([1:length(H.nh)]/H.fs*1e3,sign(H.nh).*abs(H.MaxAmp*H.nh).^(0.6));
-set(gca,'xlim',tlm);
-hold on;
-text(0.1*T0,max(abs(H.MaxAmp*H.nh))^0.6,1.001,sprintf('Peak amp=%2.2f',H.MaxAmp));
-% TODO print the maximim amplitude
+subplot(1,7,1)
+for jh=1:length(H);
+    plot([1:length(H(jh).nh)]/H.fs*1e3,sign(H(jh).nh).*abs(H(jh).MaxAmp*H(jh).nh).^(0.6));
+    set(gca,'xlim',tlm);
+    hold on;
+    text(0.1*T0,max(abs(H.MaxAmp*H.nh))^0.6,1.001,sprintf('Peak amp=%2.2f',H.MaxAmp));
+end
 hold off;
 set(gca,'xlim',[0 600]);
 xlabel('Time (ms)');

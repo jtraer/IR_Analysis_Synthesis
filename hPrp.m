@@ -6,8 +6,11 @@ set(0,'DefaultFigureVisible','off');
 fntsz=15;
 
 %* == Compute kurtosis in 10ms windows ==
-%** Find the numbr of points in a 10ms window and make sure it is an even number
-Nbn=ceil(0.01*H.fs); 
+%** Find the numbr of points in a 2ms window and make sure it is an even number
+Nbn=ceil(0.002*H.fs); 
+if Nbn>length(H.h)*2;
+    Nbn=length(H.h)/4;
+end
 Nbn=Nbn+rem(Nbn,2); 
 %** Repeat the first and last 5ms sections
 tmp=[H.h(1:Nbn/2); H.h; H.h(end-Nbn/2+1:end)]; 
@@ -57,28 +60,9 @@ for jsnp=1:Nsnps;
     SnpCgrm(:,:,jsnp)=sCgrm;
 end
 
-% and compute a spectrogram
-[NsSgrm,Nsff,Nstt]=spectrogram(H.h,32,16,32,H.fs);
-if ~isempty(C)
-    NsSgrm=NsSgrm./(mean(abs(C(1).Ns.Sgrm),2)*ones(1,length(Nstt)));
-end
-%for jf=1:length(Nsff);
-%    [Pft,NsFlr,Test,FVE]=FtPlyDcy(abs(NsSgrm(jf,:)),Nstt,1,1);
-%    Ns.bbt(jf)=-Pft(1);
-%    Ns.aa(jf)=Pft(2);
-%end
-[MdSgrm,Mdff,Mdtt]=spectrogram(H.h,512,256,512,H.fs);
-if ~isempty(C)
-    MdSgrm=MdSgrm./(mean(abs(C(1).Md.Sgrm),2)*ones(1,length(Mdtt)));
-end
-%for jf=1:length(Mdff);
-%    [Pft,NsFlr,Test,FVE]=FtPlyDcy(abs(MdSgrm(jf,:)),Mdtt,1,1);
-%    Md.bbt(jf)=-Pft(1);
-%    Md.aa(jf)=Pft(2);
-%end
-
 %* == Scroll through cochlear channels ==
 eval(sprintf('! mkdir -p %s/Subbands_%d',H.Path,Nbnds));
+eval(sprintf('! mkdir -p %s/Modes_%d',H.Path,length(H.Modes)));
 BdBndsFlg=zeros(1,Nbnds);
 for jbn=1:Nbnds; 
     fprintf('%s: Band %d/%d\n',H.Path,jbn,Nbnds);
@@ -198,6 +182,83 @@ for jj=1:2:11; cnt=cnt+1;
     Attck(cnt).T=Nft/H.fs;
 end
 
+% and compute spectrograms to find modes
+[NsSgrm,Nsff,Nstt]=spectrogram(nh,32,16,32,H.fs);
+if ~isempty(C)
+    ClSgrm=mean(abs(C(1).Ns.Sgrm),2);
+    ClSgrm=medfilt2(ClSgrm,[2 1],'Symmetric');
+    NsSgrm=NsSgrm./(mean(abs(C(1).Ns.Sgrm),2)*ones(1,length(Nstt)));
+end
+Nft=512; Nbn=Nft;
+if Nbn>length(nh)/8;
+    Nbn=ceil(length(nh)/10);
+    Nbn=Nbn+rem(Nbn,2);
+end
+[MdSgrm,Mdff,Mdtt]=spectrogram(nh,Nbn,Nbn/2,Nft,H.fs);
+if ~isempty(C)
+    ClSgrm=mean(abs(C(1).Md.Sgrm),2);
+    ClSgrm=medfilt2(ClSgrm,[15 1],'Symmetric');
+    MdSgrm=MdSgrm./(ClSgrm*ones(1,length(Mdtt)));
+end
+% compute modes
+for jm=1:length(H.Modes);
+    [~,ndx]=min(abs(Mdff-H.Modes(jm).cf));
+    md=abs(MdSgrm(ndx,:));
+    p=sum(md);
+    %** find mode width
+    cnt=0;
+    FLG=0;
+    while FLG==0; cnt=cnt+1;
+        p2=sum(abs(MdSgrm(ndx+cnt,:)));
+        if p2<p/2;
+            FLG=1;
+        end
+        if cnt>1;
+            if p2>=plst;
+                FLG=1;
+            end
+        end
+        if ndx+cnt==size(MdSgrm,1);
+            FLG=1;
+        end
+        plst=p2;
+    end
+    undx=ndx+cnt-1;
+    % and the lower frequencies
+    if ndx>1;
+        cnt=0;
+        FLG=0;
+        while FLG==0; cnt=cnt+1;
+            p2=sum(abs(MdSgrm(ndx-cnt,:)));
+            if p2<p/2;
+                FLG=1;
+            end
+            if cnt>1;
+                if p2>=plst;
+                    FLG=1;
+                end
+            end
+            if ndx-cnt==1;
+                FLG=1;
+            end
+            plst=p2;
+        end
+        lndx=ndx-cnt+1;
+    else
+        lndx=ndx;
+    end
+    H.Modes(jm).Wd=max([(Mdff(undx)-Mdff(lndx)) (Mdff(2)-Mdff(1))]);
+    % compute decay properties
+    [Pft,NsFlr,Test,FVE]=FtPlyDcy(md,Mdtt,1,1);
+
+    figure;
+    plot(20*log10(abs(md))); axis tight;
+    saveas(gcf,sprintf('%s/Modes_%d/%03d',H.Path,length(H.Modes),jm),'jpg'); 
+    H.Modes(jm).OnPwr=Pft(2); 
+    H.Modes(jm).RT60=60/abs(Pft(1));
+    H.Modes(jm).MnPwr=mean(20*log10(abs(MdSgrm(ndx,:))));
+end
+
 %% save basic data to structure
 H.nh=gather(nh);
 H.krt=krt;
@@ -227,6 +288,7 @@ H.Md.tt=Mdtt;
 H.Attck=Attck;
 
 %* == Plot ==
+save(sprintf('%s/H',H.Path),'H');
 close all
 fcnt=0;
 
@@ -273,21 +335,43 @@ saveas(gcf,sprintf('%s/RT60',H.Path),'jpg');
 saveas(gcf,sprintf('%s/RT60',H.Path),ftp);
 %*** DRR
 fcnt=fcnt+1; figure(fcnt)
-PltIRDRR(H,C);
+PltIRDRR(H,C,raw_aa);
 saveas(gcf,sprintf('%s/DRR',H.Path),'jpg');
 saveas(gcf,sprintf('%s/DRR',H.Path),ftp);
 
+%** plot mode properties
+%*** Rtt
+fcnt=fcnt+1; figure(fcnt)
+PltIRMds(H,C);
+%set(gca,'fontsize',fntsz);
+saveas(gcf,sprintf('%s/Modes',H.Path),'jpg');
+saveas(gcf,sprintf('%s/Modes',H.Path),ftp);
+
 %** => Figure for Reverb paper
 fcnt=fcnt+1; figure(fcnt)
-PltIRPrps(H);
+subplot(1,6,1);
+PltIRts(H);
+subplot(1,6,2);
+PltIRPkAmp(H);
+subplot(1,6,3);
+PltIRKrt(H);
+subplot(1,6,4);
+PltIRSpc(H);
+subplot(1,6,5);
+PltIRDRR(H);
+subplot(1,6,6);
+PltIRRT60(H);
 saveas(gcf,sprintf('%s/Fg4Ppr',H.Path),'jpg');   
 saveas(gcf,sprintf('%s/Fg4Ppr',H.Path),ftp);   
 
-
 %** Plot Spectrogram
-%fcnt=fcnt+1; figure(fcnt)
+fcnt=fcnt+1; figure(fcnt)
+PltIRSpc(H,C,NsSgrm,Nsff,MdSgrm,Mdff);
+%set(gca,'fontsize',fntsz);
+saveas(gcf,sprintf('%s/Spc',H.Path),'jpg');
+saveas(gcf,sprintf('%s/Spc',H.Path),ftp);
+
 %subplot(2,1,1);
-%plt=20*log10(abs(NsSgrm)); 
 %pcolor(Nstt,Nsff/1e3,plt);
 %axis xy; shading flat
 %xlabel('Time (s)');
@@ -297,27 +381,6 @@ saveas(gcf,sprintf('%s/Fg4Ppr',H.Path),ftp);
 %set(gca,'yscale','log');
 %colorbar
 %colormap(othercolor('Blues9',64));
-%for jplt=1:5;
-%    if jplt==1; 
-%        for jf=1:size(plt,1);
-%            [mx(jf),mxndx(jf)]=max(plt(jf,1:ceil(size(plt,2)/10)));
-%        end
-%        ndx=ceil(mean(mx.*mxndx)/mean(mx)); 
-%    elseif jplt==5; ndx=ceil(size(plt,2)/2);
-%    else ndx=ceil((jplt-1)*size(plt,2)/8);
-%    end
-%    ndx=max([ndx 1]);
-%    if ndx<size(plt,2)-5;
-%        subplot(2,1,1); hold on;
-%        plot(Nstt(ndx)*ones(1,2),Nsff([2 end])/1e3,'k--'); 
-%        subplot(2,5,5+jplt);
-%        plot(mean(plt(:,ndx+[0:4]),2),Nsff);
-%        axis tight
-%        set(gca,'xlim',max(max(plt))+[-80 0]);
-%        set(gca,'yscale','log')
-%    end
-%end
-%saveas(gcf,sprintf('%s/NsSgram',H.Path),'jpg');
 %saveas(gcf,sprintf('%s/NsSgram',H.Path),ftp);
 %%** Plot Spectrogram
 %fcnt=fcnt+1; figure(fcnt)
@@ -358,27 +421,6 @@ saveas(gcf,sprintf('%s/Fg4Ppr',H.Path),ftp);
 %end
 %saveas(gcf,sprintf('%s/MdSgram',H.Path),'jpg');
 %saveas(gcf,sprintf('%s/MdSgram',H.Path),ftp);
-
-
-%%** Plot Spectra
-%if ~isempty(C)
-%    %** => plot spectrum
-%    fcnt=fcnt+1; figure(fcnt)
-%    Hspc=interp1(H.Spcff,H.spc,C(1).Spcff);
-%    plot(20*log10(abs(H.spc)),H.Spcff/1e3,'b:');
-%    hold on
-%    plot(20*log10(abs(C(1).spc)),C(1).Spcff/1e3,'k:');
-%    plot(20*log10(abs(C(2).spc)),C(1).Spcff/1e3,'r:');
-%    plot(20*log10(abs(Hspc(:)./C(2).spc)),C(1).Spcff/1e3);
-%    hold off
-%    xlabel('Power (db)');
-%    ylabel('Frequency (kHz)')
-%    set(gca,'yscale','log')
-%    title([H.Path ': IR spectra'])
-%    %saveas(gcf,sprintf('%s/Raw_IR_Snapshots',Pth),'fig');
-%    saveas(gcf,sprintf('%s/IR_Spc',H.Path),'jpg');
-%    saveas(gcf,sprintf('%s/IR_Spc',H.Path),ftp);
-%end
 
 %%** Plot Spectra of attack
 %%** => plot spectrum

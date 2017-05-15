@@ -12,26 +12,24 @@ path(path,'Tools')
 %* == Specify Inputs == 
 
 %** = File with IRs extracted by IR_Extract.m =
-Hpth='RecordedAudio/RoomReverb/H_raw_RoomRvrb_tst_12IRs_26-Feb-2017'; Cpth='CalibrationRecordings/H_raw_CAL_ZP-TSCM_12IRs_26-Feb-2017';
-Hpth='RecordedAudio/RoomReverb/H_raw_RoomRvrb_RmDst_24IRs_26-Feb-2017'; Cpth='CalibrationRecordings/H_raw_CAL_ZP-TSCM_12IRs_26-Feb-2017';
-Hpth='RecordedAudio/RoomReverb/H_raw_RoomRvrb_Loc_18IRs_27-Feb-2017'; Cpth='CalibrationRecordings/H_raw_CAL_ZP-TSCM_12IRs_26-Feb-2017';
-Hpth='RecordedAudio/RoomReverb/H_raw_RoomRvrb_Loc_26IRs_27-Feb-2017'; Cpth='CalibrationRecordings/H_raw_CAL_ZP-TSCM_12IRs_26-Feb-2017';
+Hpth='RecordedAudio/RoomReverb/H_raw_RoomRvrb_RmDst_24IRs_08-May-2017'; Cpth='CalibrationRecordings/H_raw_CAL_ZP-TSCM_12IRs_08-May-2017';
+Hpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_14IRs_08-May-2017'; Cpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDstCAL_12IRs_08-May-2017';
+Hpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_30IRs_08-May-2017'; Cpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDstCAL_12IRs_08-May-2017';
+Hpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_30IRs_09-May-2017'; Cpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDstCAL_12IRs_08-May-2017'; % test with th other Golay code
 
 %Hpth='H_raw_LED4-Center_21IRs_05-Feb-2017'; Cpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_05-Feb-2017';
-%Hpth='RecordedAudio/Boards/LED4-Center/SbSt/H_raw_LED4-Center_Sb_9IRs_06-Mar-2017'; Cpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_05-Feb-2017';
-%Hpth='H_raw_LED4-Center_21IRs_12-Feb-2017'; Cpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_05-Feb-2017';
-%Hpth='H_raw_LED8-Corner_21IRs_05-Feb-2017'; Cpth='RecordedAudio/Boards/LED8-Corner/CAL/H_raw_CAL_LED8_1IRs_05-Feb-2017';
-%Hpth='H_raw_Crt-Edge_21IRs_05-Feb-2017'; Cpth='RecordedAudio/Boards/Crt-Edge/CAL/H_raw_CAL_Crt_1IRs_05-Feb-2017';
-%Hpth='H_raw_Rd-Ext_21IRs_05-Feb-2017'; Cpth='RecordedAudio/Boards/Rd-Ext/CAL/H_raw_CAL_Rd_1IRs_05-Feb-2017';
-%** = File with Calibration IRs (Optional, but recommended) =
-% These are re-recorded broadcasts (as in the measurements) but in as close to anechoic conditions as possible. These are required to ensure we are recording the properties of the space, not of the speaker/microphone/soundcard.
-%Cpth=[];
+
+%Hpth='RecordedAudio/Tweeter/H_raw_Twt_2IRs_22-Mar-2017'; Cpth='';
+%Hpth='RecordedAudio/Boards/LED4-Center/SbSt/H_raw_LED4-Center_Sb_9IRs_25-Apr-2017'; Cpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_22-Apr-2017';
+%Hpth='RecordedAudio/Balls/Smll/H_raw_Balls_22IRs_22-Apr-2017.mat'; Cpth='RecordedAudio/Balls/Smll/H_raw_Balls_CAL_3IRs_22-Apr-2017';
+%Hpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_05-Feb-2017'; Cpth='';
+
 %** = Number of cochlear subbands for analysis =
-Nbnds=[35];
+Nbnds=[10];
 %** = Frequency limits in Hz =
-flm=[300 20e3];
+flm=[50 20e3];
 %** = Frequency of subband envelopes in Hz =
-Sb_fs=1e3;
+Sb_fs=1e4;
 %** filetype
 %ftp='epsc';
 ftp='jpg';
@@ -182,10 +180,10 @@ load(Hpth); %H
 for jh=1:length(H);
     tH=H(jh);
     %*** => Analyze
-    keyboard
+    %keyboard
     tH=hPrp(tH,C,Nbnds,flm,Sb_fs,ftp);
     %*** => Make synthetic IRs
-    tH=hSynth(tH,ftp);
+    %tH=hSynth(tH,ftp);
     %*** => save plots of IR information
     %*** => save audio
     h=tH.nh;

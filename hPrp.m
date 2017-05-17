@@ -349,24 +349,24 @@ saveas(gcf,sprintf('%s/Modes',H.Path),ftp);
 
 %** => Figure for Reverb paper
 fcnt=fcnt+1; figure(fcnt)
-subplot(1,6,1);
-PltIRts(H);
-subplot(1,6,2);
-PltIRPkAmp(H);
-subplot(1,6,3);
-PltIRKrt(H);
-subplot(1,6,4);
-PltIRSpc(H);
-subplot(1,6,5);
-PltIRDRR(H);
-subplot(1,6,6);
-PltIRRT60(H);
-saveas(gcf,sprintf('%s/Fg4Ppr',H.Path),'jpg');   
-saveas(gcf,sprintf('%s/Fg4Ppr',H.Path),ftp);   
+%subplot(1,6,1);
+%PltIRts(H);
+%subplot(1,6,2);
+%PltIRPkAmp(H);
+%subplot(1,6,3);
+%PltIRKrt(H);
+%subplot(1,6,4);
+%PltIRSpc(H);
+%subplot(1,6,5);
+%PltIRDRR(H);
+%subplot(1,6,6);
+%PltIRRT60(H);
+%saveas(gcf,sprintf('%s/Fg4Ppr',H.Path),'jpg');   
+%saveas(gcf,sprintf('%s/Fg4Ppr',H.Path),ftp);   
 
 %** Plot Spectrogram
 fcnt=fcnt+1; figure(fcnt)
-PltIRSpc(H,C,NsSgrm,Nsff,MdSgrm,Mdff);
+%PltIRSpc(H,C,NsSgrm,Nsff,MdSgrm,Mdff);
 %set(gca,'fontsize',fntsz);
 saveas(gcf,sprintf('%s/Spc',H.Path),'jpg');
 saveas(gcf,sprintf('%s/Spc',H.Path),ftp);

@@ -13,9 +13,9 @@ path(path,'Tools')
 %** = Name and Path to recording of recorded broadcast =
 % (wildcards accepted to process multiple files in a single run)
 
-Rpth='RecordedAudio/Boards/Crt-Edge/CAL/*.wav'; Nm='CAL_Crt';
-Rpth='RecordedAudio/Boards/Crt-Edge/*.wav'; Nm='Crt-Edge';
-Rpth='RecordedAudio/Boards/LED4-Center/CAL/*.wav'; Nm='CAL_LED4';
+%Rpth='RecordedAudio/Boards/Crt-Edge/CAL/*.wav'; Nm='CAL_Crt';
+%Rpth='RecordedAudio/Boards/Crt-Edge/*.wav'; Nm='Crt-Edge';
+%Rpth='RecordedAudio/Boards/LED4-Center/CAL/*.wav'; Nm='CAL_LED4';
 %Rpth='RecordedAudio/Boards/LED4-Center/CAL/*.wav'; Nm='CAL_LED4';
 %Rpth='RecordedAudio/Boards/LED4-Center/SbSt/*.wav'; Nm='LED4-Center_Sb';
 %Rpth='RecordedAudio/Balls/Smll/*.wav'; Nm='Balls';
@@ -30,12 +30,13 @@ Rpth='RecordedAudio/Boards/LED4-Center/CAL/*.wav'; Nm='CAL_LED4';
 %Rpth='RecordedAudio/RoomReverb/Distance_RoomSize/*.wav'; Nm='RoomRvrb_RmDst';
 %Rpth='RecordedAudio/RoomReverb/Location/*.wav'; Nm='RoomRvrb_Loc';
 %Rpth='RecordedAudio/RoomReverb/Empty_vs_Full/*.wav'; Nm='RoomRvrb_EmptyOrFull';
-Rpth='CalibrationRecordings/ZIPP-TASCAM/*.wav'; Nm='CAL_ZP-TSCM'; Gnm='golay_44kHz_N19_3min_24bits';
-Rpth='RecordedAudio/RoomReverb/OfficeDistanceTest/O*.wav'; Nm='OffcDst'; Gnm='golay_44kHz_N19_3min_24bits';
+%Rpth='CalibrationRecordings/ZIPP-TASCAM/*.wav'; Nm='CAL_ZP-TSCM'; Gnm='golay_44kHz_N19_3min_24bits';
+%Rpth='RecordedAudio/RoomReverb/OfficeDistanceTest/O*.wav'; Nm='OffcDst'; Gnm='golay_44kHz_N19_3min_24bits';
 %Rpth='RecordedAudio/RoomReverb/OfficeDistanceTest/CAL*.wav'; Nm='OffcDstCAL'; Gnm='golay_44kHz_N16_3min_24bits';
 
 %Rpth='RecordedAudio/SurveyData/*.wav'; Nm='Srvy';
 
+Rpth='RecordedAudio/RoomReverb/4078/*.wav'; Nm='Office_Test'; Gnm='golay_44kHz_N17_2min_24bits';
 
 %** = Path to Golay Code used in the broadcast =
 Gpth='RawGolay';

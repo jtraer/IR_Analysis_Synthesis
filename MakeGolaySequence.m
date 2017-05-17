@@ -6,12 +6,13 @@
 %** Sampling frequency in Hz 
 %must be compatible with playback/recording hardware
 fs=96000;       
+fs=44100;       
 %** Desired length of a single Golay sequence in s.  
 %This should be longer than any IRs to be recorded.
-Lg=1;
+Lg=2;
 %** Number of repetitions
 % Noise floor in IRs due to background noise and electrical noise should decrease as \sqrt{Nrp}
-Nrp=8;
+Nrp=16;
 %** Bits per sample
 %must be compatible with playback/recording hardware
 Bts=24;
@@ -51,3 +52,4 @@ G.Bts=Bts;
 G.Name=fnm;
 G.DateCreated=date;
 save([fnm '.mat'],'G');
+fprintf('File saved: %s.wav\n',fnm)

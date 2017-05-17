@@ -12,10 +12,12 @@ path(path,'Tools')
 %* == Specify Inputs == 
 
 %** = File with IRs extracted by IR_Extract.m =
-Hpth='RecordedAudio/RoomReverb/H_raw_RoomRvrb_RmDst_24IRs_08-May-2017'; Cpth='CalibrationRecordings/H_raw_CAL_ZP-TSCM_12IRs_08-May-2017';
-Hpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_14IRs_08-May-2017'; Cpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDstCAL_12IRs_08-May-2017';
-Hpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_30IRs_08-May-2017'; Cpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDstCAL_12IRs_08-May-2017';
-Hpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_30IRs_09-May-2017'; Cpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDstCAL_12IRs_08-May-2017'; % test with th other Golay code
+%Hpth='RecordedAudio/RoomReverb/H_raw_RoomRvrb_RmDst_24IRs_08-May-2017'; Cpth='CalibrationRecordings/H_raw_CAL_ZP-TSCM_12IRs_08-May-2017';
+%Hpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_14IRs_08-May-2017'; Cpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDstCAL_12IRs_08-May-2017';
+%Hpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_30IRs_08-May-2017'; Cpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDstCAL_12IRs_08-May-2017';
+%Hpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_30IRs_09-May-2017'; Cpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDstCAL_12IRs_08-May-2017'; % test with th other Golay code
+
+Hpth='RecordedAudio/RoomReverb/4078/H_raw_Office_Test_14IRs_16-May-2017'; Cpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDstCAL_12IRs_08-May-2017'; % test with th other Golay code
 
 %Hpth='H_raw_LED4-Center_21IRs_05-Feb-2017'; Cpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_05-Feb-2017';
 
@@ -25,7 +27,7 @@ Hpth='RecordedAudio/RoomReverb/OfficeDistanceTest/H_raw_OffcDst_30IRs_09-May-201
 %Hpth='RecordedAudio/Boards/LED4-Center/CAL/H_raw_CAL_LED4_1IRs_05-Feb-2017'; Cpth='';
 
 %** = Number of cochlear subbands for analysis =
-Nbnds=[10];
+Nbnds=[30];
 %** = Frequency limits in Hz =
 flm=[50 20e3];
 %** = Frequency of subband envelopes in Hz =

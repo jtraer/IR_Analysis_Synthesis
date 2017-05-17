@@ -37,6 +37,7 @@ path(path,'Tools')
 %Rpth='RecordedAudio/SurveyData/*.wav'; Nm='Srvy';
 
 Rpth='RecordedAudio/RoomReverb/4078/*.wav'; Nm='Office_Test'; Gnm='golay_44kHz_N17_2min_24bits';
+%Gnm='golay_44kHz_N16_3min_24bits';
 
 %** = Path to Golay Code used in the broadcast =
 Gpth='RawGolay';
@@ -67,8 +68,6 @@ mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Distance';
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Material';
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Location';
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Damping';
-
-
 
 %* == Load golay sequence ==
 load(sprintf('%s/%s.mat',Gpth,Gnm)); %G
@@ -101,6 +100,9 @@ for jh=1:length(Dh);
 		tH.Channel=jch;
 		%*** => Load (or query) MetaData
 		M=GtMtDt([Fllnm '/Meta.txt'],Mt);
+        if jh==1;
+            keyboard('Now is a good time to copy the Meta Data file\n');
+        end
         %*** => re-order fields for consistency
         M=orderfields(M);
         tH.Meta=M.Meta;

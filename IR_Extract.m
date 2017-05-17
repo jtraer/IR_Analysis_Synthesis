@@ -100,8 +100,8 @@ for jh=1:length(Dh);
 		tH.Channel=jch;
 		%*** => Load (or query) MetaData
 		M=GtMtDt([Fllnm '/Meta.txt'],Mt);
-        if jh==1;
-            keyboard('Now is a good time to copy the Meta Data file\n');
+        if (jh==1&&jch==1);
+            jnk=input('Now is a good time to copy the Meta Data file\n');
         end
         %*** => re-order fields for consistency
         M=orderfields(M);
@@ -143,8 +143,8 @@ for jh=1:length(Dh);
 end % jh=1:length(Dh);
 
 %* == Save all data ==
-save(sprintf('H_raw_%s_%dIRs_%s',Nm,length(H),date),'H')
-fprintf('Data saved to H_raw_%s_%dIRs_%s\n',Nm,length(H),date);
+save(sprintf('%s/H_raw_%s_%dIRs_%s',PthStm,Nm,length(H),date),'H')
+fprintf('Data saved to %s/H_raw_%s_%dIRs_%s\n',PthStm,Nm,length(H),date);
 
 %* == Save details about code and CPU run time ==
 

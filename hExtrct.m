@@ -62,12 +62,26 @@ H.fs=G.fs;
 if exist(sprintf('%s/IR_StartEnd.txt',Pth))~=2; 
     set(0,'DefaultFigureVisible','on');
 end
-figure; 
+figure;
+subplot(3,1,1)
 plot(20*log10(abs(H.h))); 
 hold on;
 plot(20*log10(abs(H.h+sign(H.h).*H.h_var)),':'); 
 plot(20*log10(abs(H.h-sign(H.h).*H.h_var)),':'); 
 title('Manually extract start and end of IR');
+set(gca,'xlim',[0 1000]);
+subplot(3,1,2)
+plot(20*log10(abs(H.h))); 
+hold on;
+plot(20*log10(abs(H.h+sign(H.h).*H.h_var)),':'); 
+plot(20*log10(abs(H.h-sign(H.h).*H.h_var)),':'); 
+set(gca,'xlim',[0 5000]);
+subplot(3,1,3)
+plot(20*log10(abs(H.h))); 
+hold on;
+plot(20*log10(abs(H.h+sign(H.h).*H.h_var)),':'); 
+plot(20*log10(abs(H.h-sign(H.h).*H.h_var)),':'); 
+set(gca,'xlim',[0 25000]);
 drawnow; 
 M=GtMtDt(sprintf('%s/IR_StartEnd.txt',Pth),{'Start_index';'End_index'});
 eval(sprintf('xlm(1)=%s;',M.Start_index))

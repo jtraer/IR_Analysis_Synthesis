@@ -36,7 +36,8 @@ path(path,'Tools')
 
 %Rpth='RecordedAudio/SurveyData/*.wav'; Nm='Srvy';
 
-Rpth='RecordedAudio/RoomReverb/4078/*.wav'; Nm='Office_Test'; Gnm='golay_44kHz_N17_2min_24bits';
+Rpth='RecordedAudio/RoomReverb/4078+4022/*.wav'; Nm='Office_Test'; Gnm='golay_44kHz_N17_2min_24bits';
+%Rpth='RecordedAudio/Calibration/*.wav'; Nm='Cal'; Gnm='golay_44kHz_N17_2min_24bits';
 %Gnm='golay_44kHz_N16_3min_24bits';
 
 %** = Path to Golay Code used in the broadcast =

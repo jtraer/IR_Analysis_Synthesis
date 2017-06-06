@@ -98,48 +98,52 @@ H.spc=spc(1:end/2);
 H.Spcff=[1:nft/2]*H.fs/nft;
 
 %* Manually identify Mode frequencies
-if exist(sprintf('%s/IR_Modes.txt',Pth))~=2; 
-    fid=fopen(sprintf('%s/IR_Modes.txt',Pth),'w');
-    set(0,'DefaultFigureVisible','on');
-    figure; 
-    plot(20*log10(abs(H.spc)),H.Spcff);
-    axis tight; ylm=get(gca,'ylim');
-    set(gca,'ylim',[-ylm(2)/5 ylm(2)]);
-    hold on; plot([min(20*log10(abs(H.spc))) max(20*log10(abs(H.spc)))],zeros(1,2),'k--');
-    title('Manually extract modes: click under dashed line when all are selected');
-    drawnow; 
-    Mf=1;
-    mcnt=0;
-    while Mf>0; mcnt=mcnt+1;
-        Mf=ginput(1);
-        Mf=Mf(2);
-        if Mf>0;
-            [~,ndx]=min(abs(H.Spcff-Mf));
-            if ndx>50;
-                [~,ndx2]=max(abs(H.spc(ndx+[-50:50])))
-                Mf=H.Spcff(ndx+ndx2-51);
-            else 
-                [~,ndx2]=max(abs(H.spc([1:(ndx+50)])))
-                Mf=H.Spcff(ndx2);
-            end
-            Mdf(mcnt)=Mf;
-            [~,ndx]=min(abs(H.Spcff-Mf));
-            plot(20*log10(abs(H.spc(ndx))),H.Spcff(ndx),'ro');
-            drawnow
-            fprintf(fid,'Md%02d\t%f\n',mcnt,round(Mf));
-        end
-    end
-    fclose(fid)
-end
-[MdNdx,Mdf]=textread(sprintf('%s/IR_Modes.txt',Pth),['%s %f']);
-for jj=1:length(Mdf);
-    M=GtMtDt(sprintf('%s/IR_Modes.txt',Pth),{sprintf('Md%02d',jj)});
-    eval(sprintf('Modes(jj).cf=str2num(M.Md%02d);',jj,jj));
-end
-if isempty(Mdf);
-    Modes=[];
-end
-H.Modes=Modes;
+%if exist(sprintf('%s/IR_Modes.txt',Pth))~=2; 
+%    fid=fopen(sprintf('%s/IR_Modes.txt',Pth),'w');
+%    set(0,'DefaultFigureVisible','on');
+%    figure; 
+%    plot(20*log10(abs(H.spc)),H.Spcff);
+%    axis tight; ylm=get(gca,'ylim');
+%    set(gca,'ylim',[-ylm(2)/5 ylm(2)]);
+%    hold on; plot([min(20*log10(abs(H.spc))) max(20*log10(abs(H.spc)))],zeros(1,2),'k--');
+%    title('Manually extract modes: click under dashed line when all are selected');
+%    drawnow; 
+%    Mf=1;
+%    mcnt=0;
+%    while Mf>0; mcnt=mcnt+1;
+%        Mf=ginput(1);
+%        Mf=Mf(2);
+%        if Mf>0;
+%            [~,ndx]=min(abs(H.Spcff-Mf));
+%            if ndx>50;
+%                [~,ndx2]=max(abs(H.spc(ndx+[-50:50])))
+%                Mf=H.Spcff(ndx+ndx2-51);
+%            else 
+%                [~,ndx2]=max(abs(H.spc([1:(ndx+50)])))
+%                Mf=H.Spcff(ndx2);
+%            end
+%            Mdf(mcnt)=Mf;
+%            [~,ndx]=min(abs(H.Spcff-Mf));
+%            plot(20*log10(abs(H.spc(ndx))),H.Spcff(ndx),'ro');
+%            drawnow
+%            fprintf(fid,'Md%02d\t%f\n',mcnt,round(Mf));
+%        end
+%    end
+%    fclose(fid)
+%end
+%[MdNdx,Mdf]=textread(sprintf('%s/IR_Modes.txt',Pth),['%s %f']);
+%for jj=1:length(Mdf);
+%    M=GtMtDt(sprintf('%s/IR_Modes.txt',Pth),{sprintf('Md%02d',jj)});
+%    eval(sprintf('Modes(jj).cf=str2num(M.Md%02d);',jj,jj));
+%end
+%if isempty(Mdf);
+%    Modes=[];
+%end
+%H.Modes=Modes;
+
+fprintf('searching for Modes...\n')
+H.Modes=hExtrctMds(H,1024);
+fprintf('%d modes found.\n',length(H.Modes))
 
 %* Save metadata
 H.DateCreated=date;

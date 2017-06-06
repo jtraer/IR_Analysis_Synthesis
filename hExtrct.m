@@ -211,6 +211,14 @@ if length(Pth)>0;
     figure(4)
     %*** => scroll through snaphsots
     plot(20*log10(abs(H.spc)),H.Spcff/1e3);
+    hold on;
+    for jm=1:length(H.Modes);
+        [~,mndx]=min(abs(H.Spcff-H.Modes(jm).f0+H.Modes(jm).bw));
+        [~,mxdx]=min(abs(H.Spcff-H.Modes(jm).f0-H.Modes(jm).bw));
+        [~,f0ndx]=min(abs(H.Spcff-H.Modes(jm).f0));
+        plot(20*log10(abs(H.spc(f0ndx)/min(abs(H.spc))))*sin(linspace(0,pi,(mxdx-mndx+1)))+20*log10(min(abs(H.spc))),H.Spcff(mndx:mxdx)/1e3,'r');
+        plot(20*log10(abs(H.spc(f0ndx))),H.Spcff(f0ndx)/1e3,'ro')
+    end
     xlabel('Power (db)');
     ylabel('Frequency (kHz)')
     set(gca,'yscale','log')

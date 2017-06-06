@@ -81,7 +81,7 @@ while ndx<=length(dMds);
             mn2ndx=tpndx;
             %** we have a mode
             mcnt=mcnt+1;
-            M(mcnt).f0=Mxff(pkndx);
+            M(mcnt).cf=Mxff(pkndx);
             bnndx=min([(mn2ndx-pkndx) (pkndx-mn1ndx)]);
             M(mcnt).bw=min([abs(ff(mn2ndx)-ff(pkndx)) abs(ff(pkndx)-ff(mn1ndx))]);
             M(mcnt).FV=sum(Mds(pkndx)+[-1 1]*bnndx);
@@ -97,6 +97,6 @@ plot(Mxff,20*log10(Mds+1e-24)); hold on
 plot(Mxff(undx),20*log10(Mds(undx)),'o')
 plot(Mxff(dndx),20*log10(Mds(dndx)),'o')
 for jm=1:length(M);
-    plot(M(jm).f0+[-1 1]*M(jm).bw,20*log10(M(jm).FV)*ones(1,2),'k+-');
+    plot(M(jm).cf+[-1 1]*M(jm).bw,20*log10(M(jm).FV)*ones(1,2),'k+-');
 end
 

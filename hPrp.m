@@ -5,6 +5,13 @@ function H=hPrp(H,C,Nbnds,flm,sb_fs,ftp);
 set(0,'DefaultFigureVisible','off');
 fntsz=15;
 
+if ~isempty(C);
+    D=C.Direct;
+    V=C.Omni;
+else
+    D=[]; V=[];
+end
+
 %* == Compute kurtosis in 10ms windows ==
 %** Find the numbr of points in a 2ms window and make sure it is an even number
 Nbn=ceil(0.002*H.fs); 
@@ -105,12 +112,13 @@ for jbn=1:Nbnds;
     plot([1:length(tmp)]/H.fs,(Pft(2)+sdDRR/2)+(Pft(1)-sdB/2)*[1:length(tmp)]/H.fs,'r:');
     plot([1:length(tmp)]/H.fs,(Pft(2)-sdDRR/2)+(Pft(1)+sdB/2)*[1:length(tmp)]/H.fs,'r:');
     plot([1 length(tmp)]/H.fs,Pft(2)+Pft(1)*Test*ones(1,2),'k--');
-    if ~isempty(C)
-        plot([1:length(tmp)]/H.fs,tmp3(1)-(60/C(2).RT60(jbn))*[1:length(tmp)]/H.fs,'m--');
+    if ~isempty(V)
+        tV=V(find([V.Channel]==H.Channel));
+        plot([1:length(tmp)]/H.fs,tmp3(1)-(60/tV.RT60(jbn))*[1:length(tmp)]/H.fs,'m--');
         %** Check if recorded decay is less than or equal to the speaker-microphone IR
-        if C(2).RT60(jbn)>(-60/Pft(1))*0.75;
+        if tV.RT60(jbn)>(-60/Pft(1))*0.75;
             BdBndsFlg(jbn)=1;
-            text(0.5*Test,Pft(2),1.001,sprintf('Danger: Speaker-Microphone IR RT60 is %d%% of recorded',round(100*C(2).RT60(jbn)/(-60/Pft(1)))));
+            text(0.5*Test,Pft(2),1.001,sprintf('Danger: Speaker-Microphone IR RT60 is %d%% of recorded',round(100*tV.RT60(jbn)/(-60/Pft(1)))));
         end
     end
     hold off
@@ -132,8 +140,10 @@ for jbn=1:Nbnds;
     sdR(jbn)=sdRT60;
     sda(jbn)=sdDRR;
     raw_aa(jbn)=aa(jbn);
-    if ~isempty(C)
-        aa(jbn)=Pft(2)-(C(1).DRR(jbn)-mean(C(2).DRR)); 
+    if ~isempty(D)
+        tD=D(find([D.Channel]==H.Channel));
+        tV=V(find([V.Channel]==H.Channel));
+        aa(jbn)=Pft(2)-(tD.DRR(jbn)-mean(tV.DRR)); 
     end
     alph=aa(jbn);
     Rtt(jbn)=60/bt;
@@ -145,8 +155,10 @@ for jbn=1:Nbnds;
     infndx=ceil(Test*H.fs);
     if infndx>length(tmp); infndx=length(tmp)-1; end
     nCgrm(jbn,:)=tmp.*([ones(1,infndx) 10.^((-bt*[1:(length(tmp)-infndx)]/H.fs)/20)]);
-    if ~isempty(C)
-        nCgrm(jbn,:)=10^((-C(1).DRR(jbn)+mean(C(2).DRR))/20)*nCgrm(jbn,:);
+    if ~isempty(D)
+        tD=D(find([D.Channel]==H.Channel));
+        tV=V(find([V.Channel]==H.Channel));
+        nCgrm(jbn,:)=10^((-tD.DRR(jbn)+mean(tV.DRR))/20)*nCgrm(jbn,:);
     end
     % compute higher order models
     %for jp=1:Nprms; %fprintf('poly %d\n',jp)
@@ -184,10 +196,11 @@ end
 
 % and compute spectrograms to find modes
 [NsSgrm,Nsff,Nstt]=spectrogram(nh,32,16,32,H.fs);
-if ~isempty(C)
-    ClSgrm=mean(abs(C(1).Ns.Sgrm),2);
+if ~isempty(D)
+    tD=D(find([D.Channel]==H.Channel));
+    ClSgrm=mean(abs(tD.Ns.Sgrm),2);
     ClSgrm=medfilt2(ClSgrm,[2 1],'Symmetric');
-    NsSgrm=NsSgrm./(mean(abs(C(1).Ns.Sgrm),2)*ones(1,length(Nstt)));
+    NsSgrm=NsSgrm./(mean(abs(tD.Ns.Sgrm),2)*ones(1,length(Nstt)));
 end
 Nft=512; Nbn=Nft;
 if Nbn>length(nh)/8;
@@ -195,8 +208,9 @@ if Nbn>length(nh)/8;
     Nbn=Nbn+rem(Nbn,2);
 end
 [MdSgrm,Mdff,Mdtt]=spectrogram(nh,Nbn,Nbn/2,Nft,H.fs);
-if ~isempty(C)
-    ClSgrm=mean(abs(C(1).Md.Sgrm),2);
+if ~isempty(D)
+    tD=D(find([D.Channel]==H.Channel));
+    ClSgrm=mean(abs(tD.Md.Sgrm),2);
     ClSgrm=medfilt2(ClSgrm,[15 1],'Symmetric');
     MdSgrm=MdSgrm./(ClSgrm*ones(1,length(Mdtt)));
 end

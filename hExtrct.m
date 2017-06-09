@@ -142,7 +142,7 @@ H.Spcff=[1:nft/2]*H.fs/nft;
 %H.Modes=Modes;
 
 fprintf('searching for Modes...\n')
-H.Modes=hExtrctMds(H,1024);
+H.Modes=hExtrctMds(H,2048);
 fprintf('%d modes found.\n',length(H.Modes))
 
 %* Save metadata

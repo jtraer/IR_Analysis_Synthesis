@@ -11,7 +11,9 @@ hp=plot(H.RT60-H.RT60_std/2,H.ff/1e3,':'); set(hp,'color',pclr)
 set(gca,'yscale','log','xscale','log');
 hold on
 if ~isempty(C)
-    plot(C(2).RT60,H.ff/1e3,'k:');
+    V=C.Omni;
+    tV=V(find([V.Channel]==H.Channel));
+    plot(tV.RT60,H.ff/1e3,'k:');
     plot(H.RT60(H.BdBndsFlg),H.ff(H.BdBndsFlg)/1e3,'k+');
 end
 hold off;

@@ -65,7 +65,7 @@ for jh=1:length(Dh);
 		%*** => Load (or query) MetaData
 		M=GtMtDt([Fllnm '/Meta.txt'],Mt);
         if (jh==1&&jch==1);
-            jnk=input('Now is a good time to copy the Meta Data file\n');
+            jnk=input('Now is a good time to copy the Meta Data file and add the photos\n');
         end
         %*** => re-order fields for consistency
         M=orderfields(M);

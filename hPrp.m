@@ -67,6 +67,11 @@ for jsnp=1:Nsnps;
     SnpCgrm(:,:,jsnp)=sCgrm;
 end
 
+%Search for modes
+fprintf('searching for Modes...\n')
+H.Modes=hExtrctMds(H,2048);
+fprintf('%d modes found.\n',length(H.Modes))
+
 %* == Scroll through cochlear channels ==
 eval(sprintf('! mkdir -p %s/Subbands_%d',H.Path,Nbnds));
 eval(sprintf('! mkdir -p %s/Modes_%d',H.Path,length(H.Modes)));
@@ -194,10 +199,6 @@ for jj=1:2:11; cnt=cnt+1;
     Attck(cnt).T=Nft/H.fs;
 end
 
-%Search for modes
-fprintf('searching for Modes...\n')
-H.Modes=hExtrctMds(H,2048);
-fprintf('%d modes found.\n',length(H.Modes))
 
 % and compute spectrograms to find modes
 [NsSgrm,Nsff,Nstt]=spectrogram(nh,32,16,32,H.fs);

@@ -19,6 +19,8 @@ Nbnds=[4];
 flm=[50 20e3];
 %** = Frequency of subband envelopes in Hz =
 Sb_fs=1e4;
+% Overwrite calibration files (Do this if hPrp or any paths have been changed)
+OvrWrtCAL=1;
 %** filetype
 %ftp='epsc';
 ftp='jpg';
@@ -44,7 +46,7 @@ if ~isempty(Cpth)
             ccnt=ccnt+1;
             load(sprintf('%s/%s/ch%d/H.mat',Dh(jc).PthStm,Dh(jc).name(1:end-4),jch));
             %====> Check to see if the IR is already analyzed
-            if exist(sprintf('%s/H_%03dbnds.mat',H.Path,Nbnds))==2;
+            if (exist(sprintf('%s/H_%03dbnds.mat',H.Path,Nbnds))==2&&OvrWrtCAL==0);
                 load(sprintf('%s/H_%03dbnds.mat',H.Path,Nbnds));
             else
                 H=hPrp(H,[],Nbnds,flm,Sb_fs,ftp);

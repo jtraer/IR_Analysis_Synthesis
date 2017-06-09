@@ -67,6 +67,7 @@ if ~isempty(Cpth)
     C.Omni=V;
 
 %	%** save plots of calibration information
+    close all
     %*** Plot direct vs volume DRRs
     fcnt=0;
     fcnt=fcnt+1;
@@ -83,6 +84,16 @@ if ~isempty(Cpth)
     OtPth=GtPthStm(GtPthStm(D(1).Path));
     title([OtPth ': CAL RT60']);
     saveas(gcf,sprintf('%s/CAL_RT60',OtPth),'jpg');
+    
+    %*** Plot direct vs volume spectra
+    fcnt=fcnt+1;
+    figure(fcnt);
+    PltCAL_Spc(D,V);
+    OtPth=GtPthStm(GtPthStm(D(1).Path));
+    title([OtPth ': CAL Spectra']);
+    saveas(gcf,sprintf('%s/CAL_Spc',OtPth),'jpg');
+
+    fprintf('Calibration plots saved\n')
 end % if ~isempty(Dc)
 clear H 
 

@@ -2,12 +2,12 @@ function [R,C,Mt]=Input_IR_Survey_2;
 
 % Path to Recordings and Golay codes
 rcnt=0;
-rcnt=rcnt+1; R(rcnt).Pth='RecordedAudio/RoomReverb/4022'; R(rcnt).Gpth='RawGolay/golay_44kHz_N17_2min_24bits'; 
-rcnt=rcnt+1; R(rcnt).Pth='RecordedAudio/RoomReverb/4078'; R(rcnt).Gpth='RawGolay/golay_44kHz_N17_2min_24bits'; 
+rcnt=rcnt+1; R(rcnt).Pth='RecordedAudio/Reverb_Survey_2/4022'; R(rcnt).Gpth='RawGolay/golay_44kHz_N17_2min_24bits'; 
+rcnt=rcnt+1; R(rcnt).Pth='RecordedAudio/Reverb_Survey_2/4078'; R(rcnt).Gpth='RawGolay/golay_44kHz_N17_2min_24bits'; 
 
 %==> Calibration recordings
 ccnt=0;
-ccnt=ccnt+1; C(ccnt).Pth='RecordedAudio/RoomReverb/CAL'; C(ccnt).Gpth='RawGolay/golay_44kHz_N17_2min_24bits'; 
+ccnt=ccnt+1; C(ccnt).Pth='RecordedAudio/Reverb_Survey_2/CAL_TscmZpp'; C(ccnt).Gpth='RawGolay/golay_44kHz_N17_2min_24bits'; 
 
 % Specify MetaData to be saved with recording
 mcnt=0;

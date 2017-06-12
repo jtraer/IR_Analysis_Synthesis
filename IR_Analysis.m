@@ -20,7 +20,7 @@ flm=[50 20e3];
 %** = Frequency of subband envelopes in Hz =
 Sb_fs=1e4;
 % Overwrite calibration files (Do this if hPrp or any paths have been changed)
-OvrWrtCAL=1;
+OvrWrtCAL=0;
 %** filetype
 %ftp='epsc';
 ftp='jpg';
@@ -116,7 +116,7 @@ for jh=1:length(Dh);
     tDh=dir(sprintf('%s/%s/ch*',Dh(jc).PthStm,Dh(jc).name(1:end-4)));
     for jch=1:length(tDh);
         hcnt=hcnt+1;
-        load(sprintf('%s/%s/ch%d/H.mat',Dh(jc).PthStm,Dh(jc).name(1:end-4),jch));
+        load(sprintf('%s/%s/ch%d/H.mat',Dh(jh).PthStm,Dh(jh).name(1:end-4),jch));
         %*** => Analyze
         H=hPrp(H,C,Nbnds,flm,Sb_fs,ftp);
         save(sprintf('%s/H_%03dbnds.mat',H.Path,Nbnds),'H');

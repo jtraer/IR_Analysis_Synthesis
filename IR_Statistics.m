@@ -18,7 +18,7 @@ pth=pwd;
 if strcmp(pth(1:3),'/om')
     tmtpth='../timit'
 else
-    tmtpth='/Users/jtraer/LabBook/Workshop/PerceptualExperiments/Sandbox/timit');
+    tmtpth='/Users/jtraer/LabBook/Workshop/PerceptualExperiments/Sandbox/timit';
 end
 
 %** Specify Rejection Criteria

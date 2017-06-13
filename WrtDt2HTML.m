@@ -1,13 +1,15 @@
 %* == function WrtDt2HTML.m : Takes stimuli/IRs stored in a structure BH and makes a set of plots to be arranged in an interactive html  
 %** Written by James Traer - jtraer@mit.edu
 
-function WrtDt2HTML(Dh,fNm,PltPrms)
+function WrtDt2HTML(Dh,fNm,PltPrms,tmtpth)
+if nargin>4;
+    tmtpth=[];
+end
 
 %* == Inputs
 %** BH  : a structure of audio files 
 %** fNm : a filename to save the data under
 fntsz=15;
-tmtpth='/Users/jtraer/LabBook/Workshop/PerceptualExperiments/Sandbox/timit'
 if exist(tmtpth)==7
     Ds=GetTimit(tmtpth,'shuffle');
     Ds=Ds(1);

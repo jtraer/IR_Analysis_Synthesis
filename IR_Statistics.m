@@ -14,6 +14,13 @@ eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 
 Nbnds=4;
 
+pth=pwd;
+if strcmp(pth(1:3),'/om')
+    tmtpth='../timit'
+else
+    tmtpth='/Users/jtraer/LabBook/Workshop/PerceptualExperiments/Sandbox/timit');
+end
+
 %** Specify Rejection Criteria
 rcnt=0;
 rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H.DateCreated)<datenum(''12-May-2016'')';
@@ -93,7 +100,7 @@ eval('! mkdir IRMAudio/Audio')
 hPltStts(Dh,Mt);
 %* == Write an html file to display all the data
 %** clear the output folders
-WrtDt2HTML(Dh,'IRMAudio/IRdata',Mt);
+WrtDt2HTML(Dh,'IRMAudio/IRdata',Mt,tmtpth);
 fprintf('Data written to:\n\n %s/IR_Data_Summary.html\n\n',pwd)
 eval('! zip IRMAudio/Audio.zip IRMAudio/Audio')
 

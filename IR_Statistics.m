@@ -102,7 +102,8 @@ hPltStts(Dh,Mt);
 %** clear the output folders
 WrtDt2HTML(Dh,'IRMAudio/IRdata',Mt,tmtpth);
 fprintf('Data written to:\n\n %s/IR_Data_Summary.html\n\n',pwd)
-eval('! zip IRMAudio/Audio.zip IRMAudio/Audio')
+unix('cp IR_Data_Summary.html IRMAudio/')
+unix('! zip -r IRMAudio.zip IRMAudio/*')
 
 %* == TODO: Collect details about code runtime
 %* == TODO: Save this code to a summary file

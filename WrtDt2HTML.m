@@ -54,7 +54,7 @@ for jIR=[1:length(Dh)]
     end
 
     %** =>  make a folder to save images and audio to
-    FldrNm=sprintf('%s%s',OtPth,H.Name); 
+    FldrNm=sprintf('%s%s/%s',OtPth,H.Path,H.Name); 
     eval(sprintf('! mkdir -p %s',FldrNm));
 
     %** => add a comma to separate indices in the JSON

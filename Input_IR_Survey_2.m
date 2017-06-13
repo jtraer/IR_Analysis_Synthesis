@@ -23,11 +23,11 @@ mcnt=mcnt+1;Mt{mcnt}='Meta.App.AzimuthalAngle_fromFront';
 %==> Recording info
 mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Class';
 %===> Room reverb
-%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Size';
-%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.WallProximity';
-%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Distance';
+mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Size';
+mcnt=mcnt+1;Mt{mcnt}='Meta.Env.WallProximity';
+mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Distance';
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.NoPeople';
-%mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Door';
+mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Door';
 %===> Object reverb
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Size';
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Material';

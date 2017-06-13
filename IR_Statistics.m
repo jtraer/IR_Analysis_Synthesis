@@ -16,7 +16,7 @@ Nbnds=4;
 
 %** Specify Rejection Criteria
 rcnt=0;
-rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H(cnt).DateCreated)<datenum(''12-May-2016'')';
+rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H.DateCreated)<datenum(''12-May-2016'')';
 
 %* ==== Load data  ====
 
@@ -55,9 +55,9 @@ end
 %* Label the Path structures
 for jh=1:length(Dh)
     load(sprintf('%s/%s',Dh(jh).PthStm,Dh(jh).name))
-    M=GtMtDt(sprintf('%s',Dh(jh).PthStm),Mt);
+    M=GtMtDt(sprintf('%s/Meta.txt',Dh(jh).PthStm(1:end-4)),Mt);
     M=orderfields(M);
-    Dh(jh).Meta=M;
+    Dh(jh).Meta=M.Meta;
     %Mflds=fields(M);
     %for jfld=1:length(Mflds)
     %    if ~strcmp(Mflds{jfld},'Path')
@@ -90,10 +90,10 @@ end
 %** Write Data
 eval('! rm -rf IRMAudio/*');
 eval('! mkdir IRMAudio/Audio')
-H=hPltStts(Dh,Mt);
+hPltStts(Dh,Mt);
 %* == Write an html file to display all the data
 %** clear the output folders
-WrtDt2HTML(H,'IRMAudio/IRdata',Mt);
+WrtDt2HTML(Dh,'IRMAudio/IRdata',Mt);
 fprintf('Data written to:\n\n %s/IR_Data_Summary.html\n\n',pwd)
 eval('! zip IRMAudio/Audio.zip IRMAudio/Audio')
 

@@ -1,33 +1,15 @@
-function PltIRStts_MdOnPwr(H,PltPrm,Mt,MrkMt,cmpMt)
+function PltIRStts_MdOnPwr(Dh,PltPrm,V)
+% preallocate one data point for each class for the legend
+MkLgnd(V)
 
 % scroll through classes
-for jj=1:length(Mt)
-    % compile a substructure of just this class
-    jmt=Mt(jj);
-    tH=[];
-    for jh=1:length(H);
-        eval(sprintf('if strcmp(H(jh).%s,Mt(jj)); tH=[tH H(jh)]; end',PltPrm));
+for jj=1:length(V)
+    % collate all IRs that have this particular label
+    tH=[]; 
+    for jh=1:length(Dh);
+        eval(sprintf('if strcmp(Dh(jh).%s,V(jj).name); load(''%s/%s''); tH=[tH H]; end;',PltPrm,Dh(jh).PthStm,Dh(jh).name));
     end
-    Mdf=[];
-    MdR=[];
-    for jh=1:length(tH);
-        Mdf=[Mdf [tH(jh).Modes.cf]];
-        MdR=[MdR [tH(jh).Modes.OnPwr]];
-    end
-    % plot this class
-    hp=plot(MdR,Mdf/1e3,sprintf('%s',MrkMt(jj)));
-    set(hp,'color',cmpMt(ceil(length(cmpMt)*jj/length(Mt)),:));
-    hold on
-end; legend(Mt);
-% now that legend is made we cycle through and plot the individaul data points
-for jj=1:length(Mt)
-    % compile a substructure of just this class
-    jmt=Mt(jj);
-    tH=[];
-    for jh=1:length(H);
-        eval(sprintf('if strcmp(H(jh).%s,Mt(jj)); tH=[tH H(jh)]; end',PltPrm));
-    end
-    % interpolate
+    % specify the ordinates and abscissa
     Mdf=[];
     MdR=[];
     frqlms=[1e6 0];
@@ -43,10 +25,13 @@ for jj=1:length(Mt)
     ndx=find(diff(Mdf)==0);
     Mdf(ndx+1)=Mdf(ndx+1)+1e-3*rand(size(ndx));
     RR=interp1(Mdf,MdR,ff);
-    % plot
-    hp=plot(RR,ff/1e3,sprintf('-'));
-    set(hp,'color',cmpMt(ceil(length(cmpMt)*jj/length(Mt)),:));
+    % plot this class
+    hp=plot(MdR,Mdf/1e3,V(jj).mrk);
+    set(hp,'color',V(jj).cmp);
     hold on
+    hp=plot(RR,ff/1e3,'-');
+    set(hp,'color',V(jj).cmp);
+    set(hp,'linewidth',3,'markersize',6);
 end; 
 hold off
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');

@@ -1,41 +1,23 @@
-function PltIRStts_MdOPvsRT60(H,PltPrm,Mt,MrkMt,cmpMt)
+function PltIRStts_MdOPvsRT60(Dh,PltPrm,V)
+% preallocate one data point for each class for the legend
+MkLgnd(V)
 
 % scroll through classes
-for jj=1:length(Mt)
-    % compile a substructure of just this class
-    jmt=Mt(jj);
-    tH=[];
-    for jh=1:length(H);
-        eval(sprintf('if strcmp(H(jh).%s,Mt(jj)); tH=[tH H(jh)]; end',PltPrm));
+for jj=1:length(V)
+    % collate all IRs that have this particular label
+    tH=[]; 
+    for jh=1:length(Dh);
+        eval(sprintf('if strcmp(Dh(jh).%s,V(jj).name); load(''%s/%s''); tH=[tH H]; end;',PltPrm,Dh(jh).PthStm,Dh(jh).name));
     end
+    % specify the ordinates and abscissa
     Mdf=[];
     MdR=[];
     MdP=[];
+    OPlms=[1e6 0];
     for jh=1:length(tH);
         Mdf=[Mdf [tH(jh).Modes.cf]];
         MdR=[MdR [tH(jh).Modes.RT60]];
         MdP=[MdP [tH(jh).Modes.OnPwr]];
-    end
-    % plot this class
-    hp=plot(MdR,MdP,sprintf('%s',MrkMt(jj)));
-    set(hp,'color',cmpMt(ceil(length(cmpMt)*jj/length(Mt)),:));
-    hold on
-end; legend(Mt);
-% now that legend is made we cycle through and plot the individaul data points
-for jj=1:length(Mt)
-    % compile a substructure of just this class
-    jmt=Mt(jj);
-    tH=[];
-    for jh=1:length(H);
-        eval(sprintf('if strcmp(H(jh).%s,Mt(jj)); tH=[tH H(jh)]; end',PltPrm));
-    end
-    % interpolate
-    MdP=[];
-    MdR=[];
-    OPlms=[1e6 0];
-    for jh=1:length(tH);
-        MdP=[MdP [tH(jh).Modes.OnPwr]];
-        MdR=[MdR [tH(jh).Modes.RT60]];
         OPlms(1)=min([OPlms(1) [tH(jh).Modes.OnPwr]]);
         OPlms(2)=max([OPlms(2) [tH(jh).Modes.OnPwr]]);
     end
@@ -45,10 +27,12 @@ for jj=1:length(Mt)
     ndx=find(diff(MdP)==0);
     MdP(ndx+1)=MdP(ndx+1)+1e-3*rand(size(ndx));
     RR=interp1(MdP,MdR,PP);
-    % plot
-    hp=plot(RR,PP,sprintf('-'));
-    set(hp,'color',cmpMt(ceil(length(cmpMt)*jj/length(Mt)),:));
+    % plot this class
+    hp=plot(MdR,MdP,V(jj).mrk);
+    set(hp,'color',V(jj).cmp);
     hold on
+    hp=plot(RR,PP,'-');
+    set(hp,'color',V(jj).cmp);
 end; 
 hold off
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');

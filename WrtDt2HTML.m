@@ -1,7 +1,7 @@
 %* == function WrtDt2HTML.m : Takes stimuli/IRs stored in a structure BH and makes a set of plots to be arranged in an interactive html  
 %** Written by James Traer - jtraer@mit.edu
 
-function WrtDt2HTML(BH,fNm,PltPrms)
+function WrtDt2HTML(Dh,fNm,PltPrms)
 
 %* == Inputs
 %** BH  : a structure of audio files 
@@ -28,7 +28,6 @@ if length(out)>length(cfl)+153;
 end
 
 %* == Log : Just started today (3rd-Oct)
-%** TODO: we need better audio (the IR convolved with speech)
 %** TODO: when debugged search and replace variable names for more generic ones
 
 %* ==== Crunch ====
@@ -41,15 +40,19 @@ else
     OtPth=fNm(1:sndx);
 end
 
-%** get the field names of the structure
-flds=fieldnames(BH);
 %** Open the JSON file for writing
 fid2=fopen(sprintf('%s.json',fNm),'w')
 fprintf(fid2,'var stimList = [\n')
 %** => start loop over IRs (jIR)
-for jIR=[1:length(BH)]
+for jIR=[1:length(Dh)]
+    load(sprintf('%s/%s',Dh(jIR).PthStm,Dh(jIR).name)); 
+    if jIR==1;
+        %** get the field names of the structure
+        flds=fieldnames(H);
+    end
+
     %** =>  make a folder to save images and audio to
-    FldrNm=sprintf('%s/h_%s_%dBnds',OtPth,BH(jIR).Name,length(BH(jIR).ff)-2);
+    FldrNm=sprintf('%s%s',OtPth,H.Name); 
     eval(sprintf('! mkdir -p %s',FldrNm));
 
     %** => add a comma to separate indices in the JSON
@@ -62,88 +65,45 @@ for jIR=[1:length(BH)]
     %** => Plot special values 
     %*** => This should be fixed when we want to generalize this code to other stimuli
     %*** => T0
-    fprintf(fid2,',\n"T0":\t%2.3f',median(BH(jIR).RT60));
+    fprintf(fid2,',\n"T0":\t%2.3f',median(H.RT60));
     %*** => path to audio
     %**** TODO update this to rescale volumes!!!
-    Dh=dir(sprintf('%s/h_denoised_%03d.wav',BH(jIR).Path,length(BH(jIR).ff)));
-    eval(sprintf('! cp %s/%s %s/h.wav',BH(jIR).Path,Dh(1).name,FldrNm));
+    tDh=dir(sprintf('%s/h_denoised_%03d.wav',H.Path,length(H.ff)));
+    eval(sprintf('! cp %s/%s %s/h.wav',H.Path,tDh(1).name,FldrNm));
     fprintf(fid2,',\n"sound":\t"%s/h.wav"',FldrNm);
     %*** => copy to a folder of just audio
-    eval(sprintf('! cp %s/%s IRMAudio/Audio/%s.wav',BH(jIR).Path,Dh(1).name,BH(jIR).Name));
+    eval(sprintf('! cp %s/%s IRMAudio/Audio/%s.wav',H.Path,tDh(1).name,H.Name));
 
     %*** => convolve with a TIMIT sentence
     if length(Ds)>0;
-        [y,fy]=RIRcnv(TMT(1).s,TMT(1).fs,BH(jIR).nh,BH(jIR).fs,1);
+        [y,fy]=RIRcnv(TMT(1).s,TMT(1).fs,H.nh,H.fs,1);
         audiowrite(sprintf('%s/tmt1.wav',FldrNm),y,fy);
         fprintf(fid2,',\n"speech":\t"%s/tmt1.wav"',FldrNm);
     end
     %%*** => write an image of the time series
-    unix(sprintf('sips -s format png %s/IR.jpg --out %s/ts.png',BH(jIR).Path,FldrNm));
+    unix(sprintf('sips -s format png %s/IR.jpg --out %s/ts.png',H.Path,FldrNm));
     fprintf(fid2,',\n"TimeSeries":\t"%s/ts.png"',FldrNm);
 
     %*** => write an image of the synthetic time series
-    %figure;
-    %tt=[1:length(BH(jIR).h_Eco)]/BH(jIR).fs;
-    %plot(tt*1e3,sign(BH(jIR).h_Eco).*abs(BH(jIR).h_Eco).^(0.6));
-    %hold on
-    %plot(tt([2 end])*1e3,10^(-1*0.6)*ones(1,2),'k:');
-    %plot(tt([2 end])*1e3,-10^(-1*0.6)*ones(1,2),'k:');
-    %plot(tt([2 end])*1e3,10^(-2*0.6)*ones(1,2),'k:');
-    %plot(tt([2 end])*1e3,-10^(-2*0.6)*ones(1,2),'k:');
-    %plot(tt([2 end])*1e3,10^(-3*0.6)*ones(1,2),'k:');
-    %plot(tt([2 end])*1e3,-10^(-3*0.6)*ones(1,2),'k:');
-    %set(gca,'xlim',[-20 1.2e3],'xscale','log');
-    %xlabel('Time (ms)'); ylabel('Amplitude (compressed)')
-    %set(gca,'fontsize',fntsz);
-    %drawnow
-    %saveas(gcf,sprintf('%s/ts_Eco',FldrNm),'epsc');
-    %saveas(gcf,sprintf('%s/ts_Eco.png',FldrNm));
-    %fprintf(fid2,',\n"Eco_TimeSeries":\t"%s/ts_Eco.png"',FldrNm);
-    %%**** => save the audio
-    %audiowrite(sprintf('%s/h_Eco.wav',FldrNm),BH(jIR).h_Eco,BH(jIR).fs,'BitsPerSample',24);
-    %fprintf(fid2,',\n"sound_Eco":\t"%s/h_Eco.wav"',FldrNm);
-    %close all
 
     %%*** => plot C-gram
-    unix(sprintf('sips -s format png %s/Cgram.jpg --out %s/Cgrm.png',BH(jIR).Path,FldrNm));
+    unix(sprintf('sips -s format png %s/Cgram.jpg --out %s/Cgrm.png',H.Path,FldrNm));
     fprintf(fid2,',\n"Cgrm":\t"%s/Cgrm.png"',FldrNm);
     
     %%*** => plot synthetic C-gram
-    %figure;
-    %h=BH(jIR).h_Eco.'; fs=BH(jIR).fs;
-    %Npts=length(h);
-    %[fltbnk,bff,erbff]=make_erb_cos_filters(3*Npts,fs,Nbnds,BH(jIR).ff(1),BH(jIR).ff(end));
-    %Cgrm=generate_subbands([zeros(Npts,1); h; zeros(Npts,1)].',fltbnk);
-    %Cgrm=Cgrm(Npts+[1:Npts],:).'; fprintf('Cgram made\n')
-    %imagesc(BH(jIR).tt,[1:Nbnds+2],20*log10(abs(hilbert(Cgrm.').')));
-    %axis xy
-    %colorbar
-    %set(gca,'clim',[-60 0])
-    %cmp=othercolor('BuGn9',256);
-    %colormap(cmp)
-    %set(gca,'ytick',[2 Nbnds+2],'yticklabel',sprintf('%2.2f\n',BH(jIR).ff([2 Nbnds-1])/1e3));
-    %set(gca,'xlim',[0 0.2],'ylim',[1 Nbnds+2]);
-    %xlabel('Time (s)');
-    %ylabel('Frequency (kHz)')
-    %set(gca,'fontsize',fntsz);
-    %drawnow
-    %saveas(gcf,sprintf('%s/Cgrm_Eco',FldrNm),'epsc');
-    %saveas(gcf,sprintf('%s/Cgrm_Eco.png',FldrNm));
-    %fprintf(fid2,',\n"Cgrm_Eco":\t"%s/Cgrm_Eco.png"',FldrNm);
-    %close all
     
     %%*** => plot RT60
-    unix(sprintf('sips -s format png %s/RT60.jpg --out %s/RT60.png',BH(jIR).Path,FldrNm));
+    unix(sprintf('sips -s format png %s/RT60.jpg --out %s/RT60.png',H.Path,FldrNm));
     fprintf(fid2,',\n"RT60":\t"%s/RT60.png"',FldrNm);
     
     %%*** => plot spectrum
-    unix(sprintf('sips -s format png %s/IR_AttckSpc.jpg --out %s/Spc.png',BH(jIR).Path,FldrNm));
+    unix(sprintf('sips -s format png %s/IR_AttckSpc.jpg --out %s/Spc.png',H.Path,FldrNm));
     fprintf(fid2,',\n"Spc":\t"%s/Spc.png"',FldrNm);
     
     %** ==> loop over fields in structure and write them to the JSON file (jfld)
     for jf=1:length(flds); 
         fld=flds{jf};
-        vl=getfield(BH(jIR),fld);
+        vl=getfield(H,fld);
         %*** ==> if it's a string write it
         if ischar(vl);
             fprintf(fid2,',\n"%s":\t"%s"',fld,vl);

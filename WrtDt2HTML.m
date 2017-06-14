@@ -54,7 +54,7 @@ for jIR=[1:length(Dh)]
     end
 
     %** =>  make a folder to save images and audio to
-    FldrNm=sprintf('%s%s/%s',OtPth,H.Path,H.Name); 
+    FldrNm=sprintf('%s%s/%s',OtPth,H.Path); 
     eval(sprintf('! mkdir -p %s',FldrNm));
 
     %** => add a comma to separate indices in the JSON
@@ -71,10 +71,12 @@ for jIR=[1:length(Dh)]
     %*** => path to audio
     %**** TODO update this to rescale volumes!!!
     tDh=dir(sprintf('%s/h_denoised_%03d.wav',H.Path,length(H.ff)));
-    eval(sprintf('! cp %s/%s %s/h.wav',H.Path,tDh(1).name,FldrNm));
-    fprintf(fid2,',\n"sound":\t"%s/h.wav"',FldrNm);
+    if length(tDh)>0
+        eval(sprintf('! cp %s/%s %s/h.wav',H.Path,tDh(1).name,FldrNm));
+        fprintf(fid2,',\n"sound":\t"%s/h.wav"',FldrNm);
+    end
     %*** => copy to a folder of just audio
-    eval(sprintf('! cp %s/%s IRMAudio/Audio/%s.wav',H.Path,tDh(1).name,H.Name));
+    %eval(sprintf('! cp %s/%s IRMAudio/Audio/%s.wav',H.Path,tDh(1).name,H.Name));
 
     %*** => convolve with a TIMIT sentence
     if length(Ds)>0;
@@ -85,6 +87,7 @@ for jIR=[1:length(Dh)]
     %%*** => write an image of the time series
     unix(sprintf('sips -s format png %s/IR.jpg --out %s/ts.png',H.Path,FldrNm));
     fprintf(fid2,',\n"TimeSeries":\t"%s/ts.png"',FldrNm);
+
 
     %*** => write an image of the synthetic time series
 
@@ -99,9 +102,9 @@ for jIR=[1:length(Dh)]
     fprintf(fid2,',\n"RT60":\t"%s/RT60.png"',FldrNm);
     
     %%*** => plot spectrum
-    unix(sprintf('sips -s format png %s/IR_AttckSpc.jpg --out %s/Spc.png',H.Path,FldrNm));
-    fprintf(fid2,',\n"Spc":\t"%s/Spc.png"',FldrNm);
-    
+%    unix(sprintf('sips -s format png %s/IR_AttckSpc.jpg --out %s/Spc.png',H.Path,FldrNm));
+%    fprintf(fid2,',\n"Spc":\t"%s/Spc.png"',FldrNm);
+
     %** ==> loop over fields in structure and write them to the JSON file (jfld)
     for jf=1:length(flds); 
         fld=flds{jf};

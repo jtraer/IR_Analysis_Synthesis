@@ -36,6 +36,10 @@ for jPrm=1:length(PltPrms)
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_DRR(Dh,PltPrms{jPrm},V)
     saveas(gcf,sprintf('IRMAudio/%s/DRR',PltPrms{jPrm}),'png');
+    % plot Kurtosis
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_Krt(Dh,PltPrms{jPrm},V)
+    saveas(gcf,sprintf('IRMAudio/%s/Krt',PltPrms{jPrm}),'png');
     % make a plot worthy for the paper
     fcnt=fcnt+1; hfg=figure(fcnt);
     ps=get(gcf,'position');

@@ -22,6 +22,7 @@ mcnt=mcnt+1;Mt{mcnt}='Meta.App.PolarAngle_fromTop';
 mcnt=mcnt+1;Mt{mcnt}='Meta.App.AzimuthalAngle_fromFront';
 %==> Recording info
 mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Class';
+mcnt=mcnt+1;Mt{mcnt}='Meta.Env.SpaceName';
 %===> Room reverb
 mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Size';
 mcnt=mcnt+1;Mt{mcnt}='Meta.Env.WallProximity';

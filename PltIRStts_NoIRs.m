@@ -19,6 +19,14 @@ for jj=1:length(V);
     set(hp,'color',V(jj).cmp);
     hp=text(xx(jj)+0.2,plt(jj),1.001,V(jj).name); 
     set(hp,'color',V(jj).cmp);
+    % name them
+    for jh=1:length(tH)
+        Nm=tH(jh).Path;
+        ndx=regexp(Nm,'/');
+        Nm=Nm(ndx(2):ndx(4));
+        hp=text(xx(jj),jh,Nm);
+        set(hp,'color',V(jj).cmp);
+    end
 end; hold off 
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');
 set(gca,'xlim',[0 1.2*xlm(2)]);

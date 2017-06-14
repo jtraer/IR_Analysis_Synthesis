@@ -48,6 +48,20 @@ for jr=1:length(Rpth);
         end
     end
 end
+for jr=1:length(Cpth);
+    tDh=dir([Cpth(jr).Pth '/*.wav']);
+    for jj=1:length(tDh);
+        ttDh=dir(sprintf('%s/%s/ch*',Cpth(jr).Pth,tDh(jj).name(1:end-4)));
+        for jch=1:length(ttDh);
+            t3Dh=dir(sprintf('%s/%s/ch%d/H_%03dbnds.mat',Cpth(jr).Pth,tDh(jj).name(1:end-4),jch,Nbnds)); 
+            %==> save path stems
+            if length(t3Dh)>0;
+                t3Dh.PthStm=sprintf('%s/%s/ch%d',Cpth(jr).Pth,tDh(jj).name(1:end-4),jch); 
+                Dh=[Dh; t3Dh];
+            end
+        end
+    end
+end
 
 %**  remove IRs we don't want to analyze today 
 for jr=1:length(Rjct);

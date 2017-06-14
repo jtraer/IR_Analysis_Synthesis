@@ -1,4 +1,4 @@
-function PltIRStts_SpcER(Dh,PltPrm,V);
+function PltIRStts_SpcTl(Dh,PltPrm,V);
 
 % preallocate one data point for each class for the legend
 MkLgnd(V)
@@ -10,9 +10,9 @@ for jj=1:length(V);
         eval(sprintf('if strcmp(Dh(jh).%s,V(jj).name); load(''%s/%s''); tH=[tH H]; end;',PltPrm,Dh(jh).PthStm,Dh(jh).name));
     end
     % specify the ordinates and abscissa
-    ff=H.Attck(3).ff/1e3; mplt=zeros(length(ff),length(tH));
+    ff=H.Attck(6).ff/1e3; mplt=zeros(length(ff),length(tH));
     for jh=1:length(tH);
-        mplt(:,jh)=20*log10(tH(jh).Attck(3).Spc);
+        mplt(:,jh)=20*log10(tH(jh).Attck(6).Spc);
     end
     plt=mean(mplt,2);
     err=std(mplt,[],2);

@@ -40,6 +40,10 @@ for jPrm=1:length(PltPrms)
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_Krt(Dh,PltPrms{jPrm},V)
     saveas(gcf,sprintf('IRMAudio/%s/Krt',PltPrms{jPrm}),'png');
+    % plot ER spectrum
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_SpcER(Dh,PltPrms{jPrm},V)
+    saveas(gcf,sprintf('IRMAudio/%s/SpcER',PltPrms{jPrm}),'png');
     % make a plot worthy for the paper
     fcnt=fcnt+1; hfg=figure(fcnt);
     ps=get(gcf,'position');

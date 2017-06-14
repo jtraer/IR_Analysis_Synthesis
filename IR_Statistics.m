@@ -95,13 +95,14 @@ end
 %saveas(gcf,sprintf('IRMFigs/Lgnd%dIRs_%s',length(BH),nw));
 
 %** Write Data
-eval('! rm -rf IRMAudio/*');
+unix('rm -rf IRMAudio/*');
 eval('! mkdir IRMAudio/Audio')
 hPltStts(Dh,Mt);
 %* == Write an html file to display all the data
 %** clear the output folders
 WrtDt2HTML(Dh,'IRMAudio/IRdata',Mt,tmtpth);
 fprintf('Data written to:\n\n %s/IR_Data_Summary.html\n\n',pwd)
+unix('rm -rf IRMAudio.zip');
 unix('cp IR_Data_Summary.html IRMAudio/')
 unix('! zip -r IRMAudio.zip IRMAudio/*')
 

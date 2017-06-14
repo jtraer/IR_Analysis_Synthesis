@@ -87,7 +87,7 @@ for jIR=[1:length(Dh)]
     %%*** => write an image of the time series
     ici=pwd;
     if strcmp(ici(1:3),'/om')
-        unix(sprintf('magick convert %s/IR.jpg %s/ts.png',H.Path,FldrNm));
+        unix(sprintf('convert %s/IR.jpg %s/ts.png',H.Path,FldrNm));
     else
         unix(sprintf('sips -s format png %s/IR.jpg --out %s/ts.png',H.Path,FldrNm));
     end
@@ -98,7 +98,7 @@ for jIR=[1:length(Dh)]
 
     %%*** => plot C-gram
     if strcmp(ici(1:3),'/om')
-        unix(sprintf('magick convert %s/Cgram.jpg %s/Cgrm.png',H.Path,FldrNm));
+        unix(sprintf('convert %s/Cgram.jpg %s/Cgrm.png',H.Path,FldrNm));
     else
         unix(sprintf('sips -s format png %s/Cgram.jpg --out %s/Cgrm.png',H.Path,FldrNm));
     end
@@ -108,7 +108,7 @@ for jIR=[1:length(Dh)]
     
     %%*** => plot RT60
     if strcmp(ici(1:3),'/om')
-        unix(sprintf('magick convert %s/RT60.jpg %s/RT60.png',H.Path,FldrNm));
+        unix(sprintf('convert %s/RT60.jpg %s/RT60.png',H.Path,FldrNm));
     else
         unix(sprintf('sips -s format png %s/RT60.jpg --out %s/RT60.png',H.Path,FldrNm));
     end

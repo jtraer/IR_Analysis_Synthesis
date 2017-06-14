@@ -85,20 +85,33 @@ for jIR=[1:length(Dh)]
         fprintf(fid2,',\n"speech":\t"%s/tmt1.wav"',FldrNm);
     end
     %%*** => write an image of the time series
-    unix(sprintf('sips -s format png %s/IR.jpg --out %s/ts.png',H.Path,FldrNm));
+    ici=pwd;
+    if strcmp(ici(1:3),'/om')
+        unix(sprintf('magick convert %s/IR.jpg %s/ts.png',H.Path,FldrNm));
+    else
+        unix(sprintf('sips -s format png %s/IR.jpg --out %s/ts.png',H.Path,FldrNm));
+    end
     fprintf(fid2,',\n"TimeSeries":\t"%s/ts.png"',FldrNm);
 
 
     %*** => write an image of the synthetic time series
 
     %%*** => plot C-gram
-    unix(sprintf('sips -s format png %s/Cgram.jpg --out %s/Cgrm.png',H.Path,FldrNm));
+    if strcmp(ici(1:3),'/om')
+        unix(sprintf('magick convert %s/Cgram.jpg %s/Cgrm.png',H.Path,FldrNm));
+    else
+        unix(sprintf('sips -s format png %s/Cgram.jpg --out %s/Cgrm.png',H.Path,FldrNm));
+    end
     fprintf(fid2,',\n"Cgrm":\t"%s/Cgrm.png"',FldrNm);
     
     %%*** => plot synthetic C-gram
     
     %%*** => plot RT60
-    unix(sprintf('sips -s format png %s/RT60.jpg --out %s/RT60.png',H.Path,FldrNm));
+    if strcmp(ici(1:3),'/om')
+        unix(sprintf('magick convert %s/RT60.jpg %s/RT60.png',H.Path,FldrNm));
+    else
+        unix(sprintf('sips -s format png %s/RT60.jpg --out %s/RT60.png',H.Path,FldrNm));
+    end
     fprintf(fid2,',\n"RT60":\t"%s/RT60.png"',FldrNm);
     
     %%*** => plot spectrum

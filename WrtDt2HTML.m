@@ -99,7 +99,6 @@ for jIR=[1:length(Dh)]
     PhPth=PhPth(1:ndx(3));
     Dph=dir(sprintf('%s*.jpg',PhPth));
     for jph=1:length(Dph)
-        keyboard
         if strcmp(ici(1:3),'/om')
             unix(sprintf('convert %s%s %s/Photo%d.png',PhPth,Dph(jph).name,FldrNm,jph));
         else

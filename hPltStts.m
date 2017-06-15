@@ -11,6 +11,7 @@ for jPrm=1:length(PltPrms)
     % define the parameter variables and a colorscheme to plot them
     for jj=1:length(Dh); eval(sprintf('Vr{jj}=Dh(jj).%s;',PltPrms{jPrm})); end
     Vr=unique(Vr);
+    Vr(find(strcmp('NA',Vr)))=[]; 
     MrkVr=repmat(['o','s','*','^','v','+'],[1 100]);
     cmpVr=othercolor('Dark28',32);
     clear V

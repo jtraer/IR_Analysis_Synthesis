@@ -23,7 +23,7 @@ for jj=1:length(V);
     plt=mean(krt,2);
     err=std(krt,[],2);
     % plot
-    hp=plot(tt,plt,[V(jj).mrk '-']); hold on
+    hp=plot(tt,plt,['-']); hold on
     set(hp,'linewidth',3,'markersize',6);
     set(hp,'color',V(jj).cmp);
     [mx,mxndx]=max(plt);

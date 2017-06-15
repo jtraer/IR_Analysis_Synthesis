@@ -148,7 +148,7 @@ for jbn=1:Nbnds;
     if ~isempty(D)
         tD=D(find([D.Channel]==H.Channel));
         tV=V(find([V.Channel]==H.Channel));
-        aa(jbn)=Pft(2)-(tD.DRR(jbn)-mean(tV.DRR)); 
+        %aa(jbn)=Pft(2)-(tD.DRR(jbn)-mean(tV.DRR)); 
     end
     alph=aa(jbn);
     Rtt(jbn)=60/bt;
@@ -163,7 +163,7 @@ for jbn=1:Nbnds;
     if ~isempty(D)
         tD=D(find([D.Channel]==H.Channel));
         tV=V(find([V.Channel]==H.Channel));
-        nCgrm(jbn,:)=10^((-tD.DRR(jbn)+mean(tV.DRR))/20)*nCgrm(jbn,:);
+        %nCgrm(jbn,:)=10^((-tD.DRR(jbn)+mean(tV.DRR))/20)*nCgrm(jbn,:);
     end
     % compute higher order models
     %for jp=1:Nprms; %fprintf('poly %d\n',jp)
@@ -206,7 +206,7 @@ if ~isempty(D)
     tD=D(find([D.Channel]==H.Channel));
     ClSgrm=mean(abs(tD.Ns.Sgrm),2);
     ClSgrm=medfilt2(ClSgrm,[2 1],'Symmetric');
-    NsSgrm=NsSgrm./(mean(abs(tD.Ns.Sgrm),2)*ones(1,length(Nstt)));
+    %NsSgrm=NsSgrm./(mean(abs(tD.Ns.Sgrm),2)*ones(1,length(Nstt)));
 end
 Nft=512; Nbn=Nft;
 if Nbn>length(nh)/8;
@@ -218,7 +218,7 @@ if ~isempty(D)
     tD=D(find([D.Channel]==H.Channel));
     ClSgrm=mean(abs(tD.Md.Sgrm),2);
     ClSgrm=medfilt2(ClSgrm,[15 1],'Symmetric');
-    MdSgrm=MdSgrm./(ClSgrm*ones(1,length(Mdtt)));
+    %MdSgrm=MdSgrm./(ClSgrm*ones(1,length(Mdtt)));
 end
 % compute modes
 for jm=1:length(H.Modes);

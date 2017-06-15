@@ -93,6 +93,20 @@ for jIR=[1:length(Dh)]
     end
     fprintf(fid2,',\n"TimeSeries":\t"%s/ts.png"',FldrNm);
 
+    %%*** => Copy photo 
+    PhPth=H.Path;
+    ndx=regexp(PhPth,'/');
+    PhPth=PhPth(1:ndx(3));
+    Dph=dir(sprintf('%s*.jpg',PhPth));
+    for jph=1:length(Dph)
+        keyboard
+        if strcmp(ici(1:3),'/om')
+            unix(sprintf('convert %s%s %s/Photo%d.png',PhPth,Dph(jph).name,FldrNm,jph));
+        else
+            unix(sprintf('sips -s format png %s%s --out %s/Photo%d.png',PhPth,Dph(jph).name,FldrNm,jph));
+        end
+    end
+    fprintf(fid2,',\n"Photo":\t"%s/Photo1.png"',FldrNm);
 
     %*** => write an image of the synthetic time series
 

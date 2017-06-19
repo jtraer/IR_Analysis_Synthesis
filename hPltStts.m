@@ -52,13 +52,15 @@ for jPrm=1:length(PltPrms)
         tDh=Dh;
     end
     % now remove any classes that are no longer relevant
-    for jv=1:length(V);
+    vcnt=0;
+    while vcnt<length(V); vcnt=vcnt+1;
         cnt=0;
         for jh=1:length(Dh);
-            eval(sprintf('if strcmp(Dh(jh).%s,V(jv).name); cnt=cnt+1; end',PltPrms{jPrm}));
+            eval(sprintf('if strcmp(Dh(jh).%s,V(vcnt).name); cnt=cnt+1; end',PltPrms{jPrm}));
         end
         if cnt==0;
-            V(jv)=[];
+            V(vcnt)=[];
+            vcnt=vcnt-1;
         end
     end
     % plot numbers of IRs per class

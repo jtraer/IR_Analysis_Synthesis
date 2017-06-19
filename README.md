@@ -1,7 +1,19 @@
 # IR_Analysis_Synthesis
+
 Apology
 ------
-This repository is under construction - check back soon if code is missing or broken or contact James Traer (jtraer@mit.edu) if you have any urgent requests or if you would like to be informed when I finally have the code uploaded - 2016/Nov/08
+This repository is under construction - check back soon if code is missing or broken or contact James Traer (jtraer@mit.edu) if you have any urgent requests or if you have found major problems - 2017/June/19
+
+## Overview
+
+The matlab code in this repository is designed to:
+* Measure Acoustic and Vibrational Impulse Responses (IRs) with low-intensity broadcasts
+* Analyze the subsequent IRs to measure:
+    * Spectra
+    * Time for reverberation to decay 60dB (RT60) as a function of frequency 
+
+
+
 
 Functioning usable code:
 -MakeGolaySequence.m

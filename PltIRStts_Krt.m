@@ -17,10 +17,13 @@ for jj=1:length(V);
     tt=[1:Npts]/H.fs;
     krt=zeros(Npts,length(tH));
     for jh=1:length(tH);
-        krt(:,jh)=median(tH(jh).krt);
-        krt(1:length(tH(jh).krt),jh)=tH(jh).krt;
+        jkrt=tH(jh).krt;
+        mxndx=prctile(jkrt,99);
+        jkrt=jkrt(mxndx(1):end);
+        krt(1:length(jkrt),jh)=jkrt;
+        krt(length(jkrt):end,jh)=median(jkrt);
     end
-    plt=mean(krt,2);
+    plt=median(krt,2);
     err=std(krt,[],2);
     % plot
     hp=plot(tt,plt,['-']); hold on

@@ -2,7 +2,19 @@ function PltIRStts_SpcER(Dh,PltPrm,V);
 
 % preallocate one data point for each class for the legend
 MkLgnd(V,Dh,PltPrm)
-    
+
+% find calibration recording
+C=[]; D=[];
+for jh=1:length(Dh);
+    if strcmp(Dh(jh).Meta.Env.Class,'CAL');
+        load(sprintf('%s/%s',Dh(jh).PthStm,Dh(jh).name));
+        C=[C; H];
+        if strcmp(H.Meta.App.PolarAngle_fromTop,'90')&&strcmp(H.Meta.App.AzimuthalAngle_fromFront,'0')
+            D=H;
+        end
+    end
+end
+
 for jj=1:length(V);
     % collate all IRs that have this particular label
     tH=[]; 
@@ -12,7 +24,14 @@ for jj=1:length(V);
     % specify the ordinates and abscissa
     ff=H.Attck(3).ff/1e3; mplt=zeros(length(ff),length(tH));
     for jh=1:length(tH);
-        mplt(:,jh)=20*log10(tH(jh).Attck(3).Spc);
+        % if a calibration IR exists remove the speaker spectrum
+        if ~isempty(D);
+            Dspc=20*log10(D.Attck(3).Spc);
+            fprintf('Removing speaker spectrum\n')
+        else 
+            Dspc=zeros(size(tH(jh).Attck(3).Spc));
+        end
+        mplt(:,jh)=20*log10(tH(jh).Attck(3).Spc)-Dspc;
     end
     plt=mean(mplt,2);
     err=std(mplt,[],2);

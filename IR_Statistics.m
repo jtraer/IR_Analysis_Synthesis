@@ -111,7 +111,7 @@ end
 %** Write Data
 unix('rm -rf IRMAudio/*');
 eval('! mkdir IRMAudio/Audio')
-%hPltStts(Dh,Mt,Amnd);
+hPltStts(Dh,Mt,Amnd);
 %* == Write an html file to display all the data
 %** clear the output folders
 fcnt=0;

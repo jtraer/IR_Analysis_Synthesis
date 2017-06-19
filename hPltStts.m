@@ -48,6 +48,9 @@ for jPrm=1:length(PltPrms)
     else
         tDh=Dh;
     end % isempty(ndx)
+    if isempty(tDh);
+        tDh=Dh;
+    end
     % plot numbers of IRs per class
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_NoIRs(tDh,PltPrms{jPrm},V); 

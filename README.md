@@ -7,10 +7,10 @@ This repository is under construction - check back soon if code is missing or br
 ## Overview
 
 The matlab code in this repository is designed to:
-* Measure Acoustic and Vibrational Impulse Responses (IRs) with low-intensity broadcasts
-* Analyze the subsequent IRs to measure:
+* IR_Extract.m - Measure Acoustic and Vibrational Impulse Responses (IRs) with low-intensity broadcasts
+* IR_Analysis.m - Analyze the subsequent IRs to measure:
     * Spectra
-    * Time for reverberation to decay 60dB (RT60) as a function of frequency 
+    * Time for reverberation to decay 60dB (RT60) as a function of  
 
 
 

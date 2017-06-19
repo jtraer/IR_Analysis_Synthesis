@@ -51,6 +51,16 @@ for jPrm=1:length(PltPrms)
     if isempty(tDh);
         tDh=Dh;
     end
+    % now remove any classes that are no longer relevant
+    for jv=1:length(V);
+        cnt=0;
+        for jh=1:length(Dh);
+            eval(sprintf('if strcmp(Dh(jh).%s,V(jv).name); cnt=cnt+1; end',PltPrms{jPrm}));
+        end
+        if cnt==0;
+            V(jv)=[];
+        end
+    end
     % plot numbers of IRs per class
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_NoIRs(tDh,PltPrms{jPrm},V); 

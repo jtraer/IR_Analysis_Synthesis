@@ -1,7 +1,7 @@
 function PltIRStts_NoIRs(Dh,PltPrm,V);
 
 % preallocate one data point for each class for the legend
-MkLgnd(V)
+MkLgnd(V,Dh,PltPrm)
     
 plt=zeros(length(V),1);
 for jj=1:length(V);

@@ -1,6 +1,6 @@
 function PltIRStts_MdFrqHst(Dh,PltPrm,V)
 % preallocate one data point for each class for the legend
-MkLgnd(V)
+MkLgnd(V,Dh,PltPrm)
 
 % Mode frequencies
 subplot(1,3,1);

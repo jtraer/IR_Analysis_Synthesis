@@ -1,6 +1,6 @@
 function PltIRStts_MdOPvsRT60(Dh,PltPrm,V)
 % preallocate one data point for each class for the legend
-MkLgnd(V)
+MkLgnd(V,Dh,PltPrm)
 
 % scroll through classes
 for jj=1:length(V)

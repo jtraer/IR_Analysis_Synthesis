@@ -1,6 +1,6 @@
 function PltIRStts_MdSpcs(Dh,PltPrm,V)
 % preallocate one data point for each class for the legend
-MkLgnd(V)
+MkLgnd(V,Dh,PltPrm)
 
 % scroll through classes and plot 1 of each class
 for jj=1:length(V)

@@ -1,4 +1,4 @@
-function [R,C,Mt]=Input_IR_Survey_2;
+function [R,C,Mt,Amnd]=Input_IR_Survey_2;
 
 % Path to Recordings and Golay codes
 rcnt=0;
@@ -35,3 +35,9 @@ mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Door';
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Location';
 %mcnt=mcnt+1;Mt{mcnt}='Meta.Env.Damping';
 
+% amend the criteria for plots
+acnt=0;
+acnt=acnt+1; Amnd(acnt).Prm='Meta.App.Mic';
+vcnt=0;
+vcnt=vcnt+1; Amnd(acnt).Var(vcnt).Exp='Meta.App.PolarAngle_fromTop'; Amnd(acnt).Val(vcnt).Exp='90';
+vcnt=vcnt+1; Amnd(acnt).Var(vcnt).Exp='Meta.App.AzimuthalAngle_fromFront'; Amnd(acnt).Val(vcnt).Exp='0';

@@ -10,7 +10,7 @@ set(0,'DefaultFigureVisible','On');
 
 %* == Specify Inputs == 
 Input_file='Input_IR_Survey_2';
-eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
+eval(sprintf('[Rpth,Cpth,Mt,Amnd]=%s;',Input_file));
 
 Nbnds=4;
 
@@ -111,7 +111,7 @@ end
 %** Write Data
 unix('rm -rf IRMAudio/*');
 eval('! mkdir IRMAudio/Audio')
-hPltStts(Dh,Mt);
+hPltStts(Dh,Mt,Amnd);
 %* == Write an html file to display all the data
 %** clear the output folders
 WrtDt2HTML(Dh,'IRMAudio/IRdata',Mt,tmtpth);

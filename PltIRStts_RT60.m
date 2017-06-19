@@ -1,7 +1,7 @@
 function PltIRStts_RT60(Dh,PltPrm,V);
 
 % preallocate one data point for each class for the legend
-MkLgnd(V)
+MkLgnd(V,Dh,PltPrm)
     
 for jj=1:length(V);
     % collate all IRs that have this particular label
@@ -18,7 +18,7 @@ for jj=1:length(V);
     err=std(mplt,[],2);
     % plot
     hp=plot(plt,ff,[V(jj).mrk '-']); hold on
-    set(hp,'linewidth',3,'markersize',6);
+    set(hp,'linewidth',1,'markersize',6);
     set(hp,'color',V(jj).cmp);
     [mx,mxndx]=max(plt);
     hp=text(mx+0.1,ff(mxndx),1.001,V(jj).name); 

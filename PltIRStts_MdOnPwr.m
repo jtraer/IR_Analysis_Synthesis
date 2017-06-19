@@ -1,6 +1,6 @@
 function PltIRStts_MdOnPwr(Dh,PltPrm,V)
 % preallocate one data point for each class for the legend
-MkLgnd(V)
+MkLgnd(V,Dh,PltPrm)
 
 % scroll through classes
 for jj=1:length(V)
@@ -31,7 +31,7 @@ for jj=1:length(V)
     hold on
     hp=plot(RR,ff/1e3,'-');
     set(hp,'color',V(jj).cmp);
-    set(hp,'linewidth',3,'markersize',6);
+    set(hp,'linewidth',1,'markersize',6);
 end; 
 hold off
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');

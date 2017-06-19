@@ -1,7 +1,7 @@
 function PltIRStts_PkAmp(Dh,PltPrm,V);
 
 % preallocate one data point for each class for the legend
-MkLgnd(V)
+MkLgnd(V,Dh,PltPrm)
     
 plt=zeros(length(V),1);
 for jj=1:length(V);
@@ -11,14 +11,14 @@ for jj=1:length(V);
         eval(sprintf('if strcmp(Dh(jh).%s,V(jj).name); load(''%s/%s''); tH=[tH H]; end;',PltPrm,Dh(jh).PthStm,Dh(jh).name));
     end
     % specify the ordinates and abscissaa
-    xx(jj)=jj;
-    plt(jj)=mean(20*log10([tH.MaxAmp]));
-    err(jj)=std(20*log10([tH.MaxAmp]));
+    xx=jj;
+    plt=mean(20*log10([tH.MaxAmp]));
+    err=std(20*log10([tH.MaxAmp]));
     % plot
-    hp=errorbar(xx(jj),plt(jj),err(jj),V(jj).mrk); hold on
+    hp=errorbar(xx,plt,err,V(jj).mrk); hold on
     set(hp,'linewidth',3,'markersize',6);
     set(hp,'color',V(jj).cmp);
-    hp=text(xx(jj)+0.2,plt(jj),1.001,V(jj).name); 
+    hp=text(xx+0.2,plt,1.001,V(jj).name); 
     set(hp,'color',V(jj).cmp);
 end; hold off 
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');

@@ -25,7 +25,7 @@ for jj=1:length(V);
         Nm=tH(jh).Path;
         ndx=regexp(Nm,'/');
         Nm=Nm(ndx(2):ndx(4));
-        hp=text(xx(jj),jh,Nm);
+        hp=text(xx(jj),jh+rand(1)*spc,Nm);
         set(hp,'color',V(jj).cmp);
     end
 end; hold off 

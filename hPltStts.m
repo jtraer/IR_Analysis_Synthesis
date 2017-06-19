@@ -55,7 +55,7 @@ for jPrm=1:length(PltPrms)
     vcnt=0;
     while vcnt<length(V); vcnt=vcnt+1;
         cnt=0;
-        for jh=1:length(Dh);
+        for jh=1:length(tDh);
             eval(sprintf('if strcmp(tDh(jh).%s,V(vcnt).name); cnt=cnt+1; end',PltPrms{jPrm}));
         end
         if cnt==0;

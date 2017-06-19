@@ -1,8 +1,8 @@
 %* == function WrtDt2HTML.m : Takes stimuli/IRs stored in a structure BH and makes a set of plots to be arranged in an interactive html  
 %** Written by James Traer - jtraer@mit.edu
 
-function WrtDt2HTML(Dh,fNm,PltPrms,tmtpth)
-if nargin>4;
+function WrtDt2HTML(Dh,fNm,PltPrms,Flds,tmtpth)
+if nargin<5;
     tmtpth=[];
 end
 
@@ -48,10 +48,6 @@ fprintf(fid2,'var stimList = [\n')
 %** => start loop over IRs (jIR)
 for jIR=[1:length(Dh)]
     load(sprintf('%s/%s',Dh(jIR).PthStm,Dh(jIR).name)); 
-    if jIR==1;
-        %** get the field names of the structure
-        flds=fieldnames(H);
-    end
 
     %** =>  make a folder to save images and audio to
     FldrNm=sprintf('%s%s/%s',OtPth,H.Path); 
@@ -132,9 +128,13 @@ for jIR=[1:length(Dh)]
 %    fprintf(fid2,',\n"Spc":\t"%s/Spc.png"',FldrNm);
 
     %** ==> loop over fields in structure and write them to the JSON file (jfld)
-    for jf=1:length(flds); 
-        fld=flds{jf};
-        vl=getfield(H,fld);
+    for jf=1:length(Flds); 
+        fld=Flds{jf};
+        eval(sprintf('vl=H.%s;',fld));
+        ndx=regexp(fld,'\.'); 
+        if ~isempty(ndx);
+            fld=fld(ndx(end)+1:end);
+        end
         %*** ==> if it's a string write it
         if ischar(vl);
             fprintf(fid2,',\n"%s":\t"%s"',fld,vl);

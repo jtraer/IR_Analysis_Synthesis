@@ -20,7 +20,8 @@ for jj=1:length(V);
     hp=text(xx(jj)+0.2,plt(jj),1.001,V(jj).name); 
     set(hp,'color',V(jj).cmp);
     % name them
-    for jh=1:length(tH)
+    spc=ceil(length(tH)/20);
+    for jh=1:spc:length(tH)
         Nm=tH(jh).Path;
         ndx=regexp(Nm,'/');
         Nm=Nm(ndx(2):ndx(4));

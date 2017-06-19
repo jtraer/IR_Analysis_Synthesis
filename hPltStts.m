@@ -1,5 +1,7 @@
 function hPltStts(Dh,PltPrms,Amnd);
 
+ftp='png';
+ftp='epsc';
 Txt=0;
 
 % scroll through all the parameters we want to investigate
@@ -49,31 +51,31 @@ for jPrm=1:length(PltPrms)
     % plot numbers of IRs per class
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_NoIRs(tDh,PltPrms{jPrm},V); 
-    saveas(gcf,sprintf('IRMAudio/%s/NoIRs',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/NoIRs',PltPrms{jPrm}),ftp);
     % plot peak amplitude
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_PkAmp(tDh,PltPrms{jPrm},V)
-    saveas(gcf,sprintf('IRMAudio/%s/Amp',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/Amp',PltPrms{jPrm}),ftp);
     % plot RT60
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_RT60(tDh,PltPrms{jPrm},V)
-    saveas(gcf,sprintf('IRMAudio/%s/RT60',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/RT60',PltPrms{jPrm}),ftp);
     % plot DRR
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_DRR(tDh,PltPrms{jPrm},V)
-    saveas(gcf,sprintf('IRMAudio/%s/DRR',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/DRR',PltPrms{jPrm}),ftp);
     % plot Kurtosis
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_Krt(tDh,PltPrms{jPrm},V)
-    saveas(gcf,sprintf('IRMAudio/%s/Krt',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/Krt',PltPrms{jPrm}),ftp);
     % plot ER spectrum
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_SpcER(tDh,PltPrms{jPrm},V)
-    saveas(gcf,sprintf('IRMAudio/%s/SpcER',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/SpcER',PltPrms{jPrm}),ftp);
     % plot tail spectrum
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_SpcTl(tDh,PltPrms{jPrm},V)
-    saveas(gcf,sprintf('IRMAudio/%s/SpcTl',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/SpcTl',PltPrms{jPrm}),ftp);
     % make a plot worthy for the paper
     fcnt=fcnt+1; hfg=figure(fcnt);
     ps=get(gcf,'position');
@@ -85,22 +87,22 @@ for jPrm=1:length(PltPrms)
     % Plot Modes
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdRT60(tDh,PltPrms{jPrm},V);
-    saveas(gcf,sprintf('IRMAudio/%s/ModeRT60',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeRT60',PltPrms{jPrm}),ftp);
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdRT60Pk(tDh,PltPrms{jPrm},V);
-    saveas(gcf,sprintf('IRMAudio/%s/ModeRT60Pk',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeRT60Pk',PltPrms{jPrm}),ftp);
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdOnPwr(tDh,PltPrms{jPrm},V);
-    saveas(gcf,sprintf('IRMAudio/%s/ModeOnPwr',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeOnPwr',PltPrms{jPrm}),ftp);
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdFrqHst(tDh,PltPrms{jPrm},V);
-    saveas(gcf,sprintf('IRMAudio/%s/ModeHst',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeHst',PltPrms{jPrm}),ftp);
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdOPvsRT60(tDh,PltPrms{jPrm},V);
-    saveas(gcf,sprintf('IRMAudio/%s/ModeOPvsRT60',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeOPvsRT60',PltPrms{jPrm}),ftp);
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdSpcs(tDh,PltPrms{jPrm},V);
-    saveas(gcf,sprintf('IRMAudio/%s/ModeSpc',PltPrms{jPrm}),'png');
+    saveas(gcf,sprintf('IRMAudio/%s/ModeSpc',PltPrms{jPrm}),ftp);
 
 %    % plot spectral entropy vs mean(RT60)
 %    % Plot spcER

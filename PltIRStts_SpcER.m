@@ -33,8 +33,11 @@ for jj=1:length(V);
         end
         mplt(:,jh)=20*log10(tH(jh).Attck(3).Spc)-Dspc;
     end
-    plt=mean(mplt,2);
+    plt=median(mplt,2);
     err=std(mplt,[],2);
+    % spooth for plot
+    plt=medfilt1(plt,2);
+    err=medfilt1(err,2);
     % plot
     hp=plot(plt,ff,['-']); hold on
     set(hp,'linewidth',1,'markersize',6);

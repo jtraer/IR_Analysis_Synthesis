@@ -301,11 +301,11 @@ if ~isempty(V);
     fNH=NH./abs(T(:))*mean(abs(T));
     h_cal=ifft([fNH; 0; flipud(conj(fNH(2:end)))]);
     h_cal=h_cal(1:Npd);
+    H.h_cal=h_cal;
 end
 
 %% save basic data to structure
 H.nh=gather(nh);
-H.h_cal=h_cal;
 H.krt=krt;
 % and the channel values
 H.spcER=spcER/mean([spcGs]);

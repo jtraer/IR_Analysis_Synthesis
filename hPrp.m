@@ -148,7 +148,7 @@ for jbn=1:Nbnds;
     if ~isempty(D)
         tD=D(find([D.Channel]==H.Channel));
         tV=V(find([V.Channel]==H.Channel));
-        %aa(jbn)=Pft(2)-(tD.DRR(jbn)-mean(tV.DRR)); 
+        aa(jbn)=aa(jbn)-(tD.DRR(jbn)-mean(tV.DRR)); 
     end
     alph=aa(jbn);
     Rtt(jbn)=60/bt;
@@ -183,6 +183,9 @@ Rscl=1/max(abs(nh));
 nh=nh*Rscl;
 
 %* Compute the spectrum of the attack
+if ~isempty(D)
+    tD=D(find([D.Channel]==H.Channel));
+end
 ndx=min(find(abs(nh)>prctile(abs(nh),90)));
 cnt=0;
 for jj=1:2:11; cnt=cnt+1;
@@ -193,12 +196,16 @@ for jj=1:2:11; cnt=cnt+1;
         spc=fft(tmp(ndx+jstrt-1+[0:(Nft-1)]),Nft); 
         Bgspc=Bgspc+abs(spc(1:Nft/2))/(Nft/4); 
     end
-    Attck(cnt).Spc=Bgspc(1:Nft/2);
+    Attck(cnt).RwSpc=Bgspc(1:Nft/2);
+    if ~isempty(D)
+        Attck(cnt).Spc=Attck(cnt).RwSpc./tD.Attck(cnt).RwSpc;
+    else
+        Attck(cnt).Spc=Attck(cnt).RwSpc;
+    end
     Attck(cnt).SpcIntrp=interp1([1:Nft/2]*H.fs/Nft,Bgspc,ff,'spline');
     Attck(cnt).ff=[1:Nft/2]*H.fs/Nft;
     Attck(cnt).T=Nft/H.fs;
 end
-
 
 % and compute spectrograms to find modes
 [NsSgrm,Nsff,Nstt]=spectrogram(nh,32,16,32,H.fs);
@@ -279,8 +286,26 @@ for jm=1:length(H.Modes);
     H.Modes(jm).MnPwr=mean(20*log10(abs(MdSgrm(ndx,:))));
 end
 
+% remove speaker tranfser function from IR time series
+if ~isempty(V);
+    tV=V(find([V.Channel]==H.Channel));
+    cSpc=tV.Attck(3).RwSpc;
+    cff=tV.Attck(3).ff;
+    Npd=length(nh);
+    tmp=[nh; zeros(Npd,1)];
+    nft=2^max(ceil(log2([length(tmp) length(cSpc)])));
+    tff=[1:nft]/nft*H.fs;
+    NH=fft(nh,nft);
+    NH=NH(1:nft/2);
+    T=interp1([0 cff tff(end)],[cSpc(1); cSpc; cSpc(end) ],tff(1:nft/2));
+    fNH=NH./abs(T(:))*mean(abs(T));
+    h_cal=ifft([fNH; 0; flipud(conj(fNH(2:end)))]);
+    h_cal=h_cal(1:Npd);
+end
+
 %% save basic data to structure
 H.nh=gather(nh);
+H.h_cal=h_cal;
 H.krt=krt;
 % and the channel values
 H.spcER=spcER/mean([spcGs]);

@@ -1,7 +1,7 @@
 function hPltStts(Dh,PltPrms,Amnd);
 
 ftp='png';
-ftp='epsc';
+%ftp='epsc';
 Txt=0;
 
 % scroll through all the parameters we want to investigate

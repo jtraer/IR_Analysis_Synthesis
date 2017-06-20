@@ -130,11 +130,13 @@ for jh=1:length(Dh);
         h=h/MaxAmp*(1-1e-6);
         h=[zeros(ceil(H.fs/5),1); h; zeros(ceil(H.fs/2),1)];
         audiowrite(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds),h,H.fs,'BitsPerSample',24);
-        h=H.h_cal;
-        MaxAmp=max(abs(h));
-        h=h/MaxAmp*(1-1e-6);
-        h=[zeros(ceil(H.fs/5),1); h; zeros(ceil(H.fs/2),1)];
-        audiowrite(sprintf('%s/h_cal_%03d.wav',H.Path,Nbnds),h,H.fs,'BitsPerSample',24);
+        if isfield(H,'h_cal')
+            h=H.h_cal;
+            MaxAmp=max(abs(h));
+            h=h/MaxAmp*(1-1e-6);
+            h=[zeros(ceil(H.fs/5),1); h; zeros(ceil(H.fs/2),1)];
+            audiowrite(sprintf('%s/h_cal_%03d.wav',H.Path,Nbnds),h,H.fs,'BitsPerSample',24);
+        end
     end
 end
 

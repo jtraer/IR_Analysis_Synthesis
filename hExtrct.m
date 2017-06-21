@@ -177,7 +177,11 @@ if length(Pth)>0;
     plot([1:length(H.h)]/H.fs,h_var1,':');
     plot([1:length(H.h)]/H.fs,h_var2,':');
     %*** => plot markers for trimming
-    plot([10 30 100]/H.fs,h([10 30 100]),'d');
+    if length(h)>=100
+        plot([10 30 100]/H.fs,h([10 30 100]),'d');
+    else
+        plot([10 30]/H.fs,h([10 30]),'d');
+    end
     xlabel('Time (s)');
     ylabel('Waveform amplitude (compressed)')
     set(gca,'xscale','log')

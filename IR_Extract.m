@@ -38,7 +38,7 @@ for jc=1:length(C);
         %tDh(jj).PthStm=GtPthStm(C(jc).Pth);  
         tDh(jj).PthStm=C(jc).Pth;  
     end
-    Dh=[Dh; tDh];
+    Dh=[tDh; Dh];
 end
 %** Scroll through recordings
 hcnt=0;

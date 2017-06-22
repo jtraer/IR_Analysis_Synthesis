@@ -57,7 +57,7 @@ for jr=1:length(Cpth);
             %==> save path stems
             if length(t3Dh)>0;
                 t3Dh.PthStm=sprintf('%s/%s/ch%d',Cpth(jr).Pth,tDh(jj).name(1:end-4),jch); 
-                Dh=[Dh; t3Dh];
+                Dh=[t3Dh; Dh];
             end
         end
     end
@@ -110,7 +110,7 @@ end
 
 %** Write Data
 unix('rm -rf IRMAudio/*');
-eval('! mkdir IRMAudio/Audio')
+%eval('! mkdir IRMAudio/Audio')
 hPltStts(Dh,Mt,Amnd);
 %* == Write an html file to display all the data
 %** clear the output folders

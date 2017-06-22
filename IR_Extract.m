@@ -10,6 +10,7 @@ path(path,'Tools')
 
 %* == Specify Inputs == 
 Input_file='Input_IRSurvey_NatStats';
+%Input_file='Input_IR_Survey_2';
 eval(sprintf('[R,C,Mt]=%s;',Input_file));
 %==> R is a structure of recordings
 %==> C is a structure of calibration recordings

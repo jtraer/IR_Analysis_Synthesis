@@ -67,7 +67,14 @@ subplot(3,1,1)
 plot(20*log10(abs(H.h))); 
 hold on;
 plot(20*log10(abs(H.h+sign(H.h).*H.h_var)),':'); 
-plot(20*log10(abs(H.h-sign(H.h).*H.h_var)),':'); 
+plot(20*log10(abs(H.h-sign(H.h).*H.h_var)),':');
+axis tight
+ylm=get(gca,'ylim');
+for jj=1:4;
+    x=(jj/340)*H.fs;
+    plot([1 1]*x,ylm,'k--'); % 1m increments
+    text(x,ylm(1)+0.1*(ylm(2)-ylm(1)),sprintf('%dm path',jj));
+end
 title('Manually extract start and end of IR');
 set(gca,'xlim',[0 1000]);
 subplot(3,1,2)
@@ -75,12 +82,26 @@ plot(20*log10(abs(H.h)));
 hold on;
 plot(20*log10(abs(H.h+sign(H.h).*H.h_var)),':'); 
 plot(20*log10(abs(H.h-sign(H.h).*H.h_var)),':'); 
+axis tight
+ylm=get(gca,'ylim');
+for jj=1:3;
+    x=(10*jj/340)*H.fs;
+    plot([1 1]*x,ylm,'k--'); % 1m increments
+    text(x,ylm(1)+0.1*(ylm(2)-ylm(1)),sprintf('%dm path',10*jj));
+end
 set(gca,'xlim',[0 5000]);
 subplot(3,1,3)
 plot(20*log10(abs(H.h))); 
 hold on;
 plot(20*log10(abs(H.h+sign(H.h).*H.h_var)),':'); 
 plot(20*log10(abs(H.h-sign(H.h).*H.h_var)),':'); 
+axis tight
+ylm=get(gca,'ylim');
+for jj=1:4;
+    x=(20*jj/340)*H.fs;
+    plot([1 1]*x,ylm,'k--'); % 1m increments
+    text(x,ylm(1)+0.1*(ylm(2)-ylm(1)),sprintf('%dm path',20*jj));
+end
 set(gca,'xlim',[0 25000]);
 drawnow; 
 M=GtMtDt(sprintf('%s/IR_StartEnd.txt',Pth),{'Start_index';'End_index'});

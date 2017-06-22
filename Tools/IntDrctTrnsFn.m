@@ -170,7 +170,7 @@ for jc=1:length(C);
     V.RT60_std=V.RT60_std+C(jc).RT60_std*jrms/mnrms/length(C);
     V.spc=V.spc+C(jc).spc/length(C);
     NsFlr=NsFlr+C(jc).NsFlr/length(C);
-    for ja=1:length(D.Attck);
+    for ja=1:length(D(1).Attck);
         V.Attck(ja).RwSpc=V.Attck(ja).RwSpc+C(jc).Attck(ja).RwSpc/length(C);
     end
 end

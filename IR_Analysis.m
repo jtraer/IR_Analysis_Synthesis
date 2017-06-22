@@ -21,7 +21,7 @@ flm=[50 20e3];
 %** = Frequency of subband envelopes in Hz =
 Sb_fs=1e4;
 % Overwrite calibration files (Do this if hPrp or any paths have been changed)
-OvrWrtCAL=0;
+OvrWrtCAL=1;
 %** filetype
 %ftp='epsc';
 ftp='jpg';
@@ -61,7 +61,7 @@ if ~isempty(Cpth)
     D=[]; V=[]; 
     for jch=1:max([C.Channel])
         tC=C(find([C.Channel]==jch));
-        [tD,tV]=IntDrctTrnsFn(tC,90,0);
+        [tD,tV]=IntDrctTrnsFn(tC,90,0); 
         D=[D; tD];
         V=[V; tV];
     end
@@ -114,7 +114,7 @@ end
 %** Scroll through them
 hcnt=0;
 for jh=1:length(Dh);
-    tDh=dir(sprintf('%s/%s/ch*',Dh(jc).PthStm,Dh(jc).name(1:end-4)));
+    tDh=dir(sprintf('%s/%s/ch*',Dh(jh).PthStm,Dh(jh).name(1:end-4)));
     for jch=1:length(tDh);
         hcnt=hcnt+1;
         load(sprintf('%s/%s/ch%d/H.mat',Dh(jh).PthStm,Dh(jh).name(1:end-4),jch));
@@ -131,7 +131,7 @@ for jh=1:length(Dh);
         h=h/MaxAmp*(1-1e-6);
         h=[zeros(ceil(H.fs/5),1); h; zeros(ceil(H.fs/2),1)];
         audiowrite(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds),h,H.fs,'BitsPerSample',24);
-        if ~isempty(H,'h_cal')
+        if ~isempty(H.h_cal)
             h=H.h_cal;
             MaxAmp=max(abs(h));
             h=h/MaxAmp*(1-1e-6);

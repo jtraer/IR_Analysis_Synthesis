@@ -11,7 +11,7 @@ path(path,'Tools')
 
 %* == Specify Inputs == 
 Input_file='Input_IR_Survey_2';
-%Input_file='Input_IRSurvey_NatStats';
+Input_file='Input_IRSurvey_NatStats';
 eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 
 %** = Number of cochlear subbands for analysis =
@@ -131,7 +131,7 @@ for jh=1:length(Dh);
         h=h/MaxAmp*(1-1e-6);
         h=[zeros(ceil(H.fs/5),1); h; zeros(ceil(H.fs/2),1)];
         audiowrite(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds),h,H.fs,'BitsPerSample',24);
-        if isfield(H,'h_cal')
+        if ~isempty(H,'h_cal')
             h=H.h_cal;
             MaxAmp=max(abs(h));
             h=h/MaxAmp*(1-1e-6);

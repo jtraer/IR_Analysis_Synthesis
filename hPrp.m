@@ -302,6 +302,8 @@ if ~isempty(V);
     h_cal=ifft([fNH; 0; flipud(conj(fNH(2:end)))]);
     h_cal=h_cal(1:Npd);
     H.h_cal=h_cal;
+else
+    H.h_cal=[];
 end
 
 %% save basic data to structure

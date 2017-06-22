@@ -10,6 +10,7 @@ set(0,'DefaultFigureVisible','On');
 
 %* == Specify Inputs == 
 Input_file='Input_IR_Survey_2';
+%Input_file='Input_IRSurvey_NatStats';
 eval(sprintf('[Rpth,Cpth,Mt,Amnd]=%s;',Input_file));
 
 Nbnds=4;

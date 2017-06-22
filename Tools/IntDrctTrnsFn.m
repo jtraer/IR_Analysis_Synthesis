@@ -146,14 +146,14 @@ end
 %end
 
 % average over all measurements to get the Omnidriectional values
-DRR=zeros(size(D.DRR));
-DRR_std=zeros(size(D.DRR_std));
-RT60=zeros(size(D.RT60));
-RT60_std=zeros(size(D.RT60_std));
-spc=zeros(size(D.spc));
-NsFlr=zeros(size(D.NsFlr));
-for ja=1:length(D.Attck);
-    Attck(ja).spc=zeros(size(D.Attck(ja).RwSpc));
+DRR=zeros(size(D(1).DRR));
+DRR_std=zeros(size(D(1).DRR_std));
+RT60=zeros(size(D(1).RT60));
+RT60_std=zeros(size(D(1).RT60_std));
+spc=zeros(size(D(1).spc));
+NsFlr=zeros(size(D(1).NsFlr));
+for ja=1:length(D(1).Attck);
+    Attck(ja).spc=zeros(size(D(1).Attck(ja).RwSpc));
 end
 % get mean rms
 for jc=1:length(C);

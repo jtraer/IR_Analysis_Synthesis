@@ -66,9 +66,17 @@ for jIR=[1:length(Dh)]
     fprintf(fid2,',\n"T0":\t%2.3f',median(H.RT60));
     %*** => path to audio
     %**** TODO update this to rescale volumes!!!
-    tDh=dir(sprintf('%s/h_denoised_%03d.wav',H.Path,length(H.ff)));
+    tDh=dir(sprintf('%s/h_cal_%03d.wav',H.Path,length(H.ff)));
+    t2Dh=dir(sprintf('%s/h_denoised_%03d.wav',H.Path,length(H.ff)));
+    t3Dh=dir(sprintf('%s/h.wav',H.Path));
     if length(tDh)>0
-        eval(sprintf('! cp %s/%s %s/h.wav',H.Path,tDh(1).name,FldrNm));
+        unix(sprintf('cp %s/%s %s/h.wav',H.Path,tDh(1).name,FldrNm));
+        fprintf(fid2,',\n"sound":\t"%s/h.wav"',FldrNm);
+    elseif length(t2Dh)>0
+        unix(sprintf('cp %s/%s %s/h.wav',H.Path,t2Dh(1).name,FldrNm));
+        fprintf(fid2,',\n"sound":\t"%s/h.wav"',FldrNm);
+    elseif length(t3Dh)>0
+        unix(sprintf('cp %s/%s %s/h.wav',H.Path,t3Dh(1).name,FldrNm));
         fprintf(fid2,',\n"sound":\t"%s/h.wav"',FldrNm);
     end
     %*** => copy to a folder of just audio

@@ -9,8 +9,8 @@ path(path,'Tools')
 set(0,'DefaultFigureVisible','On');
 
 %* == Specify Inputs == 
-Input_file='Input_IR_Survey_2';
-%Input_file='Input_IRSurvey_NatStats';
+Input_file='Input_IR_Survey_2'; Nm='RvrbStrct';
+%Input_file='Input_IRSurvey_NatStats'; Nm='NtStts';
 eval(sprintf('[Rpth,Cpth,Mt,Amnd]=%s;',Input_file));
 
 Nbnds=4;
@@ -110,18 +110,21 @@ end
 %saveas(gcf,sprintf('IRMFigs/Lgnd%dIRs_%s',length(BH),nw));
 
 %** Write Data
-unix('rm -rf IRMAudio/*');
+FldrNm=sprintf('IRMAudio_%s_%03bnds',Nm,Nbnds);
+unix(sprintf('mkdir -p %s',FldrNm))
+unix(sprintf('rm -rf %s/*',FldrNm));
 %eval('! mkdir IRMAudio/Audio')
 hPltStts(Dh,Mt,Amnd);
 %* == Write an html file to display all the data
 %** clear the output folders
 fcnt=0;
 fcnt=fcnt+1; Flds{fcnt}='Meta.Env.Class';
-WrtDt2HTML(Dh,'IRMAudio/IRdata',Mt,Flds,tmtpth);
-fprintf('Data written to:\n\n %s/IR_Data_Summary.html\n\n',pwd)
-unix('rm -rf IRMAudio.zip');
-unix('cp IR_Data_Summary.html IRMAudio/')
-unix('! zip -r IRMAudio.zip IRMAudio/*')
+WrtDt2HTML(Dh,sprintf('%/IRdata',FldrNm),Mt,Flds,tmtpth);
+unix(sprintf('cp IR_Data_Summary.html IR_Data_Summary_%s.html',FldrNm));
+fprintf('Data written to:\n\n %s/IR_Data_Summary_%s.html\n\n',pwd,FldrNm)
+unix(sprintf('cp IR_Data_Summary_%s.html %s/',FldrNm,FldrNm));
+unix(sprintf('rm -rf %s.zip',FldrNm));
+unix(sprintf('! zip -r %s.zip %s/*'),FldrNm,FldrNm)
 
 %* == TODO: Collect details about code runtime
 %* == TODO: Save this code to a summary file

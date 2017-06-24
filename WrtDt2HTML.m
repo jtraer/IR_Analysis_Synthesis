@@ -169,7 +169,7 @@ fprintf(fid2,'\n]');
 fclose(fid2)
 
 %* == write the HTML file ==
-%** Delete current lines
+%** Delete current lines in template
 [~,LnNdx]=unix('sed -n ''/<img src="IRMAudio/='' IR_Data_Summary.html');
 LnNdx=str2num(LnNdx);
 for jln=1:length(LnNdx);

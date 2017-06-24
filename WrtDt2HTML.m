@@ -1,7 +1,7 @@
 %* == function WrtDt2HTML.m : Takes stimuli/IRs stored in a structure BH and makes a set of plots to be arranged in an interactive html  
 %** Written by James Traer - jtraer@mit.edu
 
-function WrtDt2HTML(Dh,fNm,PltPrms,Flds,tmtpth)
+function WrtDt2HTML(Dh,fNm,hNm,PltPrms,Flds,tmtpth)
 if nargin<5;
     tmtpth=[];
 end
@@ -169,22 +169,24 @@ fprintf(fid2,'\n]');
 fclose(fid2)
 
 %* == write the HTML file ==
+unix(sprintf('cp %s.html tmp.html',hNm))
 %** Delete current lines in template
-[~,LnNdx]=unix('sed -n ''/<img src="IRMAudio/='' IR_Data_Summary.html');
+[~,LnNdx]=unix(sprintf('sed -n ''/<img src="IRMAudio/='' tmp.html'));
 LnNdx=str2num(LnNdx);
 for jln=1:length(LnNdx);
-    unix(sprintf('sed -i.bak -e ''%dd'' IR_Data_Summary.html',LnNdx(1)));
+    unix(sprintf('sed -i.bak -e ''%dd'' tmp.html',LnNdx(1)));
 end
 %** Write new ones
-[~,LnNdx]=unix('sed -n ''/<div id="Stats">/='' IR_Data_Summary.html');
+[~,LnNdx]=unix('sed -n ''/<div id="Stats">/='' tmp.html');
 LnNdx=str2num(LnNdx);
 for jPlt=1:length(PltPrms);
     Dplt=dir(sprintf('IRMAudio/%s/*.png',PltPrms{jPlt}));
     for jp=1:length(Dplt);
-        unix(sprintf('awk ''NR==%d{print "    <img src=\\"IRMAudio/%s/%s\\">"}7'' IR_Data_Summary.html >tmp.html',LnNdx+1,PltPrms{jPlt},Dplt(jp).name)); 
-        unix('mv tmp.html IR_Data_Summary.html')
+        unix(sprintf('awk ''NR==%d{print "    <img src=\\"IRMAudio/%s/%s\\">"}7'' tmp.html >tmp2.html',LnNdx+1,PltPrms{jPlt},Dplt(jp).name)); 
+        unix('mv tmp2.html tmp.html')
     end
 end
+unix(sprintf('mv tmp.html %s.html',hNm))
 
 %* == TODO: Save this code to a summary file
 %eval(sprintf('! grep "%%\\*" %s.m > tmp.org',cfl))

@@ -79,6 +79,9 @@ for jPrm=1:length(PltPrms)
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_DRR(tDh,PltPrms{jPrm},V)
     saveas(gcf,sprintf('IRMAudio/%s/DRR',PltPrms{jPrm}),ftp);
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_mDRR(tDh,PltPrms{jPrm},V)
+    saveas(gcf,sprintf('IRMAudio/%s/mDRR',PltPrms{jPrm}),ftp);
     % plot Kurtosis
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_Krt(tDh,PltPrms{jPrm},V)

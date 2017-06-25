@@ -110,18 +110,18 @@ end
 %saveas(gcf,sprintf('IRMFigs/Lgnd%dIRs_%s',length(BH),nw));
 
 %** Write Data
+unix('mkdir -p IRMAudio');
 unix('rm -rf IRMAudio/*');
-%eval('! mkdir IRMAudio/Audio')
 hPltStts(Dh,Mt,Amnd);
 %* == Write an html file to display all the data
 %** clear the output folders
 fcnt=0;
 fcnt=fcnt+1; Flds{fcnt}='Meta.Env.Class';
 WrtDt2HTML(Dh,'IRMAudio/IRdata',sprintf('IR_Data_%s',Nm),Mt,Flds,tmtpth);
-fprintf('Data written to:\n\n %s/IR_Data_%s.html\n\n',pwd,Nm)
 unix(sprintf('cp IR_Data_%s.html IRMAudio/',Nm));
-unix(sprintf('cp -r IRMAudio/ IRMAudio_%s_%03dbnds',Nm,Nbnds));
+unix(sprintf('mv IRMAudio IRMAudio_%s_%03dbnds',Nm,Nbnds));
 unix(sprintf('! zip -r IRMAudio_%s_%03dbnds.zip IRMAudio_%s_%03dbnds/*',Nm,Nbnds,Nm,Nbnds));
+fprintf('Data written to:\n\n %s/IRMAudio_%s_%03dbnds.html\n\n',pwd,Nm,Nbnds)
 
 %* == TODO: Collect details about code runtime
 %* == TODO: Save this code to a summary file

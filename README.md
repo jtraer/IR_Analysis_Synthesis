@@ -1,8 +1,8 @@
 # IR_Analysis_Synthesis
 
-Apology
 ------
-This repository is under construction - check back soon if code is missing or broken or contact James Traer (jtraer@mit.edu) if you have any urgent requests or if you have found major problems - Last updated 2017/June/19
+Apology: This repository is under construction - check back soon if code is missing or broken or contact James Traer (jtraer@mit.edu) if you have any urgent requests or if you have found major problems - Last updated 2017/June/19
+------
 
 ## Overview
 

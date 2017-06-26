@@ -49,20 +49,24 @@ All the wrapper functions IR_Extract.m, IR_Analysis.m and IR_Statistics.m read t
 
 ### Known issues
 
-* IR_Statistics.m has very recently gone through a big overhaul and - though functional - it is over-engineered, poorly commented and is easily broken by real-world data. 
+* IR_Statistics.m has very recently gone through a big overhaul and - though functional - it is over-engineered, poorly commented and is easily broken by real-world data. Proceed with caution. 
 * hExtrctMds.m (which is designed to find spectral peaks amd thereby select modes) is new and is both clunky, slow and not fully tested.  Modal analysis is still experimental. Similarly all the Plotting subroutines that plot modes are mostly ugly and untested.
 * IR_Analysis.m produces a bloated structure with many fields saving overlapping data, much of which is probably useless.
 * Currently some of the calibration steps are being done at the plotting stage.  Ideally this should all be done in IR_Analysis.m, such that the oututs are all calibrated and can be taken at face value later.  However, the calibration steps are easier to check and debug in IR_Statistics.m (which runs faster).  At some point, when I am convinced they are bug free and doing what they should, I plan to move them into IR_Analysis.
-
+* Many of these codes write data to and from the same folders so running them simultaneously can be a dangerous game.  Of particular note, only one version of IR_Statistics.m can be run at any given time as they always clear the folder IRMAudio/ and write to it. Someday I'll fix this to be more intelligent. 
 
 # Detailed Instructions
 
 ## To measure an IR
 To measure IRs broadcast a Golay sequence (created by running MakeGolaySequence.m - audio parameters can be specified therein) out of a loudspeaker and re-recording with a microphone. The broadcast and recorded signal should be synced to the same clock and hence a multitrack recorder is ideal (we used a Tascam DR40) but a laptop can also be used using standard audio software, as long as the same program controls both the broadcast and recording. The measurement technique is robust to noise and does not require silence nor loud broadcast volumes, however, the technique is sensitive to motion of thae apparatus (sturdy tripods are recommended) and distortion from clipping in the recoding or overdriving the speaker. Though background noise is not fatal it does contribute to the noise floor and loud broadcasts are desirable if possible.  If not possible, the noise floor can be diminished by lengthening the broadcast time.
 
-The IR is extracted from the recorded track by ExtractIR.m (input path and analysis parameters specified in the input file). 
+The IR is extracted from the recorded track by ExtractIR.m (input path and analysis parameters specified in the input file).  It is highly recommended to add meta data as soon as possible after making a recording before all the infromation about teh recording is forgotten. 
+
+IR_Extract.m outputs a mat file (H.mat) is written for each measurement in the appropriate subdirectory. A set of plots are also written and an audio file of the IR. 
 
 ## To analyze measured IRs
+
+Make sure IR_Extract.m has run to completeion on the desired data set.  Running IR_Analysis.m with the same input file (Input_Example.m) as IR_Extract.m will scroll through the same list of recordings, read H.mat, analyze the IR in a number of frequency subbands (specified in IR_Analysis.m) and write a new data file (H_<N>bands.mat) where <N> is the number of frequency bands. IR_Analysis also saves a number of plots in the same subdirectory. And two new audio files - one in which the noise floor has been removed (assuming the exponential decay rates measured are correct) and another in which the de-noised IR has been filtered to remove the speaker transfer function.
 
 ## To Calibrate the Apparatus
 
@@ -77,5 +81,10 @@ In all cases the microphone should face the speaker and the speaker-microphone s
 
 ## To plot the statistics of a set of analyzed IRs
 
+Make sure IR_Analysis.m has run to completeion on the required data set.  Run IR_Statistics.m with the same input file and number of subbands as as IR_Analysis.m. IR_Statistics.m scrolls through the same directory tree of recordings and saves the paths to the analyzed IRs (i.e. H_<N>bnds.mat) in a structure.  It also saves the meta-data to each structure element.  
 
+IR_Statistics.m  then cycles through every field specified in the meta-data.  For each field, it gathers the number of unique values. IR_Statistics.m then calls hPltStts.m which loads each IR for each unique meta-data tag and averages them together. This data is plotted by a battery of plotting subroutines (PltIRStts_RT60.m, etc...)  The final result is a set of plots grouping the data according to the values specified in the meta-data files. These plots are all written a to folder
+IRMAudio_<Name>_<N>bnds/. 
+
+IR_Statistics. then scrolls through the data set and writes an HTML file IR_Data_<Name>.html, where <Name> is specified in IR_Statistics.m.  If all worked to plan this html file allows the user to view and listen to the individual IRs in the data. 
 

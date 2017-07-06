@@ -37,7 +37,7 @@ end;
 hold off
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');
 set(gca,'xlim',[(1-0.2*sign(xlm(1)))*xlm(1) (1+0.2*sign(xlm(2)))*xlm(2)]);
-set(gca,'yscale','log')
+%set(gca,'yscale','log')
 set(gca,'xscale','log')
 xlabel('Mode RT60 (s)')
 ylabel('Mode Frequency (kHz)')

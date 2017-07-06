@@ -34,23 +34,16 @@ end
 
 %* ==== Crunch ====
 
-%** get the path to which we save files
-sndx=[]; for jtmp=1:length(fNm); if strcmp(fNm(jtmp),'/'); sndx=[sndx jtmp]; end; end
-if isempty(sndx)
-    OtPth='';
-else
-    OtPth=fNm(1:sndx);
-end
-
 %** Open the JSON file for writing
-fid2=fopen(sprintf('%s.json',fNm),'w')
+fid2=fopen(sprintf('%s/IRdata.json',fNm),'w')
 fprintf(fid2,'var stimList = [\n')
 %** => start loop over IRs (jIR)
 for jIR=[1:length(Dh)]
     load(sprintf('%s/%s',Dh(jIR).PthStm,Dh(jIR).name)); 
 
     %** =>  make a folder to save images and audio to
-    FldrNm=sprintf('%s%s/%s',OtPth,H.Path); 
+    FldrNm=sprintf('%s/%s',fNm,H.Path); % where to copy files
+    PthNm=sprintf('%s/%s',H.Path); % what to write in the html file (which will be a level below where we are now)
     eval(sprintf('! mkdir -p %s',FldrNm));
 
     %** => add a comma to separate indices in the JSON
@@ -71,13 +64,13 @@ for jIR=[1:length(Dh)]
     t3Dh=dir(sprintf('%s/h.wav',H.Path));
     if length(tDh)>0
         unix(sprintf('cp %s/%s %s/h.wav',H.Path,tDh(1).name,FldrNm));
-        fprintf(fid2,',\n"sound":\t"%s/h.wav"',FldrNm);
+        fprintf(fid2,',\n"sound":\t"%s/h.wav"',PthNm);
     elseif length(t2Dh)>0
         unix(sprintf('cp %s/%s %s/h.wav',H.Path,t2Dh(1).name,FldrNm));
-        fprintf(fid2,',\n"sound":\t"%s/h.wav"',FldrNm);
+        fprintf(fid2,',\n"sound":\t"%s/h.wav"',PthNm);
     elseif length(t3Dh)>0
         unix(sprintf('cp %s/%s %s/h.wav',H.Path,t3Dh(1).name,FldrNm));
-        fprintf(fid2,',\n"sound":\t"%s/h.wav"',FldrNm);
+        fprintf(fid2,',\n"sound":\t"%s/h.wav"',PthNm);
     end
     %*** => copy to a folder of just audio
     %eval(sprintf('! cp %s/%s IRMAudio/Audio/%s.wav',H.Path,tDh(1).name,H.Name));
@@ -86,7 +79,7 @@ for jIR=[1:length(Dh)]
     if length(Ds)>0;
         [y,fy]=RIRcnv(TMT(1).s,TMT(1).fs,H.nh,H.fs,1);
         audiowrite(sprintf('%s/tmt1.wav',FldrNm),y,fy);
-        fprintf(fid2,',\n"speech":\t"%s/tmt1.wav"',FldrNm);
+        fprintf(fid2,',\n"speech":\t"%s/tmt1.wav"',PthNm);
     end
     %%*** => write an image of the time series
     ici=pwd;
@@ -95,7 +88,7 @@ for jIR=[1:length(Dh)]
     else
         unix(sprintf('sips -s format png %s/IR.jpg --out %s/ts.png',H.Path,FldrNm));
     end
-    fprintf(fid2,',\n"TimeSeries":\t"%s/ts.png"',FldrNm);
+    fprintf(fid2,',\n"TimeSeries":\t"%s/ts.png"',PthNm);
 
     %%*** => Copy photo 
     PhPth=H.Path;
@@ -109,7 +102,7 @@ for jIR=[1:length(Dh)]
             unix(sprintf('sips -s format png %s%s --out %s/Photo%d.png',PhPth,Dph(jph).name,FldrNm,jph));
         end
     end
-    fprintf(fid2,',\n"Photo":\t"%s/Photo1.png"',FldrNm);
+    fprintf(fid2,',\n"Photo":\t"%s/Photo1.png"',PthNm);
 
     %*** => write an image of the synthetic time series
 
@@ -119,7 +112,7 @@ for jIR=[1:length(Dh)]
     else
         unix(sprintf('sips -s format png %s/Cgram.jpg --out %s/Cgrm.png',H.Path,FldrNm));
     end
-    fprintf(fid2,',\n"Cgrm":\t"%s/Cgrm.png"',FldrNm);
+    fprintf(fid2,',\n"Cgrm":\t"%s/Cgrm.png"',PthNm);
     
     %%*** => plot synthetic C-gram
     
@@ -129,11 +122,11 @@ for jIR=[1:length(Dh)]
     else
         unix(sprintf('sips -s format png %s/RT60.jpg --out %s/RT60.png',H.Path,FldrNm));
     end
-    fprintf(fid2,',\n"RT60":\t"%s/RT60.png"',FldrNm);
+    fprintf(fid2,',\n"RT60":\t"%s/RT60.png"',PthNm);
     
     %%*** => plot spectrum
 %    unix(sprintf('sips -s format png %s/IR_AttckSpc.jpg --out %s/Spc.png',H.Path,FldrNm));
-%    fprintf(fid2,',\n"Spc":\t"%s/Spc.png"',FldrNm);
+%    fprintf(fid2,',\n"Spc":\t"%s/Spc.png"',PthNm);
 
     %** ==> loop over fields in structure and write them to the JSON file (jfld)
     for jf=1:length(Flds); 
@@ -169,7 +162,7 @@ fprintf(fid2,'\n]');
 fclose(fid2)
 
 %* == write the HTML file ==
-unix(sprintf('cp %s.html tmp.html',hNm))
+unix(sprintf('cp IR_Data_Summary.html tmp.html',hNm))
 %** Delete current lines in template
 [~,LnNdx]=unix(sprintf('sed -n ''/<img src="IRMAudio/='' tmp.html'));
 LnNdx=str2num(LnNdx);
@@ -180,13 +173,13 @@ end
 [~,LnNdx]=unix('sed -n ''/<div id="Stats">/='' tmp.html');
 LnNdx=str2num(LnNdx);
 for jPlt=1:length(PltPrms);
-    Dplt=dir(sprintf('IRMAudio/%s/*.png',PltPrms{jPlt}));
+    Dplt=dir(sprintf('%s/%s/*.png',fNm,PltPrms{jPlt}));
     for jp=1:length(Dplt);
-        unix(sprintf('awk ''NR==%d{print "    <img src=\\"IRMAudio/%s/%s\\">"}7'' tmp.html >tmp2.html',LnNdx+1,PltPrms{jPlt},Dplt(jp).name)); 
+        unix(sprintf('awk ''NR==%d{print "    <img src=\\"%s/%s\\">"}7'' tmp.html >tmp2.html',LnNdx+1,PltPrms{jPlt},Dplt(jp).name)); 
         unix('mv tmp2.html tmp.html')
     end
 end
-unix(sprintf('mv tmp.html %s.html',hNm))
+unix(sprintf('mv tmp.html %s/%s.html',fNm,hNm))
 
 %* == TODO: Save this code to a summary file
 %eval(sprintf('! grep "%%\\*" %s.m > tmp.org',cfl))

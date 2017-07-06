@@ -12,10 +12,11 @@ path(path,'Tools')
 %* == Specify Inputs == 
 Input_file='Input_IR_Survey_2';
 Input_file='Input_IRSurvey_NatStats';
+Input_file='Input_ObjIRs';
 eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 
 %** = Number of cochlear subbands for analysis =
-Nbnds=[4];
+Nbnds=[50];
 %** = Frequency limits in Hz =
 flm=[50 20e3];
 %** = Frequency of subband envelopes in Hz =
@@ -23,8 +24,8 @@ Sb_fs=1e4;
 % Overwrite calibration files (Do this if hPrp or any paths have been changed)
 OvrWrtCAL=1;
 %** filetype
-%ftp='epsc';
 ftp='jpg';
+ftp='epsc';
 
 %* == Calibrate Apparatus ==
 %** search for calibration files 

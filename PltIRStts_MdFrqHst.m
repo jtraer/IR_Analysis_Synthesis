@@ -18,22 +18,28 @@ for jj=1:length(V)
         Mdf=[Mdf [tH(jh).Modes.cf]];
         MdR=[MdR [tH(jh).Modes.OnPwr]];
     end
+    % remove any high frequency peaks
+    ndx=find(Mdf>20e3);
+    Mdf(ndx)=[];
+    MdR(ndx)=[];
     % compute histogram
-    [hst,ff]=histcounts(Mdf);
+    [hst,ff]=histcounts(Mdf,10);
     hst=[0 hst 0];
     ff=[ff ff(end)+(ff(2)-ff(1))];
     ff(find(ff==0))=20;
     % plot this class
-    hp=plot(hst,ff/1e3,V(jj).mrk);
+    hp=plot(hst,ff/1e3,sprintf('%s-',V(jj).mrk));
     set(hp,'color',V(jj).cmp);
     hold on
 end; 
 hold off
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');
 set(gca,'xlim',[(1-0.2*sign(xlm(1)))*xlm(1) (1+0.2*sign(xlm(2)))*xlm(2)]);
+set(gca,'ylim',[0.02 20]);
 %set(gca,'yscale','log')
 xlabel('No of Modes histogram')
 ylabel('Mode Frequency (kHz)')
+
 
 % Mode spacing frequencies
 subplot(1,3,2);

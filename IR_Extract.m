@@ -12,6 +12,7 @@ path(path,'Tools')
 Input_file='Input_IRSurvey_NatStats';
 %Input_file='Input_IR_Survey_2';
 %Input_file='Input_UtahReverb';
+Input_file='Input_ObjIRs';
 eval(sprintf('[R,C,Mt]=%s;',Input_file));
 %==> R is a structure of recordings
 %==> C is a structure of calibration recordings

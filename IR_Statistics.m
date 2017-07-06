@@ -6,11 +6,12 @@
 %* == Preamble ==
 clear all; close all; clc
 path(path,'Tools')
-set(0,'DefaultFigureVisible','On');
+set(0,'DefaultFigureVisible','Off');
 
 %* == Specify Inputs == 
-Input_file='Input_IR_Survey_2'; Nm='RvrbStrct';
+Input_file='Input_Survey_2'; Nm='Tst';
 %Input_file='Input_IRSurvey_NatStats'; Nm='NtStts';
+%Input_file='Input_ObjIRs'; Nm='ObjIRs'
 eval(sprintf('[Rpth,Cpth,Mt,Amnd]=%s;',Input_file));
 
 Nbnds=4;
@@ -19,7 +20,7 @@ pth=pwd;
 if strcmp(pth(1:3),'/om')
     tmtpth='../timit'
 else
-    tmtpth='/Users/jtraer/LabBook/Workshop/PerceptualExperiments/Sandbox/timit';
+    tmtpth='/Users/jtraer/LabBook/ThereIsScienceToBeDone/Projects/ReverbAndPerception/timit';
 end
 
 %** Specify Rejection Criteria
@@ -110,18 +111,19 @@ end
 %saveas(gcf,sprintf('IRMFigs/Lgnd%dIRs_%s',length(BH),nw));
 
 %** Write Data
-unix('mkdir -p IRMAudio');
-unix('rm -rf IRMAudio/*');
-hPltStts(Dh,Mt,Amnd);
+fNm=sprintf('IRstts_%s_%03d',Nm,Nbnds);
+unix(sprintf('mkdir -p %s',fNm));
+unix(sprintf('rm -rf %s/*',fNm));
+hPltStts(Dh,Mt,Amnd,fNm);
 %* == Write an html file to display all the data
 %** clear the output folders
 fcnt=0;
 fcnt=fcnt+1; Flds{fcnt}='Meta.Env.Class';
-WrtDt2HTML(Dh,'IRMAudio/IRdata',sprintf('IR_Data_%s',Nm),Mt,Flds,tmtpth);
-unix(sprintf('cp IR_Data_%s.html IRMAudio/',Nm));
-unix(sprintf('mv IRMAudio IRMAudio_%s_%03dbnds',Nm,Nbnds));
-unix(sprintf('! zip -r IRMAudio_%s_%03dbnds.zip IRMAudio_%s_%03dbnds/*',Nm,Nbnds,Nm,Nbnds));
-fprintf('Data written to:\n\n %s/IRMAudio_%s_%03dbnds.html\n\n',pwd,Nm,Nbnds)
+WrtDt2HTML(Dh,sprintf('%s',fNm),sprintf('IRstts_%s',fNm),Mt,Flds,tmtpth);
+%unix(sprintf('cp IR_Data_%s.html IRMAudio/',Nm));
+%unix(sprintf('mv IRMAudio IRMAudio_%s_%03dbnds',Nm,Nbnds));
+unix(sprintf('! zip -r %s.zip %s/*',fNm,fNm));
+fprintf('Data written to:\n\n %s/%s.zip\n\n',pwd,fNm)
 
 %* == TODO: Collect details about code runtime
 %* == TODO: Save this code to a summary file

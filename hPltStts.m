@@ -86,6 +86,9 @@ for jPrm=1:length(PltPrms)
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_Krt(tDh,PltPrms{jPrm},V)
     saveas(gcf,sprintf('%s/%s/Krt',fNm,PltPrms{jPrm}),ftp);
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_smKrt(tDh,PltPrms{jPrm},V)
+    saveas(gcf,sprintf('%s/%s/smKrt',fNm,PltPrms{jPrm}),ftp);
     % plot ER spectrum
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_SpcER(tDh,PltPrms{jPrm},V)

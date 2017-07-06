@@ -25,12 +25,12 @@ for jj=1:length(V);
     ff=H.ff/1e3; mplt=zeros(length(ff),length(tH));
     for jh=1:length(tH);
         % if a calibration IR exists remove the speaker spectrum
-        if ~isempty(D);
-            D_DRR=D.DRR;
-            fprintf('Removing speaker DRR\n')
-        else 
-            Dspc=zeros(size(tH(jh).DRR));
-        end
+        %if ~isempty(D);
+        %    D_DRR=D.DRR;
+        %    fprintf('Removing speaker DRR\n')
+        %else 
+        %    Dspc=zeros(size(tH(jh).DRR));
+        %end
         mplt(:,jh)=tH(jh).DRR;
     end
     plt=mean(mplt,2);

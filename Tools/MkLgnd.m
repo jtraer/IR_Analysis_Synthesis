@@ -8,5 +8,9 @@ for jj=1:length(V); hp=plot(-1,-1,V(jj).mrk); hold on
         eval(sprintf('if strcmp(Dh(jh).%s,V(jj).name); cnt=cnt+1; end;',PltPrm));
     end
     V(jj).name=sprintf('%s: %dIRs',V(jj).name,cnt);
+    hhp(jj)=hp;
 end; 
-legend({V.name}); 
+legend({V.name});
+for jj=1:length(hhp);
+    set(hhp(jj),'visible','off');
+end

@@ -1,4 +1,4 @@
-function PltIRStts_Krt(Dh,PltPrm,V);
+function PltIRStts_smKrt(Dh,PltPrm,V);
 
 % preallocate one data point for each class for the legend
 MkLgnd(V,Dh,PltPrm)
@@ -15,37 +15,47 @@ for jj=1:length(V);
     end
     Npts=max(Npts);
     tt=[1:Npts]/H.fs;
-    krt=zeros(Npts,length(tH));
+    smtt=[1/H.fs:0.001:(max(tt)-0.01)];
+    smkrt=zeros(length(smtt),length(tH));
+    krt=zeros(length(smtt),length(tH));
+    bnwd=ceil(0.01*tH(1).fs);
+
     for jh=1:length(tH);
         jkrt=tH(jh).krt;
         mxndx=prctile(jkrt,99);
         jkrt=jkrt(mxndx(1):end);
-        krt(1:length(jkrt),jh)=jkrt;
-        krt(length(jkrt):end,jh)=median(jkrt);
+        for jb=1:length(smtt)
+            [~,ndx]=min(abs(tt-smtt(jb)));
+            if ndx<length(jkrt)-bnwd;
+                smkrt(jb,jh)=length(find(jkrt(ndx+[0:bnwd])>3.4))/bnwd; 
+            else 
+                smkrt(jb,jh)=0;
+            end
+        end
     end
-    plt=median(krt,2);
-    err=std(krt,[],2);
+    plt=median(smkrt,2);
+    err=std(smkrt,[],2);
     % plot
-    hp=plot(tt,plt,['-']); hold on
+    hp=plot(smtt,plt,['-']); hold on
     set(hp,'linewidth',1,'markersize',6);
     set(hp,'color',V(jj).cmp);
     [mx,mxndx]=max(plt);
-    hp=text(tt(mxndx)+0.1,mx,1.001,V(jj).name); 
+    hp=text(smtt(mxndx)+0.1,mx,1.001,V(jj).name); 
     set(hp,'color',V(jj).cmp);
-    hp=plot(tt,plt+err,':'); hold on
+    hp=plot(smtt,plt+err,':'); hold on
     set(hp,'color',V(jj).cmp);
-    hp=plot(tt,plt-err,':'); hold on
+    hp=plot(smtt,plt-err,':'); hold on
     set(hp,'color',V(jj).cmp);
 end; 
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');
 set(gca,'xscale','log');
 set(gca,'xlim',[0.5*xlm(1) 1.2*xlm(2)]);
-set(gca,'yscale','log');ylm=get(gca,'ylim');
+%set(gca,'yscale','log');ylm=get(gca,'ylim'); 
 % add distance marks 
 for jd=[1 3 10 30];
     plot(jd/340*[1 1],ylm,'k:')
-    text(jd/340,2*ylm(1),sprintf('%dm',jd));
+    text(jd/340,2*ylm(1),sprintf('%dm',jd)); 
 end
 xlabel('time (s)')
-ylabel('Kurtosis')
+ylabel('Fraction of 10ms windows with Early Reflections (Kurt>3.4)')
 title(PltPrm)

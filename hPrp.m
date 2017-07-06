@@ -148,7 +148,7 @@ for jbn=1:Nbnds;
     if ~isempty(D)
         tD=D(find([D.Channel]==H.Channel));
         tV=V(find([V.Channel]==H.Channel));
-        aa(jbn)=aa(jbn)-(tD.DRR(jbn)-mean(tV.DRR)); 
+        %aa(jbn)=aa(jbn)-(tD.DRR(jbn)-mean(tV.DRR));  This is almost certainly not the right thing to do and it is causing artifacts.
     end
     alph=aa(jbn);
     Rtt(jbn)=60/bt;

@@ -32,7 +32,7 @@ axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');
 set(gca,'xscale','log');
 set(gca,'xlim',[0.5*xlm(1) 1.2*xlm(2)]);
 set(gca,'yscale','log');
-set(gca,'ylim',[20 20e3]/1e3);
+set(gca,'ylim',[50 20e3]/1e3);
 xlabel('RT60 (s)')
 ylabel('Frequency (kHz)')
 title(PltPrm)

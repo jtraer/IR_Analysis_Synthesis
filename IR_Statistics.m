@@ -120,9 +120,11 @@ hPltStts(Dh,Mt,Amnd,fNm);
 fcnt=0;
 fcnt=fcnt+1; Flds{fcnt}='Meta.Env.Class';
 WrtDt2HTML(Dh,sprintf('%s',fNm),sprintf('IRstts_%s',fNm),Mt,Flds,tmtpth);
+unix(sprintf('cp %s/*.png %s/',Cpth(1).Pth,fNm));
 %unix(sprintf('cp IR_Data_%s.html IRMAudio/',Nm));
 %unix(sprintf('mv IRMAudio IRMAudio_%s_%03dbnds',Nm,Nbnds));
-unix(sprintf('! zip -r %s.zip %s/*',fNm,fNm));
+unix(sprintf('rm %s.zip',fNm));
+unix(sprintf('zip -r %s.zip %s/*',fNm,fNm));
 fprintf('Data written to:\n\n %s/%s.zip\n\n',pwd,fNm)
 
 %* == TODO: Collect details about code runtime

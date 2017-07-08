@@ -128,7 +128,6 @@ for jPrm=1:length(PltPrms)
 %    % plot spectral entropy vs mean(RT60)
 %    % Plot spcER
 %    % Plot spcGs
-%    % Plot kurtosis
 %    % plot T-gauss    
 %    % Plot spectrum
 %    % plot spectral centroid

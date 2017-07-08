@@ -90,15 +90,17 @@ for jbn=1:Nbnds;
     tmp2=tmp2(Npts+[1:Npts]);
     % resample
     tmp3=resample(tmp2,sb_fs,H.fs);  
+    N2ndx=ceil(Nndx*sb_fs/H.fs);
     % Fit an exponential decay model
-    [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3,[1:length(tmp3)]/sb_fs,1,1);     
+    tt=[1:length(tmp3)]/sb_fs;
+    [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3(N2ndx),tt(N2ndx),1,1);     
     % Do this for all the snapshots
     for jsnp=1:Nsnps
         snp=SnpCgrm(jbn,:,jsnp); 
         snp2=abs(hilbert([zeros(1,Npts) snp zeros(1,Npts)]));  
         snp2=snp2(Npts+[1:Npts]);
         snp3=resample(snp2,sb_fs,H.fs);  
-        [sPft,snp_NsFlr,snp_Test,snp_FVE]=FtPlyDcy(snp3,[1:length(tmp3)]/sb_fs,1,1);     
+        [sPft,snp_NsFlr,snp_Test,snp_FVE]=FtPlyDcy(snp3(N2ndx),tt(N2ndx),1,1);     
         snpB(jsnp)=-sPft(1);
         snpRT60(jsnp)=60/-sPft(1);
         snpDRR(jsnp)=sPft(2);

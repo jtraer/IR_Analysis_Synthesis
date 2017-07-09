@@ -42,8 +42,10 @@ for jj=1:length(V);
     set(hp,'linewidth',1,'markersize',6);
     set(hp,'color',V(jj).cmp);
     [mx,mxndx]=max(plt);
-    hp=text(smtt(mxndx(1))+0.1,mx(1),1.001,V(jj).name); 
-    set(hp,'color',V(jj).cmp);
+    if ~isempty(mxndx)
+        hp=text(smtt(mxndx(1))+0.1,mx(1),1.001,V(jj).name); 
+        set(hp,'color',V(jj).cmp);
+    end
     hp=plot(smtt,plt+err,':'); hold on
     set(hp,'color',V(jj).cmp);
     hp=plot(smtt,plt-err,':'); hold on

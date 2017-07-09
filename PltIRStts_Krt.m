@@ -19,6 +19,7 @@ for jj=1:length(V);
     for jh=1:length(tH);
         jkrt=tH(jh).krt;
         mxndx=prctile(jkrt,99);
+        mxndx=find(jkrt>mxndx);
         jkrt=jkrt(mxndx(1):end);
         krt(1:length(jkrt),jh)=jkrt;
         krt(length(jkrt):end,jh)=median(jkrt);

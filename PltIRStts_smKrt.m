@@ -15,7 +15,8 @@ for jj=1:length(V);
     end
     Npts=max(Npts);
     tt=[1:Npts]/H.fs;
-    smtt=[1/H.fs:0.001:(max(tt)-0.01)];
+    bnsz=min([0.001 max(tt)/10]);
+    smtt=[1/H.fs:bnsz:(max(tt)-0.01)];
     smkrt=zeros(length(smtt),length(tH));
     krt=zeros(length(smtt),length(tH));
     bnwd=ceil(0.01*tH(1).fs);

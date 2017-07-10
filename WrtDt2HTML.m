@@ -1,7 +1,7 @@
 %* == function WrtDt2HTML.m : Takes stimuli/IRs stored in a structure BH and makes a set of plots to be arranged in an interactive html  
 %** Written by James Traer - jtraer@mit.edu
 
-function WrtDt2HTML(Dh,fNm,hNm,PltPrms,Flds,tmtpth)
+function WrtDt2HTML(Dh,fNm,html_tmp,hNm,PltPrms,Flds,tmtpth)
 if nargin<5;
     tmtpth=[];
 end
@@ -162,7 +162,7 @@ fprintf(fid2,'\n]');
 fclose(fid2)
 
 %* == write the HTML file ==
-unix(sprintf('cp IR_Data_Summary.html tmp.html',hNm))
+unix(sprintf('cp %s tmp.html',html_tmp))
 %** Delete current lines in template
 [~,LnNdx]=unix(sprintf('sed -n ''/<img src="IRMAudio/='' tmp.html'));
 LnNdx=str2num(LnNdx);

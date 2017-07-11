@@ -10,9 +10,9 @@ clear all; close all; clc
 path(path,'Tools')
 
 %* == Specify Inputs == 
-Input_file='Input_IR_Survey_2';
-Input_file='Input_IRSurvey_NatStats';
-Input_file='Input_ObjIRs';
+Input_file='Input_Survey_2';
+%Input_file='Input_IRSurvey_NatStats';
+%Input_file='Input_ObjIRs';
 eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 
 %** = Number of cochlear subbands for analysis =

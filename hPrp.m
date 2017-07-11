@@ -415,7 +415,7 @@ fcnt=fcnt+1; figure(fcnt)
 
 %** Plot Spectrogram
 fcnt=fcnt+1; figure(fcnt)
-%PltIRSpc(H,C,NsSgrm,Nsff,MdSgrm,Mdff);
+PltIRSpc(H,C,NsSgrm,Nsff,MdSgrm,Mdff);
     %for jm=1:length(H.Modes);
     %    [~,mndx]=min(abs(H.Spcff-H.Modes(jm).cf+H.Modes(jm).bw));
     %    [~,mxdx]=min(abs(H.Spcff-H.Modes(jm).cf-H.Modes(jm).bw));

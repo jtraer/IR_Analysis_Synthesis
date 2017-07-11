@@ -19,7 +19,7 @@ for jPrm=1:length(PltPrms)
     clear V
     for jv=1:length(Vr)
         V(jv).name=Vr{jv};
-        V(jv).cmp=cmpVr(ceil(length(cmpVr)*jv/length(Vr)),:)
+        V(jv).cmp=cmpVr(ceil(length(cmpVr)*jv/length(Vr)),:);
         V(jv).mrk=MrkVr(jv);
     end
     % scroll through the directory and remove files as necessary

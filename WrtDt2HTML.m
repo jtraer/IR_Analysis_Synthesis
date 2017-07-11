@@ -77,7 +77,11 @@ for jIR=[1:length(Dh)]
 
     %*** => convolve with a TIMIT sentence
     if length(Ds)>0;
-        [y,fy]=RIRcnv(TMT(1).s,TMT(1).fs,H.nh,H.fs,1);
+        if ~isempty(H.h_cal);
+            [y,fy]=RIRcnv(TMT(1).s,TMT(1).fs,H.h_cal,H.fs,1);
+        else
+            [y,fy]=RIRcnv(TMT(1).s,TMT(1).fs,H.nh,H.fs,1);
+        end
         audiowrite(sprintf('%s/tmt1.wav',FldrNm),y,fy);
         fprintf(fid2,',\n"speech":\t"%s/tmt1.wav"',PthNm);
     end
@@ -129,8 +133,8 @@ for jIR=[1:length(Dh)]
 %    fprintf(fid2,',\n"Spc":\t"%s/Spc.png"',PthNm);
 
     %** ==> loop over fields in structure and write them to the JSON file (jfld)
-    for jf=1:length(Flds); 
-        fld=Flds{jf};
+    for jf=1:length(PltPrms); 
+        fld=PltPrms{jf};
         eval(sprintf('vl=H.%s;',fld));
         ndx=regexp(fld,'\.'); 
         if ~isempty(ndx);

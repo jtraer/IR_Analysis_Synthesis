@@ -44,7 +44,8 @@ for jIR=[1:length(Dh)]
     %** =>  make a folder to save images and audio to
     FldrNm=sprintf('%s/%s',fNm,H.Path); % where to copy files
     PthNm=sprintf('%s/%s',H.Path); % what to write in the html file (which will be a level below where we are now)
-    eval(sprintf('! mkdir -p %s',FldrNm));
+    unix(sprintf('! mkdir -p %s',FldrNm));
+    unix(sprintf('cp %s/*.jpg %s',H.Path,FldrNm));
 
     %** => add a comma to separate indices in the JSON
     if jIR~=1;

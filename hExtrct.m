@@ -107,9 +107,6 @@ drawnow;
 M=GtMtDt(sprintf('%s/IR_StartEnd.txt',Pth),{'Start_index';'End_index'});
 eval(sprintf('xlm(1)=%s;',M.Start_index))
 eval(sprintf('xlm(2)=%s;',M.End_index))
-if xlm(2)<xlm(1)+H.fs;
-    xlm(2)=xlm(1)+H.fs;
-end
 %** trim out just the IR from the background noise
 H.h=H.h([xlm(1):xlm(2)]);
 H.h_var=H.h_var([xlm(1):xlm(2)]);

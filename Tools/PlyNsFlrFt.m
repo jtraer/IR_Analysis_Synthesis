@@ -13,7 +13,7 @@
 
 function [total_error] = PlyNsFlrFt(xx,tt,prms)
 
-set(0,'DefaultFigureVisible','off');
+%set(0,'DefaultFigureVisible','off');
 
 % get index of inflection point
 Tinf=prms(1); prms=prms(2:end);

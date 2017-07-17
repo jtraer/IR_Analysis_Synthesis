@@ -69,7 +69,8 @@ end
 
 %Search for modes
 fprintf('searching for Modes...\n')
-H.Modes=hExtrctMds(H,2048);
+%H.Modes=hExtrctMds(H,2048);
+H.Modes=hExtrctMds(H,1024); % for now this is faster
 fprintf('%d modes found.\n',length(H.Modes))
 
 %* == Scroll through cochlear channels ==

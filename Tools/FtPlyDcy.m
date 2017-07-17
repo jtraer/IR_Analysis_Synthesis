@@ -56,6 +56,23 @@ while (isempty(xmns)~=1); cnt=cnt+1;
 end
 hold off
 
+% to save time make sure smrc is not too large (though we still want the first and the last)
+tmp=ceil(length(smrc)/10);
+smrc2{1}=smrc{1};
+ttrc2{1}=ttrc{1};
+Lrc2(1)=Lrc(1);
+for jj=1:(floor(length(smrc)/tmp));
+    smrc2{1+jj}=smrc{jj*tmp};
+    ttrc2{1+jj}=ttrc{jj*tmp};
+    Lrc2(1+jj)=Lrc(jj*tmp);
+end
+smrc2{length(smrc2)+1}=smrc{end};
+ttrc2{length(ttrc2)+1}=ttrc{end};
+Lrc2(length(Lrc2)+1)=Lrc(end);
+smrc=smrc2;
+ttrc=ttrc2;
+Lrc=Lrc2;
+
 % iterate through the different smoothed versions of the time series and fit an exponential fit model to each
 ftcnt=0;
 for jft=1:length(smrc); 

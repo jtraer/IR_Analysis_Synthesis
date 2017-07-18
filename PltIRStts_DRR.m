@@ -4,16 +4,16 @@ function PltIRStts_DRR(Dh,PltPrm,V);
 MkLgnd(V,Dh,PltPrm)
     
 % find calibration recording
-C=[]; D=[];
-for jh=1:length(Dh);
-    if strcmp(Dh(jh).Meta.Env.Class,'CAL');
-        load(sprintf('%s/%s',Dh(jh).PthStm,Dh(jh).name));
-        C=[C; H];
-        if strcmp(H.Meta.App.PolarAngle_fromTop,'90')&&strcmp(H.Meta.App.AzimuthalAngle_fromFront,'0')
-            D=H;
-        end
-    end
-end
+%C=[]; D=[];
+%for jh=1:length(Dh);
+%    if strcmp(Dh(jh).Meta.Env.Class,'CAL');
+%        load(sprintf('%s/%s',Dh(jh).PthStm,Dh(jh).name));
+%        C=[C; H];
+%        if strcmp(H.Meta.App.PolarAngle_fromTop,'90')&&strcmp(H.Meta.App.AzimuthalAngle_fromFront,'0')
+%            D=H;
+%        end
+%    end
+%end
 
 for jj=1:length(V);
     % collate all IRs that have this particular label

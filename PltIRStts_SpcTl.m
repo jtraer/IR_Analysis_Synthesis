@@ -33,7 +33,7 @@ for jj=1:length(V);
 %        end
 %        mplt(:,jh)=20*log10(tH(jh).Attck(6).Spc)-Dspc;
         mplt(:,jh)=20*log10(tH(jh).Attck(6).Spc);
-%    end
+    end
     plt=median(mplt,2);
     err=std(mplt,[],2);
     % smooth for plotting purposes

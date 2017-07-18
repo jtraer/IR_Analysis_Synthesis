@@ -23,7 +23,7 @@ for jj=1:length(V);
     end
     % specify the ordinates and abscissa
     ff=H.Attck(3).ff/1e3; mplt=zeros(length(ff),length(tH));
-    %for jh=1:length(tH);
+    for jh=1:length(tH);
     %    % if a calibration IR exists remove the speaker spectrum
     %    if ~isempty(D);
     %        Dspc=20*log10(D.Attck(3).Spc);
@@ -33,7 +33,7 @@ for jj=1:length(V);
     %    end
     %    mplt(:,jh)=20*log10(tH(jh).Attck(3).Spc)-Dspc;
         mplt(:,jh)=20*log10(tH(jh).Attck(3).Spc);
-    %end
+    end
     plt=median(mplt,2);
     err=std(mplt,[],2);
     % spooth for plot

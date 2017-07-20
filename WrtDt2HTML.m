@@ -97,8 +97,8 @@ for jIR=[1:length(Dh)]
 
     %%*** => Copy photo 
     PhPth=H.Path;
-    ndx=regexp(PhPth,'/');
-    PhPth=PhPth(1:ndx(3));
+    ndx=regexp(PhPth,sprintf('/ch%d',H.Channel));
+    PhPth=PhPth(1:ndx);
     Dph=dir(sprintf('%s*.jpg',PhPth));
     for jph=1:length(Dph)
         if strcmp(ici(1:3),'/om')

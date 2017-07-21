@@ -428,8 +428,8 @@ fcnt=fcnt+1; figure(fcnt)
     %    plot(20*log10(abs(H.spc(f0ndx))),H.Spcff(f0ndx)/1e3,'ro')
     %end
 %set(gca,'fontsize',fntsz);
-saveas(gcf,sprintf('%s/Spc',H.Path),'jpg');
-saveas(gcf,sprintf('%s/Spc',H.Path),ftp);
+%saveas(gcf,sprintf('%s/Spc',H.Path),'jpg');
+%saveas(gcf,sprintf('%s/Spc',H.Path),ftp);
 
 %subplot(2,1,1);
 %pcolor(Nstt,Nsff/1e3,plt);

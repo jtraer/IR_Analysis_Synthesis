@@ -10,7 +10,8 @@ for jj=1:length(V); hp=plot(-1,-1,V(jj).mrk); hold on
     V(jj).name=sprintf('%s: %dIRs',V(jj).name,cnt);
     hhp(jj)=hp;
 end; 
-legend({V.name});
+hl=legend({V.name},'Location','eastoutside');
 for jj=1:length(hhp);
     set(hhp(jj),'visible','off');
 end
+

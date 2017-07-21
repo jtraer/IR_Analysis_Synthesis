@@ -80,7 +80,9 @@ BdBndsFlg=zeros(1,Nbnds);
 for jbn=1:Nbnds; 
     fprintf('%s: Band %d/%d\n',H.Path,jbn,Nbnds);
     % Extract the subband
-    tmp=Cgrm(jbn,:); 
+    tmp=Cgrm(jbn,:);
+    %** record the subband peak amplitude
+    sbbA(jbn)=20*log10(max(abs(tmp)));
     % rescale the ERs relative to the diffuse tail according to the face and volume speaker transfer functions
     tmp2=tmp; 
     % Compute spectral amplitude of the Sparse and Gaussian patches of the entire time series (for calibration only) -- shouldn't this be after we remove the noise floor?
@@ -313,6 +315,7 @@ end
 H.nh=gather(nh);
 H.krt=krt;
 % and the channel values
+H.SbAmp=sbbA; %+20*log10(Rscl);
 H.spcER=spcER/mean([spcGs]);
 H.spcGs=spcGs/mean([spcGs]);
 H.spcAllGs=Nspc/mean(Nspc);

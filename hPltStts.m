@@ -71,6 +71,10 @@ for jPrm=1:length(PltPrms)
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_PkAmp(tDh,PltPrms{jPrm},V)
     saveas(gcf,sprintf('%s/%s/Amp',fNm,PltPrms{jPrm}),ftp);
+    % plot subband peak amplitude
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_SbAmp(tDh,PltPrms{jPrm},V)
+    saveas(gcf,sprintf('%s/%s/AmpSb',fNm,PltPrms{jPrm}),ftp);
     % plot RT60
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_RT60(tDh,PltPrms{jPrm},V)

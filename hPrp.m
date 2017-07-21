@@ -307,6 +307,11 @@ if ~isempty(V);
     h_cal=ifft([fNH; 0; flipud(conj(fNH(2:end)))]);
     h_cal=h_cal(1:Npd);
     H.h_cal=h_cal;
+    %* Measure spectra
+    nft=2^ceil(log2(length(h_cal)));
+    spc=fft(h_cal,nft);
+    H.spc=spc(1:end/2);
+    H.Spcff=[1:nft/2]*H.fs/nft;
 else
     H.h_cal=[];
 end

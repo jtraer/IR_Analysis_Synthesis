@@ -327,7 +327,6 @@ end
 %    [Pft,NsFlr,Test,FVE]=FtPlyDcy(md,Mdtt,1,1);
 
 %* == Plot ==
-save(sprintf('%s/H',H.Path),'H');
 close all
 fcnt=0;
 

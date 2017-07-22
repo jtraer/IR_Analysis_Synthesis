@@ -25,7 +25,7 @@ end
 
 %** Specify Rejection Criteria
 rcnt=0;
-rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H.DateCreated)<datenum(''19-June-2017'')';
+rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H.DateCreated)<datenum(''22-July-2017'')';
 
 %* ==== Load data  ====
 

@@ -89,6 +89,10 @@ if ~isempty(V);
     N2=length(H.h)-N1-Ncrss;
     wn1=[ones(N1,1); linspace(1,0,Ncrss).'; zeros(N2,1)];
     wn2=[zeros(N1,1); linspace(0,1,Ncrss).'; ones(N2,1)];
+    if length(wn1)>length(h); % as might be the case if Tgs is the length of the IR
+        wn1=wn1(1:length(h));
+        wn2=wn2(1:length(h));
+    end
     H.h=wn1.*h_Direct_Calibrated+wn2.*h_Tail_Calibrated;
     % repeat this for all the snapshots
     Nsnps=size(H.h_snps,2);

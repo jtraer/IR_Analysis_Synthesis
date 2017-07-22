@@ -13,7 +13,7 @@ path(path,'Tools')
 Input_file='Input_Survey_2';        Sb_fs=1e2; % Frequency of subband envelopes in Hz
 Input_file='Input_IR_Survey_2_OM';  Sb_fs=1e2; % Frequency of subband envelopes in Hz
 %Input_file='Input_IRSurvey_NatStats'; Sb_fs=1e2;
-%Input_file='Input_ObjectIRs';      Sb_fs=1e3; 
+%Input_file='Input_ObjectIRs';      Sb_fs=1e4; 
 eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 
 %** = Number of cochlear subbands for analysis =

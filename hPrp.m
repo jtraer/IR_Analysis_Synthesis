@@ -127,17 +127,15 @@ for jbn=1:Nbnds;
     tmp=Cgrm(jbn,:);
     %** record the subband peak amplitude
     H.SbAmp(jbn)=20*log10(max(abs(tmp)));
-    % rescale the ERs relative to the diffuse tail according to the face and volume speaker transfer functions
-    tmp2=tmp; 
     % take envelope
-    tmp2=abs(hilbert([zeros(1,Npts) tmp2 zeros(1,Npts)]));  
+    tmp2=abs(hilbert([zeros(1,Npts) tmp zeros(1,Npts)]));  
     tmp2=tmp2(Npts+[1:Npts]);
     % resample
     tmp3=resample(tmp2,sb_fs,H.fs); 
     N2ndx=ceil(Nndx*sb_fs/H.fs); 
     N2ndx=unique(N2ndx);
     if length(N2ndx)<20;
-        error(sprintf('The downsampled frequency (sb_fs=%2.2fHz is too small. We only have %d points to which we must fit a decay rate and noise floor.  There are %d possible points in the original\n',sb_fs,length(N2ndx),length(Nndx)));
+        error(sprintf('The downsampled frequency (sb_fs=%2.2fHz is too small. We only have %d points to which we must fit a decay rate and noise floor.  There are %d Gaussian points in the %d point original\n',sb_fs,length(N2ndx),length(Nndx),length(tmp2)));
     end
     % Fit an exponential decay model
     tt=[1:length(tmp3)]/sb_fs; 

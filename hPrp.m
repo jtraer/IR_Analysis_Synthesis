@@ -136,8 +136,8 @@ for jbn=1:Nbnds;
     tmp3=resample(tmp2,sb_fs,H.fs); 
     N2ndx=ceil(Nndx*sb_fs/H.fs); 
     N2ndx=unique(N2ndx);
-    if length(N2ndx)<100;
-        error(sprintf('The downsampled frequency (sb_fs=%2.2fHz is too small. We only have %d points to whcih we must fit a decay rate and noise floor.  There are %d possible points in the original\n',sb_fs,length(N2ndx),length(Nndx)));
+    if length(N2ndx)<20;
+        error(sprintf('The downsampled frequency (sb_fs=%2.2fHz is too small. We only have %d points to which we must fit a decay rate and noise floor.  There are %d possible points in the original\n',sb_fs,length(N2ndx),length(Nndx)));
     end
     % Fit an exponential decay model
     tt=[1:length(tmp3)]/sb_fs; 

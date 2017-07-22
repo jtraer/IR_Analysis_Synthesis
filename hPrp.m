@@ -16,13 +16,13 @@ if sb_fs>H.fs; sb_fs=H.fs; end
 % find data for Direct (D) and Omnidirectional (V) Speaker IRs
 if ~isempty(C);
     for jc=1:length(C);
-        dndx_t(jc)=regexp(C(jc).Name,'Front');
-        vndx_t(jc)=regexp(C(jc).Name,'Omni');
+        dndx_t(jc)=length(regexp(C(jc).Name,'Front'));
+        vndx_t(jc)=length(regexp(C(jc).Name,'Omni'));
     end
-    dndx=find(dndx_t~=1);
+    dndx=find(dndx_t~=0);
     D=C(dndx);
     D=D(find([D.Channel]==H.Channel));
-    vndx=find(vndx_t~=1);
+    vndx=find(vndx_t~=0);
     V=C(vndx);
     V=V(find([V.Channel]==H.Channel));
     H.CalibrationFiles=V(1).Path;

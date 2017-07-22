@@ -98,8 +98,8 @@ if ~isempty(V);
     Nsnps=size(H.h_snps,2);
     for js=1:Nsnps;
         h=H.h_snps(:,js);
-        th_Tail_Calibrated=RmvSpkTrnsFn(h,vSpc,vff);
-        th_Direct_Calibrated=RmvSpkTrnsFn(h,dSpc,dff);
+        th_Tail_Calibrated=RmvSpkTrnsFn(h,H.fs,vSpc,vff);
+        th_Direct_Calibrated=RmvSpkTrnsFn(h,H.fs,dSpc,dff);
         H.h_snps(:,js)=wn1.*th_Direct_Calibrated+wn2.*th_Tail_Calibrated;
     end
 end

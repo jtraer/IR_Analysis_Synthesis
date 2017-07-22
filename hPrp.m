@@ -45,6 +45,9 @@ VrKrt=24*Nbn*(Nbn-1)^2/((Nbn-3)*(Nbn-2)*(Nbn+3)*(Nbn+5));
 %** Classify data points as "Sparse" or "Noise-like" 
 Sndx=find(krt>3+2*VrKrt);  %Sparse
 Nndx=find(krt<=3+2*VrKrt); %Noise-like
+if length(Nndx)<=1; % if we only have one point we cannot fit a decay - this will likely only occur in Calibration recordings which are very short
+    Nndx=find(krt<prctile(krt,25));
+end
 H.Tail_ndx=Nndx;
 %** Compute the crossover to Gaussian statistics as the point at which there has been as many Gaussian points as sparse (this is a stable measure but it is also arbitrary and crude)
 %*** Find the maximum (preumably this is near the first arrival)
@@ -129,7 +132,7 @@ for jbn=1:Nbnds;
     tmp3=resample(tmp2,sb_fs,H.fs);  
     N2ndx=ceil(Nndx*sb_fs/H.fs);
     % Fit an exponential decay model
-    tt=[1:length(tmp3)]/sb_fs;
+    tt=[1:length(tmp3)]/sb_fs; 
     [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3(N2ndx),tt(N2ndx),1,1);
     alph=Pft(2); bt=-Pft(1);
     % Do this for all the snapshots

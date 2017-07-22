@@ -20,8 +20,6 @@ eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 Nbnds=[4];
 %** = Frequency limits in Hz =
 flm=[50 20e3];
-%** = Frequency of subband envelopes in Hz =
-Sb_fs=1e3;
 % Overwrite calibration files (Do this if hPrp or any paths have been changed)
 OvrWrtCAL=0;
 %** filetype

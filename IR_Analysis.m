@@ -22,7 +22,7 @@ flm=[50 20e3];
 %** = Frequency of subband envelopes in Hz =
 Sb_fs=1e3;
 % Overwrite calibration files (Do this if hPrp or any paths have been changed)
-OvrWrtCAL=1;
+OvrWrtCAL=0;
 %** filetype
 ftp='jpg';
 %ftp='epsc';

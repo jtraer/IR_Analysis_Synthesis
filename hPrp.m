@@ -115,7 +115,7 @@ for jsnp=1:Nsnps;
 end
 
 %* == Scroll through cochlear channels ==
-eval(sprintf('! mkdir -p %s/Subbands_%d',H.Path,Nbnds));
+unix(sprintf('! mkdir -p %s/Subbands_%d',H.Path,Nbnds));
 BdBndsFlg=zeros(1,Nbnds);
 for jbn=1:Nbnds; 
     fprintf('%s: Band %d/%d\n',H.Path,jbn,Nbnds);
@@ -219,7 +219,7 @@ fprintf('searching for Modes...\n')
 %H.Modes=hExtrctMds(H,2048);
 H.Modes=hExtrctMds(H,1024); % for now this is faster
 fprintf('%d modes found.\n',length(H.Modes))
-eval(sprintf('! mkdir -p %s/Modes_%d',H.Path,length(H.Modes)));
+unix(sprintf('! mkdir -p %s/Modes_%d',H.Path,Nbnds));
 %** fit decay properties of modes
 Npts=length(H.h);
 for jm=1:length(H.Modes);
@@ -241,7 +241,7 @@ for jm=1:length(H.Modes);
     xlabel('Time (s)')
     ylabel('Power (dB)')
     title(sprintf('%2.2kHz, FV=%2.2f',Md.cf/1e3,Md.FV))
-    saveas(gcf,sprintf('%s/Modes_%d/%03d',H.Path,length(H.Modes),jm),'jpg'); 
+    saveas(gcf,sprintf('%s/Modes_%d/%03d',H.Path,Nbnds,jm),'jpg'); 
 end
 
 % and compute spectrograms to find modes

@@ -5,14 +5,24 @@ function H=hPrp(H,C,Nbnds,flm,sb_fs,ftp);
 set(0,'DefaultFigureVisible','off');
 fntsz=15;
 
+% first we check that downsampling won't leave us with too little data for a sensible fitter
+nL=0;
+if nL<1e3;
+    nL=length(H.h)*ceil(H.fs/sb_fs);
+    sb_fs=2*sb_fs;
+end
+if sb_fs>H.fs; sb_fs=H.fs; end
+
 % find data for Direct (D) and Omnidirectional (V) Speaker IRs
 if ~isempty(C);
-    dndx_t=strcmp({C.Name},'Front');
-    dndx=find(dndx_t==1);
+    for jc=1:length(C);
+        dndx_t(jc)=regexp(C(jc).Name,'Front');
+        vndx_t(jc)=regexp(C(jc).Name,'Omni');
+    end
+    dndx=find(dndx_t~=1);
     D=C(dndx);
     D=D(find([D.Channel]==H.Channel));
-    vndx_t=strcmp({C.Name},'Omni');
-    vndx=find(vndx_t==1);
+    vndx=find(vndx_t~=1);
     V=C(vndx);
     V=V(find([V.Channel]==H.Channel));
     H.CalibrationFiles=V(1).Path;
@@ -45,9 +55,6 @@ VrKrt=24*Nbn*(Nbn-1)^2/((Nbn-3)*(Nbn-2)*(Nbn+3)*(Nbn+5));
 %** Classify data points as "Sparse" or "Noise-like" 
 Sndx=find(krt>3+2*VrKrt);  %Sparse
 Nndx=find(krt<=3+2*VrKrt); %Noise-like
-if length(Nndx)<=3*round(H.fs/sb_fs); % if we only have three points we cannot fit a decay and noisefloor - this will likely only occur in Calibration recordings which are very short
-    Nndx=find(krt<prctile(krt,25));
-end
 H.Tail_ndx=Nndx;
 %** Compute the crossover to Gaussian statistics as the point at which there has been as many Gaussian points as sparse (this is a stable measure but it is also arbitrary and crude)
 %*** Find the maximum (preumably this is near the first arrival)

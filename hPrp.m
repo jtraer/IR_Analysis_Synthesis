@@ -134,8 +134,11 @@ for jbn=1:Nbnds;
     tmp3=resample(tmp2,sb_fs,H.fs); 
     N2ndx=ceil(Nndx*sb_fs/H.fs); 
     N2ndx=unique(N2ndx);
+    % if the section left is too short we can't fit the data. So if we must fit to non-Gaussian data so be it.  The IRs where this will happen will basically be short clicks anyways so this shouldn't cause audible problems
     if length(N2ndx)<20;
-        error(sprintf('The downsampled frequency (sb_fs=%2.2fHz is too small. We only have %d points to which we must fit a decay rate and noise floor.  There are %d Gaussian points in the %d point original\n',sb_fs,length(N2ndx),length(Nndx),length(tmp2)));
+        fprintf('Not enough Gaussian points: fitting decay rates to all the data\n')
+        [~,ndx]=max(abs(tmp3));
+        N2ndx=(ndx+1):length(tmp3);
     end
     % Fit an exponential decay model
     tt=[1:length(tmp3)]/sb_fs; 
@@ -213,7 +216,7 @@ for jj=1:2:11; cnt=cnt+1;
         spc=fft(spc_t,Nft); 
         Bgspc=Bgspc+abs(spc(1:Nft/2))/(Nft/4); 
     end
-    Attck(cnt).RwSpc=Bgspc(1:Nft/2);
+    Attck(cnt).Spc=Bgspc(1:Nft/2);
     Attck(cnt).SpcIntrp=interp1([1:Nft/2]*H.fs/Nft,Bgspc,ff,'spline');
     Attck(cnt).ff=[1:Nft/2]*H.fs/Nft;
     Attck(cnt).T=Nft/H.fs;

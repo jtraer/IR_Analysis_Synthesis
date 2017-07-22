@@ -17,7 +17,7 @@ xlabel('Power (db)');
 Nsc=length(H.Attck);
 for js=1:Nsc;
     subplot(3,Nsc,2*Nsc+js)
-    plot(20*log10(abs(H.Attck(js).RwSpc)),H.Attck(js).ff/1e3,'b');
+    plot(20*log10(abs(H.Attck(js).Spc)),H.Attck(js).ff/1e3,'b');
     axis tight
     set(gca,'yscale','log')
     set(gca,'ylim',[min(H.ff) max(H.ff)]/1e3);

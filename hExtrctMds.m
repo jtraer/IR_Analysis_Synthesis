@@ -68,7 +68,7 @@ dndx=find(dMds<0);
 %** scroll through and count modes
 mcnt=0;
 mn1ndx=1;
-ndx=2; dr=1
+ndx=2; dr=1;
 while ndx<=length(dMds);
     if ndx==length(dMds);
         dMds(ndx)=-dr*abs(dMds(ndx));

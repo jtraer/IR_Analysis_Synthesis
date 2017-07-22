@@ -45,7 +45,7 @@ VrKrt=24*Nbn*(Nbn-1)^2/((Nbn-3)*(Nbn-2)*(Nbn+3)*(Nbn+5));
 %** Classify data points as "Sparse" or "Noise-like" 
 Sndx=find(krt>3+2*VrKrt);  %Sparse
 Nndx=find(krt<=3+2*VrKrt); %Noise-like
-if length(Nndx)<=1; % if we only have one point we cannot fit a decay - this will likely only occur in Calibration recordings which are very short
+if length(Nndx)<=3*round(H.fs/sb_fs); % if we only have three points we cannot fit a decay and noisefloor - this will likely only occur in Calibration recordings which are very short
     Nndx=find(krt<prctile(krt,25));
 end
 H.Tail_ndx=Nndx;

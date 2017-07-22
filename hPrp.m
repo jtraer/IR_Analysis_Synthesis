@@ -56,7 +56,7 @@ VrKrt=24*Nbn*(Nbn-1)^2/((Nbn-3)*(Nbn-2)*(Nbn+3)*(Nbn+5));
 Sndx=find(krt>3+2*VrKrt);  %Sparse
 Nndx=find(krt<=3+2*VrKrt); %Noise-like
 prc=25;
-while length(Nndx)<=5*ceil(H.fs/sb_fs); % in the case of very short calibrtion IRs they might have very little few Gaussian points which leaves nothing to be fit.  We need at least three AFTER downsampling to find a decay rate and a noise floor
+while length(Nndx)<=5*floor(H.fs/sb_fs); % in the case of very short calibrtion IRs they might have very little few Gaussian points which leaves nothing to be fit.  We need at least three AFTER downsampling to find a decay rate and a noise floor
     prc=prc+5;
     Nndx=find(krt<prctile(krt,prc)); 
     Sndx=find(krt>=prctile(krt,prc)); 
@@ -146,8 +146,8 @@ for jbn=1:Nbnds;
     tmp2=abs(hilbert([zeros(1,Npts) tmp2 zeros(1,Npts)]));  
     tmp2=tmp2(Npts+[1:Npts]);
     % resample
-    tmp3=resample(tmp2,sb_fs,H.fs);  
-    N2ndx=ceil(Nndx*sb_fs/H.fs);
+    tmp3=resample(tmp2,sb_fs,H.fs); length(tmp3)  
+    N2ndx=ceil(Nndx*sb_fs/H.fs); length(N2ndx)
     % Fit an exponential decay model
     tt=[1:length(tmp3)]/sb_fs; 
     [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3(N2ndx),tt(N2ndx),1,1);

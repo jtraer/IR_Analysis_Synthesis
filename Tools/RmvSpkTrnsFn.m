@@ -1,9 +1,9 @@
-function h=RmvSpkTrnsFn(h,cSpc,cff);
+function h=RmvSpkTrnsFn(h,fs,cSpc,cff);
     
 Npd=length(h);
 tmp=[zeros(Npd,1); h; zeros(Npd,1)];
 nft=2^max(ceil(log2([length(tmp) length(cSpc)])));
-tff=[1:nft]/nft*H.fs;
+tff=[1:nft]/nft*fs;
 NH=fft(h,nft);
 NH=NH(1:nft/2);
 T=interp1([0 cff tff(end)],[cSpc(1); cSpc; cSpc(end) ],tff(1:nft/2));

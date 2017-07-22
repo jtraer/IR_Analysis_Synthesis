@@ -74,10 +74,10 @@ if ~isempty(V);
     h=H.h;
     vSpc=V.Attck(3).RwSpc;
     vff=V.Attck(3).ff;
-    h_Tail_Calibrated=RmvSpkTrnsFn(h,vSpc,vff);
+    h_Tail_Calibrated=RmvSpkTrnsFn(h,H.fs,vSpc,vff);
     dSpc=D.Attck(3).RwSpc;
     dff=D.Attck(3).ff;
-    h_Direct_Calibrated=RmvSpkTrnsFn(h,dSpc,dff);
+    h_Direct_Calibrated=RmvSpkTrnsFn(h,H.fs,dSpc,dff);
     % splice the two calibrated IR together with a crossfade
     CrssL=10; %crossfade length in ms
     if CrssL>2*H.Tgs;

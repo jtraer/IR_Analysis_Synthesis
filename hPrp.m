@@ -138,6 +138,7 @@ for jbn=1:Nbnds;
     N2ndx=unique(N2ndx);
     if length(N2ndx)<100;
         error(sprintf('Error: The dowsnampled frequency (sb_fs=%2.2Hz is too small. We only have %d points to fit a decay rate and noise floor\n',sb_fs,length(N2ndx)));
+    end
     % Fit an exponential decay model
     tt=[1:length(tmp3)]/sb_fs; 
     [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3(N2ndx),tt(N2ndx),1,1);

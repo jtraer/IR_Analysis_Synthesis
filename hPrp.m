@@ -5,21 +5,32 @@ function H=hPrp(H,C,Nbnds,flm,sb_fs,ftp);
 set(0,'DefaultFigureVisible','off');
 fntsz=15;
 
+% find data for Direct (D) and Omnidirectional (V) Speaker IRs
 if ~isempty(C);
-    D=C.Direct;
-    V=C.Omni;
+    dndx_t=strcmp({C.Name},'Front');
+    dndx=find(dndx_t==1);
+    D=C(dndx);
+    D=D(find([D.Channel]==H.Channel));
+    vndx_t=strcmp({C.Name},'Omni');
+    vndx=find(vndx_t==1);
+    V=C(vndx);
+    V=V(find([V.Channel]==H.Channel));
+    H.CalibrationFiles=V(1).Path;
 else
     D=[]; V=[];
+    H.CalibrationFiles=[];
 end
 
-%* == Compute kurtosis in 10ms windows ==
-%** Find the numbr of points in a 2ms window and make sure it is an even number
-Nbn=ceil(0.002*H.fs); 
+
+%* === Compute kurtosis in windows ===
+BnL=5; % [Length of window in ms]
+%** Find the numbr of points in the bin and make sure it is an even number
+Nbn=ceil(BnL/1e3*H.fs); 
 if Nbn>length(H.h)*2;
     Nbn=length(H.h)/4;
 end
 Nbn=Nbn+rem(Nbn,2); 
-%** Repeat the first and last 5ms sections
+%** Repeat the first and last sections
 tmp=[H.h(1:Nbn/2); H.h; H.h(end-Nbn/2+1:end)]; 
 %** Scroll through data points
 krt=zeros(length(H.h),1); 
@@ -47,8 +58,41 @@ while (NGs<=NER&&cnt<length(krt)); cnt=cnt+1;
 end; 
 H.Tgs=cnt/H.fs;
 
-%* == Compute the cochleagram ==
-%** zeropad to avoid edge effects
+%* === remove the direct and omnidirectional speaker transfer function from IR time series ===
+H.h_before_removing_speaker_TF=H.h;
+if ~isempty(V);
+    h=H.h;
+    vSpc=V.Attck(3).RwSpc;
+    vff=V.Attck(3).ff;
+    h_Tail_Calibrated=RmvSpkTrnsFn(h,vSpc,vff);
+    dSpc=D.Attck(3).RwSpc;
+    dff=D.Attck(3).ff;
+    h_Direct_Calibrated=RmvSpkTrnsFn(h,dSpc,dff);
+    % splice the two calibrated IR together with a crossfade
+    CrssL=10; %crossfade length in ms
+    if CrssL>2*H.Tgs;
+        CrssL=H.Tgs;
+    end
+    Ncrss=CrssL/1e3*H.fs;
+    Ncrss=Ncrss+rem(Ncrss,2);
+    N1=cnt-Ncrss/2;
+    N2=length(H.h)-N1-Ncrss;
+    wn1=[ones(N1,1); linspace(1,0,Ncrss).'; zeros(N2,1)];
+    wn2=[zeros(N1,1); linspace(0,1,Ncrss).'; ones(N2,1)];
+    H.h=wn1.*h_Direct_Calibrated+wn2.*h_Tail_Calibrated;
+    % repeat this for all the snapshots
+    Nsnps=size(H.h_snps,2);
+    for js=1:Nsnps;
+        h=H.h_snps(:,js);
+        th_Tail_Calibrated=RmvSpkTrnsFn(h,vSpc,vff);
+        th_Direct_Calibrated=RmvSpkTrnsFn(h,dSpc,dff);
+        H.h_snps(:,js)=wn1.*th_Direct_Calibrated+wn2.*th_Tail_Calibrated;
+    end
+end
+
+%* Remove the noise floor in subbands
+%** == Compute the cochleagram ==
+%*** zeropad to avoid edge effects
 Npts=length(H.h);
 [fltbnk,ff,erbff]=make_erb_cos_filters(3*Npts,H.fs,Nbnds,flm(1),flm(2));
 Cgrm=generate_subbands([zeros(Npts,1); H.h; zeros(Npts,1)].',fltbnk);
@@ -67,27 +111,17 @@ for jsnp=1:Nsnps;
     SnpCgrm(:,:,jsnp)=sCgrm;
 end
 
-%Search for modes
-fprintf('searching for Modes...\n')
-%H.Modes=hExtrctMds(H,2048);
-H.Modes=hExtrctMds(H,1024); % for now this is faster
-fprintf('%d modes found.\n',length(H.Modes))
-
 %* == Scroll through cochlear channels ==
 eval(sprintf('! mkdir -p %s/Subbands_%d',H.Path,Nbnds));
-eval(sprintf('! mkdir -p %s/Modes_%d',H.Path,length(H.Modes)));
 BdBndsFlg=zeros(1,Nbnds);
 for jbn=1:Nbnds; 
     fprintf('%s: Band %d/%d\n',H.Path,jbn,Nbnds);
     % Extract the subband
     tmp=Cgrm(jbn,:);
     %** record the subband peak amplitude
-    sbbA(jbn)=20*log10(max(abs(tmp)));
+    H.SbAmp(jbn)=20*log10(max(abs(tmp)));
     % rescale the ERs relative to the diffuse tail according to the face and volume speaker transfer functions
     tmp2=tmp; 
-    % Compute spectral amplitude of the Sparse and Gaussian patches of the entire time series (for calibration only) -- shouldn't this be after we remove the noise floor?
-    Nspc(jbn)=rms(gather(tmp2(Nndx)));
-    Sspc(jbn)=rms(gather(tmp2(Sndx)));
     % take envelope
     tmp2=abs(hilbert([zeros(1,Npts) tmp2 zeros(1,Npts)]));  
     tmp2=tmp2(Npts+[1:Npts]);
@@ -96,7 +130,8 @@ for jbn=1:Nbnds;
     N2ndx=ceil(Nndx*sb_fs/H.fs);
     % Fit an exponential decay model
     tt=[1:length(tmp3)]/sb_fs;
-    [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3(N2ndx),tt(N2ndx),1,1);     
+    [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3(N2ndx),tt(N2ndx),1,1);
+    alph=Pft(2); bt=-Pft(1);
     % Do this for all the snapshots
     for jsnp=1:Nsnps
         snp=SnpCgrm(jbn,:,jsnp); 
@@ -114,287 +149,211 @@ for jbn=1:Nbnds;
     sdDRR=std(snpDRR);
     % Plot
     figure; set(gcf,'visible','off')
-    plot([1:length(tmp)]/H.fs,20*log10(abs(tmp))); 
-    hold on
-    plot([1:length(tmp2)]/H.fs,20*log10(abs(tmp2)),'c');
-    plot([0:(length(tmp3)-1)]/sb_fs,20*log10(abs(tmp3)),'g:');
-    plot([1:length(tmp)]/H.fs,Pft(2)+Pft(1)*[1:length(tmp)]/H.fs,'r--');
-    plot([1:length(tmp)]/H.fs,(Pft(2)+sdDRR/2)+(Pft(1)-sdB/2)*[1:length(tmp)]/H.fs,'r:');
-    plot([1:length(tmp)]/H.fs,(Pft(2)-sdDRR/2)+(Pft(1)+sdB/2)*[1:length(tmp)]/H.fs,'r:');
-    plot([1 length(tmp)]/H.fs,Pft(2)+Pft(1)*Test*ones(1,2),'k--');
-    if ~isempty(V)
-        tV=V(find([V.Channel]==H.Channel));
-        plot([1:length(tmp)]/H.fs,tmp3(1)-(60/tV.RT60(jbn))*[1:length(tmp)]/H.fs,'m--');
-        %** Check if recorded decay is less than or equal to the speaker-microphone IR
-        if tV.RT60(jbn)>(-60/Pft(1))*0.75;
-            BdBndsFlg(jbn)=1;
-            text(0.5*Test,Pft(2),1.001,sprintf('Danger: Speaker-Microphone IR RT60 is %d%% of recorded',round(100*tV.RT60(jbn)/(-60/Pft(1)))));
-        end
-    end
-    hold off
-    title(sprintf('%s: Band %d',H.Path,jbn));
-    set(gca,'xlim',[0 3*Test]);
-    set(gca,'ylim',[Pft(2)+Pft(1)*Test-20 Pft(2)+20]);
-    xlabel('Time (s)')
-    ylabel('Power (dB)')
+    BdFLG=PltIRSbbnd(H,V,jbn,tmp,tmp2,tmp3,sb_fs,Pft,Test,sdDRR,sdB);
     saveas(gcf,sprintf('%s/Subbands_%d/%03d',H.Path,Nbnds,jbn),'jpg'); 
     close all
-    % Compute the spectrum of the early reflections and diffuse section for only the sections where the IR is above the noise floor
-    tmpERndx=Sndx; tmpERndx(find(tmpERndx)>Test*H.fs)=[];
-    tmpGsndx=Nndx; tmpGsndx(find(tmpGsndx)>Test*H.fs)=[];
-    spcER(jbn)=rms(gather(tmp2(tmpERndx)));
-    spcGs(jbn)=rms(gather(tmp2(tmpGsndx)));
-    % record subband values
-    bbt(jbn)=-Pft(1); 	bt=-Pft(1);
-    aa(jbn)=Pft(2);
-    sdR(jbn)=sdRT60;
-    sda(jbn)=sdDRR;
-    raw_aa(jbn)=aa(jbn);
-    if ~isempty(D)
-        tD=D(find([D.Channel]==H.Channel));
-        tV=V(find([V.Channel]==H.Channel));
-        %aa(jbn)=aa(jbn)-(tD.DRR(jbn)-mean(tV.DRR));  This is almost certainly not the right thing to do and it is causing artifacts.
-    end
-    alph=aa(jbn);
-    Rtt(jbn)=60/bt;
-    dttm(jbn)=(60+alph)/bt;
-    NNs(jbn)=alph-bt*Test;
-    TTest(jbn)=Test;
-    %FVVE(jbn,:)=FVE;
     % compute a new subband with the noise floor removed
     infndx=ceil(Test*H.fs);
     if infndx>length(tmp); infndx=length(tmp)-1; end
-    nCgrm(jbn,:)=tmp.*([ones(1,infndx) 10.^((-bt*[1:(length(tmp)-infndx)]/H.fs)/20)]);
-    if ~isempty(D)
-        tD=D(find([D.Channel]==H.Channel));
-        tV=V(find([V.Channel]==H.Channel));
-        %nCgrm(jbn,:)=10^((-tD.DRR(jbn)+mean(tV.DRR))/20)*nCgrm(jbn,:);
-    end
-    % compute higher order models
-    %for jp=1:Nprms; %fprintf('poly %d\n',jp)
-    %    [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3,tt3,jp,Qswtch);     
-    %    FVVE(jbn,jp)=gather(FVE);
-    %    PFFt(jp).Prms(jbn,:)=[Test Pft];
-    %end
+    ntmp=tmp.*([ones(1,infndx) 10.^((-bt*[1:(length(tmp)-infndx)]/H.fs)/20)]); 
+    nCgrm(jbn,:)=ntmp;
+    %** compute subband properties
+    %*** spectrum of the early reflections and diffuse section 
+    %*** (for only the sections where the IR is above the noise floor)
+    tmpERndx=Sndx; tmpERndx(find(tmpERndx)>Test*H.fs)=[];
+    tmpGsndx=Nndx; tmpGsndx(find(tmpGsndx)>Test*H.fs)=[];
+    H.spcER(jbn)=rms(ntmp(tmpERndx));
+    H.spcGs(jbn)=rms(ntmp(tmpGsndx));
+    H.spcAllGs(jbn)=rms(ntmp(Nndx));
+    %*** decay statistics
+    H.DRR(jbn)=Pft(2); 
+    H.DRR_std(jbn)=sdDRR; 
+    H.RT60(jbn)=60/(-Pft(1));
+    H.RT60_std(jbn)=sdRT60; 
+    %*** diagnostic information
+    H.NsFlr(jbn)=alph-bt*Test;
+    H.TTest(jbn)=Test;
+    H.BdBndsFlg(jbn)=BdBndsFlg(jbn);
 end
-
+H.BdBndsFlg=find(H.BdBndsFlg==1);
 % resynthesize the new denoised IR estimate
 nCgrm=[zeros(1,size(nCgrm,2)); nCgrm; zeros(1,size(nCgrm,2))];
 nh=collapse_subbands([zeros(size(nCgrm)) nCgrm zeros(size(nCgrm))].',fltbnk);
 nh=nh(Npts+[1:Npts]);
 nCgrm=nCgrm(2:(end-1),:);
-% rescale peak
-Rscl=1/max(abs(nh));
-nh=nh*Rscl;
+H.h_before_removing_noisefloor=H.h;
+H.h=nh;
 
-%* Compute the spectrum of the attack
-if ~isempty(D)
-    tD=D(find([D.Channel]==H.Channel));
-end
-ndx=min(find(abs(nh)>prctile(abs(nh),90)));
+%* measure broadband properties
+%** Spectrum
+tmp=[zeros(size(H.h)); H.h; zeros(size(H.h))];
+nft=2^ceil(log2(length(tmp)));
+spc=fft(tmp,nft);
+H.spc=spc(1:end/2);
+H.Spcff=[1:nft/2]*H.fs/nft;
+%* Compute the spectrum in time windows
+ndx=min(find(abs(H.h)>prctile(abs(nh),90)));
 cnt=0;
 for jj=1:2:11; cnt=cnt+1;
     Nft=2^(jj+3);
     tmp=[nh; zeros(2*Nft,1)];
     Bgspc=zeros(Nft/2,1);
     for jstrt=1:(Nft/4);
-        spc=fft(tmp(ndx+jstrt-1+[0:(Nft-1)]),Nft); 
+        spc_t=tmp(ndx+jstrt-1+[0:(Nft-1)]);
+        spc_t=spc_t.*hann(length(spc_t));
+        spc=fft(spc_t,Nft); 
         Bgspc=Bgspc+abs(spc(1:Nft/2))/(Nft/4); 
     end
     Attck(cnt).RwSpc=Bgspc(1:Nft/2);
-    if ~isempty(D)
-        Attck(cnt).Spc=Attck(cnt).RwSpc./tD.Attck(cnt).RwSpc;
-    else
-        Attck(cnt).Spc=Attck(cnt).RwSpc;
-    end
     Attck(cnt).SpcIntrp=interp1([1:Nft/2]*H.fs/Nft,Bgspc,ff,'spline');
     Attck(cnt).ff=[1:Nft/2]*H.fs/Nft;
     Attck(cnt).T=Nft/H.fs;
 end
+H.Attck=Attck;
 
-% and compute spectrograms to find modes
-[NsSgrm,Nsff,Nstt]=spectrogram(nh,32,16,32,H.fs);
-if ~isempty(D)
-    tD=D(find([D.Channel]==H.Channel));
-    ClSgrm=mean(abs(tD.Ns.Sgrm),2);
-    ClSgrm=medfilt2(ClSgrm,[2 1],'Symmetric');
-    %NsSgrm=NsSgrm./(mean(abs(tD.Ns.Sgrm),2)*ones(1,length(Nstt)));
-end
-Nft=512; Nbn=Nft;
-if Nbn>length(nh)/8;
-    Nbn=ceil(length(nh)/10);
-    Nbn=Nbn+rem(Nbn,2);
-end
-[MdSgrm,Mdff,Mdtt]=spectrogram(nh,Nbn,Nbn/2,Nft,H.fs);
-if ~isempty(D)
-    tD=D(find([D.Channel]==H.Channel));
-    ClSgrm=mean(abs(tD.Md.Sgrm),2);
-    ClSgrm=medfilt2(ClSgrm,[15 1],'Symmetric');
-    %MdSgrm=MdSgrm./(ClSgrm*ones(1,length(Mdtt)));
-end
-% compute modes
+%Search for modes
+fprintf('searching for Modes...\n')
+%H.Modes=hExtrctMds(H,2048);
+H.Modes=hExtrctMds(H,1024); % for now this is faster
+fprintf('%d modes found.\n',length(H.Modes))
+eval(sprintf('! mkdir -p %s/Modes_%d',H.Path,length(H.Modes)));
+%** fit decay properties of modes
+Npts=length(H.h);
 for jm=1:length(H.Modes);
-    [~,ndx]=min(abs(Mdff-H.Modes(jm).cf));
-    md=abs(MdSgrm(ndx,:));
-    p=sum(md);
-    %** find mode width
-    cnt=0;
-    FLG=0;
-    while FLG==0; cnt=cnt+1;
-        p2=sum(abs(MdSgrm(ndx+cnt,:)));
-        if p2<p/2;
-            FLG=1;
-        end
-        if cnt>1;
-            if p2>=plst;
-                FLG=1;
-            end
-        end
-        if ndx+cnt==size(MdSgrm,1);
-            FLG=1;
-        end
-        plst=p2;
-    end
-    undx=ndx+cnt-1;
-    % and the lower frequencies
-    if ndx>1;
-        cnt=0;
-        FLG=0;
-        while FLG==0; cnt=cnt+1;
-            p2=sum(abs(MdSgrm(ndx-cnt,:)));
-            if p2<p/2;
-                FLG=1;
-            end
-            if cnt>1;
-                if p2>=plst;
-                    FLG=1;
-                end
-            end
-            if ndx-cnt==1;
-                FLG=1;
-            end
-            plst=p2;
-        end
-        lndx=ndx-cnt+1;
-    else
-        lndx=ndx;
-    end
-    H.Modes(jm).Wd=max([(Mdff(undx)-Mdff(lndx)) (Mdff(2)-Mdff(1))]);
-    % compute decay properties
-    [Pft,NsFlr,Test,FVE]=FtPlyDcy(md,Mdtt,1,1);
+    Md=H.Modes(jm);
+    [fltbnk,ff,erbff]=make_erb_cos_filters(3*Npts,H.fs,1,Md.cf-Md.bw/2,Md.cf+Md.bw/2);
+    md=generate_subbands([zeros(Npts,1); H.h; zeros(Npts,1)].',fltbnk).';
+    md=md(2,:);
+    md=abs(hilbert(md));
+    md=md(Npts+[1:Npts]);
+    md=interp1([1:Npts]/H.fs,md,tt);
+    % measure mode decay properties
+    [Pft,NsFlr,Test,FVE]=FtPlyDcy(md,tt,1,1);
+    H.Modes(jm).OnPwr=Pft(2);
+    H.Modes(jm).RT60=60/abs(Pft(1));
+    H.Modes(jm).MnPwr=mean(20*log10(md));
 
     figure;
-    plot(20*log10(abs(md))); axis tight;
+    plot(tt,20*log10(abs(md))); axis tight;
+    xlabel('Time (s)')
+    ylabel('Power (dB)')
+    title(sprintf('%2.2kHz, FV=%2.2f',Md.cf/1e3,Md.FV))
     saveas(gcf,sprintf('%s/Modes_%d/%03d',H.Path,length(H.Modes),jm),'jpg'); 
-    H.Modes(jm).OnPwr=Pft(2); 
-    H.Modes(jm).RT60=60/abs(Pft(1));
-    H.Modes(jm).MnPwr=mean(20*log10(abs(MdSgrm(ndx,:))));
 end
 
-% remove speaker tranfser function from IR time series
-if ~isempty(V);
-    tV=V(find([V.Channel]==H.Channel));
-    cSpc=tV.Attck(3).RwSpc;
-    cff=tV.Attck(3).ff;
-    Npd=length(nh);
-    tmp=[nh; zeros(Npd,1)];
-    nft=2^max(ceil(log2([length(tmp) length(cSpc)])));
-    tff=[1:nft]/nft*H.fs;
-    NH=fft(nh,nft);
-    NH=NH(1:nft/2);
-    T=interp1([0 cff tff(end)],[cSpc(1); cSpc; cSpc(end) ],tff(1:nft/2));
-    fNH=NH./abs(T(:))*mean(abs(T));
-    h_cal=ifft([fNH; 0; flipud(conj(fNH(2:end)))]);
-    h_cal=h_cal(1:Npd);
-    H.h_cal=h_cal;
-    %* Measure spectra
-    nft=2^ceil(log2(length(h_cal)));
-    spc=fft(h_cal,nft);
-    H.spc=spc(1:end/2);
-    H.Spcff=[1:nft/2]*H.fs/nft;
-else
-    H.h_cal=[];
-end
-
-%% save basic data to structure
-H.nh=gather(nh);
-H.krt=krt;
-% and the channel values
-H.SbAmp=sbbA; %+20*log10(Rscl);
-H.spcER=spcER/mean([spcGs]);
-H.spcGs=spcGs/mean([spcGs]);
-H.spcAllGs=Nspc/mean(Nspc);
-H.DRR=aa; %+20*log10(Rscl);
-H.DRR_std=sda; 
-H.RT60=Rtt;
-H.RT60_std=sdR; 
-H.NsFlr=NNs;
-H.TTest=TTest;
-H.BdBndsFlg=find(BdBndsFlg);
-%H.FVE=FVVE;
-%H.PFFt=PFFt;
-
-% Spectrograms
-%H.Ns=Ns;
-H.Ns.Sgrm=NsSgrm;
-H.Ns.ff=Nsff;
-H.Ns.tt=Nstt;
-%H.Md=Md;
-H.Md.Sgrm=MdSgrm;
-H.Md.ff=Mdff;
-H.Md.tt=Mdtt;
-H.Attck=Attck;
+% and compute spectrograms to find modes
+%[NsSgrm,Nsff,Nstt]=spectrogram(nh,32,16,32,H.fs);
+%if ~isempty(D)
+%    tD=D(find([D.Channel]==H.Channel));
+%    ClSgrm=mean(abs(tD.Ns.Sgrm),2);
+%    ClSgrm=medfilt2(ClSgrm,[2 1],'Symmetric');
+%    %NsSgrm=NsSgrm./(mean(abs(tD.Ns.Sgrm),2)*ones(1,length(Nstt)));
+%end
+%Nft=512; Nbn=Nft;
+%if Nbn>length(nh)/8;
+%    Nbn=ceil(length(nh)/10);
+%    Nbn=Nbn+rem(Nbn,2);
+%end
+%[MdSgrm,Mdff,Mdtt]=spectrogram(nh,Nbn,Nbn/2,Nft,H.fs);
+%if ~isempty(D)
+%    tD=D(find([D.Channel]==H.Channel));
+%    ClSgrm=mean(abs(tD.Md.Sgrm),2);
+%    ClSgrm=medfilt2(ClSgrm,[15 1],'Symmetric');
+%    %MdSgrm=MdSgrm./(ClSgrm*ones(1,length(Mdtt)));
+%end
+%% compute modes
+%for jm=1:length(H.Modes);
+%    [~,ndx]=min(abs(Mdff-H.Modes(jm).cf));
+%    md=abs(MdSgrm(ndx,:));
+%    p=sum(md);
+%    %** find mode width
+%    cnt=0;
+%    FLG=0;
+%    while FLG==0; cnt=cnt+1;
+%        p2=sum(abs(MdSgrm(ndx+cnt,:)));
+%        if p2<p/2;
+%            FLG=1;
+%        end
+%        if cnt>1;
+%            if p2>=plst;
+%                FLG=1;
+%            end
+%        end
+%        if ndx+cnt==size(MdSgrm,1);
+%            FLG=1;
+%        end
+%        plst=p2;
+%    end
+%    undx=ndx+cnt-1;
+%    % and the lower frequencies
+%    if ndx>1;
+%        cnt=0;
+%        FLG=0;
+%        while FLG==0; cnt=cnt+1;
+%            p2=sum(abs(MdSgrm(ndx-cnt,:)));
+%            if p2<p/2;
+%                FLG=1;
+%            end
+%            if cnt>1;
+%                if p2>=plst;
+%                    FLG=1;
+%                end
+%            end
+%            if ndx-cnt==1;
+%                FLG=1;
+%            end
+%            plst=p2;
+%        end
+%        lndx=ndx-cnt+1;
+%    else
+%        lndx=ndx;
+%    end
+%    H.Modes(jm).Wd=max([(Mdff(undx)-Mdff(lndx)) (Mdff(2)-Mdff(1))]);
+%    % compute decay properties
+%    [Pft,NsFlr,Test,FVE]=FtPlyDcy(md,Mdtt,1,1);
 
 %* == Plot ==
 save(sprintf('%s/H',H.Path),'H');
 close all
 fcnt=0;
 
-%** => plot kurtosis
-fcnt=fcnt+1; figure(fcnt); 
-fprintf('%s: Plotting Kurtosis\n');
-PltIRKrt(H,C,VrKrt,ftp);
-saveas(gcf,sprintf('%s/Kurtosis',H.Path),'jpg');
-saveas(gcf,sprintf('%s/Kurtosis',H.Path),ftp);
-
-%** Plot Cochleagram
-fcnt=fcnt+1; figure(fcnt)
-subplot(2,1,1);
-PltIRCgrm(H.h,H);
-subplot(2,1,2);
-PltIRCgrm(H.nh,H);
-colormap(othercolor('Blues9',64));
-%set(gca,'fontsize',fntsz);
-%saveas(gcf,sprintf('%s/Cgram',H.Path),ftp);
-saveas(gcf,sprintf('%s/Cgram',H.Path),'jpg');
-
 %** => plot IR
 fcnt=fcnt+1; figure(fcnt)
 PltIRts(H);
 %set(gca,'fontsize',fntsz);
 %saveas(gcf,sprintf('%s/Raw_IR',Pth),'fig');
-saveas(gcf,sprintf('%s/IR',H.Path),'jpg');
 saveas(gcf,sprintf('%s/IR',H.Path),ftp);
 
-%** => plot IR phase
+%** => plot kurtosis
+fcnt=fcnt+1; figure(fcnt); 
+fprintf('%s: Plotting Kurtosis\n');
+PltIRKrt(H,C,VrKrt);
+saveas(gcf,sprintf('%s/Kurtosis',H.Path),ftp);
+
+%** => plot spectrum
+fcnt=fcnt+1; figure(fcnt); 
+fprintf('%s: Plotting Spectrum\n');
+PltIRSpc(H,C);
+saveas(gcf,sprintf('%s/Spc',H.Path),ftp);
+
+%** Plot Cochleagram
 fcnt=fcnt+1; figure(fcnt)
-PltIRDyn(H);
+PltIRCgrm(H.h,H);
+colormap(othercolor('Blues9',64));
 %set(gca,'fontsize',fntsz);
-%saveas(gcf,sprintf('%s/Raw_IR',Pth),'fig');
-saveas(gcf,sprintf('%s/Dyn',H.Path),'jpg');
-saveas(gcf,sprintf('%s/Dyn',H.Path),ftp);
+%saveas(gcf,sprintf('%s/Cgram',H.Path),ftp);
+saveas(gcf,sprintf('%s/Cgram',H.Path),'jpg');
+
 
 %** plot subband properties
 %*** Rtt
 fcnt=fcnt+1; figure(fcnt)
 PltIRRT60(H,C);
 %set(gca,'fontsize',fntsz);
-saveas(gcf,sprintf('%s/RT60',H.Path),'jpg');
 saveas(gcf,sprintf('%s/RT60',H.Path),ftp);
 %*** DRR
 fcnt=fcnt+1; figure(fcnt)
-PltIRDRR(H,C,raw_aa);
-saveas(gcf,sprintf('%s/DRR',H.Path),'jpg');
+PltIRDRR(H,C);
 saveas(gcf,sprintf('%s/DRR',H.Path),ftp);
 
 %** plot mode properties
@@ -402,11 +361,19 @@ saveas(gcf,sprintf('%s/DRR',H.Path),ftp);
 fcnt=fcnt+1; figure(fcnt)
 PltIRMds(H,C);
 %set(gca,'fontsize',fntsz);
-saveas(gcf,sprintf('%s/Modes',H.Path),'jpg');
 saveas(gcf,sprintf('%s/Modes',H.Path),ftp);
 
+%** => plot IR phase
+fcnt=fcnt+1;figure(fcnt)
+PltIRDyn(H);
+%set(gca,'fontsize',fntsz);
+%saveas(gcf,sprintf('%s/Raw_IR',Pth),'fig');
+saveas(gcf,sprintf('%s/Dyn',H.Path),'jpg');
+%saveas(gcf,sprintf('%s/Dyn',H.Path),ftp);
+
+%======= Below here is a mess of old plots we don't use anymore ======
 %** => Figure for Reverb paper
-fcnt=fcnt+1; figure(fcnt)
+%fcnt=fcnt+1; figure(fcnt)
 %subplot(1,6,1);
 %PltIRts(H);
 %subplot(1,6,2);

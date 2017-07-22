@@ -1,7 +1,7 @@
 function PltIRDyn(H);
 
 %*** => compress the time series for plotting
-h=H.nh;
+h=H.h;
 hdot=diff(h)/H.fs;
 hdd=diff(hdot)/H.fs;
 h=sign(h).*abs(h).^(0.6);

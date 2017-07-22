@@ -25,7 +25,7 @@ Sb_fs=1e3;
 OvrWrtCAL=1;
 %** filetype
 ftp='jpg';
-ftp='epsc';
+%ftp='epsc';
 
 %* == Calibrate Apparatus ==
 %** search for calibration files 
@@ -59,41 +59,26 @@ if ~isempty(Cpth)
         end
     end
     % Integrate the multiple measurements into direct and volume integrated signals, for each recording channel
-    D=[]; V=[]; 
     for jch=1:max([C.Channel])
         tC=C(find([C.Channel]==jch));
-        [tD,tV]=IntDrctTrnsFn(tC,90,0); 
-        D=[D; tD];
-        V=[V; tV];
+        fprintf('Integrating Calibration measurements into an omnidirectional IR: channel %d\n',jch)
+        [tV]=IntDrctTrnsFn(tC); 
+        tV=hPrp(tV,[],Nbnds,flm,Sb_fs,ftp);
+        H=tV;
+        save(sprintf('%s/H_%03dbnds.mat',H.Path,Nbnds),'H');
+        fprintf('Saved to %s\n',H.Path);
+        C(length(C)+1)=H;
+
     end
-    clear C
-    C.Direct=D;
-    C.Omni=V;
 
 %	%** save plots of calibration information
     close all
-    %*** Plot direct vs volume DRRs
     fcnt=0;
-    fcnt=fcnt+1;
-    figure(fcnt);
-    PltCAL_DRR(D,V);
-    OtPth=GtPthStm(GtPthStm(D(1).Path));
-    title([OtPth ': CAL DRR']);
-    saveas(gcf,sprintf('%s/CAL_DRR',OtPth),'jpg');
-    
-    %*** Plot direct vs volume RT60
-    fcnt=fcnt+1;
-    figure(fcnt);
-    PltCAL_RT60(D,V);
-    OtPth=GtPthStm(GtPthStm(D(1).Path));
-    title([OtPth ': CAL RT60']);
-    saveas(gcf,sprintf('%s/CAL_RT60',OtPth),'jpg');
-    
     %*** Plot direct vs volume spectra
     fcnt=fcnt+1;
     figure(fcnt);
-    PltCAL_Spc(D,V);
-    OtPth=GtPthStm(GtPthStm(D(1).Path));
+    PltCAL_Spc(C);
+    OtPth=GtPthStm(GtPthStm(C(1).Path));
     title([OtPth ': CAL Spectra']);
     saveas(gcf,sprintf('%s/CAL_Spc',OtPth),'jpg');
 

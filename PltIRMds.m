@@ -6,7 +6,7 @@ pclr=get(hp,'color');
 set(hp,'linewidth',3);
 hold on;
 for jj=1:length(H.Modes);
-    hp=plot(H.Modes(jj).RT60*ones(1,2),(H.Modes(jj).cf+[-1 1]/2*H.Modes(jj).Wd)/1e3,'-');
+    hp=plot(H.Modes(jj).RT60*ones(1,2),(H.Modes(jj).cf+[-1 1]/2*H.Modes(jj).bw)/1e3,'-');
 end
 set(gca,'yscale','log','xscale','log');
 hold on
@@ -21,7 +21,7 @@ pclr=get(hp,'color');
 set(hp,'linewidth',3);
 hold on;
 for jj=1:length(H.Modes);
-    hp=plot(H.Modes(jj).OnPwr*ones(1,2),(H.Modes(jj).cf+[-1 1]/2*H.Modes(jj).Wd)/1e3,'-');
+    hp=plot(H.Modes(jj).OnPwr*ones(1,2),(H.Modes(jj).cf+[-1 1]/2*H.Modes(jj).bw)/1e3,'-');
 end
 set(gca,'yscale','log');
 hold on

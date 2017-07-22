@@ -56,7 +56,7 @@ VrKrt=24*Nbn*(Nbn-1)^2/((Nbn-3)*(Nbn-2)*(Nbn+3)*(Nbn+5));
 Sndx=find(krt>3+2*VrKrt);  %Sparse
 Nndx=find(krt<=3+2*VrKrt); %Noise-like
 prc=25;
-while (length(Nndx)<=5*floor(H.fs/sb_fs))&&(prc<95)); % in the case of very short calibrtion IRs they might have very little few Gaussian points which leaves nothing to be fit.  We need at least three AFTER downsampling to find a decay rate and a noise floor
+while (length(Nndx)<=5*floor(H.fs/sb_fs)&&prc<95); % in the case of very short calibrtion IRs they might have very little few Gaussian points which leaves nothing to be fit.  We need at least three AFTER downsampling to find a decay rate and a noise floor
     prc=prc+5
     Nndx=find(krt<prctile(krt,prc)); 
     Sndx=find(krt>=prctile(krt,prc)); 

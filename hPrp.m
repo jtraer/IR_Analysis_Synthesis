@@ -83,7 +83,7 @@ if ~isempty(V);
     if CrssL>2*H.Tgs;
         CrssL=H.Tgs;
     end
-    Ncrss=CrssL/1e3*H.fs;
+    Ncrss=ceil(CrssL/1e3*H.fs);
     Ncrss=Ncrss+rem(Ncrss,2);
     N1=cnt-Ncrss/2;
     N2=length(H.h)-N1-Ncrss;

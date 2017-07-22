@@ -10,9 +10,10 @@ clear all; close all; clc
 path(path,'Tools')
 
 %* == Specify Inputs == 
-Input_file='Input_Survey_2';
-%Input_file='Input_IRSurvey_NatStats';
-%Input_file='Input_ObjIRs';
+Input_file='Input_Survey_2';        sb_fs=1e2; % Frequency of subband envelopes in Hz
+Input_file='Input_IR_Survey_2_OM';  sb_fs=1e2; % Frequency of subband envelopes in Hz
+%Input_file='Input_IRSurvey_NatStats'; sb_fs=1e2;
+%Input_file='Input_ObjectIRs';      sb_fs=1e3; 
 eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 
 %** = Number of cochlear subbands for analysis =

@@ -146,8 +146,9 @@ for jbn=1:Nbnds;
     tmp2=abs(hilbert([zeros(1,Npts) tmp2 zeros(1,Npts)]));  
     tmp2=tmp2(Npts+[1:Npts]);
     % resample
-    tmp3=resample(tmp2,sb_fs,H.fs); length(tmp3)  
-    N2ndx=ceil(Nndx*sb_fs/H.fs); length(N2ndx)
+    tmp3=resample(tmp2,sb_fs,H.fs); 
+    N2ndx=ceil(Nndx*sb_fs/H.fs); 
+    N2ndx=unique(N2ndx);
     % Fit an exponential decay model
     tt=[1:length(tmp3)]/sb_fs; 
     [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3(N2ndx),tt(N2ndx),1,1);

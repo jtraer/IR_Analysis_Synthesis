@@ -60,7 +60,7 @@ envFLG=0; objFLG=0;
 for jf=1:length(mflds);
     if strcmp(mflds{jf},'Env');
         envFLG=1;
-    else strcmp(mflds{jf},'Obj'); 
+    elseif strcmp(mflds{jf},'Obj'); 
         objFLG=1;
     end
 end

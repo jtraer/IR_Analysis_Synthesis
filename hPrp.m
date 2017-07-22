@@ -55,6 +55,10 @@ VrKrt=24*Nbn*(Nbn-1)^2/((Nbn-3)*(Nbn-2)*(Nbn+3)*(Nbn+5));
 %** Classify data points as "Sparse" or "Noise-like" 
 Sndx=find(krt>3+2*VrKrt);  %Sparse
 Nndx=find(krt<=3+2*VrKrt); %Noise-like
+if length(Nndx)<=3*ceil(H.fs/sb_fs); % in the case of very short calibrtion IRs they might have very little few Gaussian points which leaves nothing to be fit.  We need at least three AFTER downsampling to find a decay rate and a noise floor
+    Nndx=find(krt<prctile(krt,25)); 
+    Sndx=find(krt>=prctile(krt,25)); 
+end
 H.Tail_ndx=Nndx;
 %** Compute the crossover to Gaussian statistics as the point at which there has been as many Gaussian points as sparse (this is a stable measure but it is also arbitrary and crude)
 %*** Find the maximum (preumably this is near the first arrival)

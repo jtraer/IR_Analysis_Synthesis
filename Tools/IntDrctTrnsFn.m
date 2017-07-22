@@ -71,8 +71,8 @@ if envFLG==1;
     end
 end
 if objFLG==1;
-    flds=fields(V.Meta.Env);
+    flds=fields(V.Meta.Obj);
     for jf=1:length(flds);
-        eval(sprintf('V.Meta.Env.%s=''CAL-Omni'';',flds{jf}));
+        eval(sprintf('V.Meta.Obj.%s=''CAL-Omni'';',flds{jf}));
     end
 end

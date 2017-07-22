@@ -65,10 +65,10 @@ H.Tgs=cnt/H.fs;
 H.h_before_removing_speaker_TF=H.h;
 if ~isempty(V);
     h=H.h;
-    vSpc=V.Attck(3).RwSpc;
+    vSpc=V.Attck(3).Spc;
     vff=V.Attck(3).ff;
     h_Tail_Calibrated=RmvSpkTrnsFn(h,H.fs,vSpc,vff);
-    dSpc=D.Attck(3).RwSpc;
+    dSpc=D.Attck(3).Spc;
     dff=D.Attck(3).ff;
     h_Direct_Calibrated=RmvSpkTrnsFn(h,H.fs,dSpc,dff);
     % splice the two calibrated IR together with a crossfade

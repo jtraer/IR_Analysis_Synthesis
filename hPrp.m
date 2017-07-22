@@ -5,13 +5,6 @@ function H=hPrp(H,C,Nbnds,flm,sb_fs,ftp);
 set(0,'DefaultFigureVisible','off');
 fntsz=15;
 
-% first we check that downsampling won't leave us with too little data for a sensible fitter
-nL=0;
-if nL<1e3;
-    nL=length(H.h)*ceil(H.fs/sb_fs);
-    sb_fs=2*sb_fs;
-end
-if sb_fs>H.fs; sb_fs=H.fs; end
 
 % find data for Direct (D) and Omnidirectional (V) Speaker IRs
 if ~isempty(C);
@@ -55,12 +48,6 @@ VrKrt=24*Nbn*(Nbn-1)^2/((Nbn-3)*(Nbn-2)*(Nbn+3)*(Nbn+5));
 %** Classify data points as "Sparse" or "Noise-like" 
 Sndx=find(krt>3+2*VrKrt);  %Sparse
 Nndx=find(krt<=3+2*VrKrt); %Noise-like
-prc=25;
-while (length(Nndx)<=5*floor(H.fs/sb_fs)&&prc<95); % in the case of very short calibrtion IRs they might have very little few Gaussian points which leaves nothing to be fit.  We need at least three AFTER downsampling to find a decay rate and a noise floor
-    prc=prc+5
-    Nndx=find(krt<prctile(krt,prc)); 
-    Sndx=find(krt>=prctile(krt,prc)); 
-end
 H.Tail_ndx=Nndx;
 %** Compute the crossover to Gaussian statistics as the point at which there has been as many Gaussian points as sparse (this is a stable measure but it is also arbitrary and crude)
 %*** Find the maximum (preumably this is near the first arrival)
@@ -149,6 +136,8 @@ for jbn=1:Nbnds;
     tmp3=resample(tmp2,sb_fs,H.fs); 
     N2ndx=ceil(Nndx*sb_fs/H.fs); 
     N2ndx=unique(N2ndx);
+    if length(N2ndx)<100;
+        error(sprintf('Error: The dowsnampled frequency (sb_fs=%2.2Hz is too small. We only have %d points to fit a decay rate and noise floor\n',sb_fs,length(N2ndx)));
     % Fit an exponential decay model
     tt=[1:length(tmp3)]/sb_fs; 
     [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3(N2ndx),tt(N2ndx),1,1);

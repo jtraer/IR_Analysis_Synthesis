@@ -25,7 +25,8 @@ end
 
 %** Specify Rejection Criteria
 rcnt=0;
-rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H.DateCreated)<datenum(''22-July-2017'')';
+rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H.DateCreated)<datenum(''23-July-2017'')';
+rcnt=rcnt+1; Rjct(rcnt).Expr='length(H.Attck(3).Spc)~=256';
 
 %* ==== Load data  ====
 
@@ -52,6 +53,10 @@ for jr=1:length(Rpth);
 end
 for jr=1:length(Cpth);
     tDh=dir([Cpth(jr).Pth '/*.wav']);
+    % add the omni file
+    ttDh=tDh(1);
+    ttDh.name='Omni.wav';
+    tDh(length(tDh)+1)=ttDh;
     for jj=1:length(tDh);
         ttDh=dir(sprintf('%s/%s/ch*',Cpth(jr).Pth,tDh(jj).name(1:end-4)));
         for jch=1:length(ttDh);

@@ -52,7 +52,11 @@ if ~isempty(Cpth)
             else
                 H=hPrp(H,[],Nbnds,flm,Sb_fs,ftp);
                 save(sprintf('%s/H_%03dbnds.mat',H.Path,Nbnds),'H');
-                audiowrite(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds),H.h,H.fs,'BitsPerSample',24); 
+                h=H.h;
+                MaxAmp=max(abs(h));
+                h=h/MaxAmp*(1-1e-6);
+                h=[zeros(ceil(H.fs/5),1); h; zeros(ceil(H.fs/2),1)];
+                audiowrite(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds),h,H.fs,'BitsPerSample',24); 
             end
             %===> coallate a structure 
             C(ccnt)=H;
@@ -66,7 +70,11 @@ if ~isempty(Cpth)
         tV=hPrp(tV,[],Nbnds,flm,Sb_fs,ftp);
         H=tV;
         save(sprintf('%s/H_%03dbnds.mat',H.Path,Nbnds),'H');
-        audiowrite(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds),H.h,H.fs,'BitsPerSample',24); 
+        h=H.h;
+        MaxAmp=max(abs(h));
+        h=h/MaxAmp*(1-1e-6);
+        h=[zeros(ceil(H.fs/5),1); h; zeros(ceil(H.fs/2),1)];
+        audiowrite(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds),h,H.fs,'BitsPerSample',24); 
         fprintf('Saved to %s\n',H.Path);
         C(length(C)+1)=H;
 

@@ -5,7 +5,7 @@ plot(20*log10(abs(H.spc)),H.Spcff/1e3,'b');
 hold on
 if ~isempty(C)
     for jc=1:length(C);
-        plot(20*log10(abs(C(jc).spc)),C(1).Spcff/1e3,'k:');
+        plot(20*log10(abs(C(jc).spc)),C(jc).Spcff/1e3,'k:');
     end
 end
 hold off

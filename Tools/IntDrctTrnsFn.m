@@ -3,6 +3,15 @@ function [V]=IntDrctTrnsFn(C);
 % -- input: a structure containing multiple recordings made at different broadcast directions (C) and the polar (Drct_th) and azimuthal (Drct_ph) angles of th direct path between teh speaker and the microphone
 % -- output: a structure with the properties of the direct signal (D) and volume integrated signal (V)
 
+% first remove any IRs that do not have defined broadcast angles
+ndx=[];
+for jc=1:length(C);
+    if isempty(str2num(C(jc).Meta.App.PolarAngle_fromTop));
+        ndx=[ndx jc];
+    end
+end
+C(ndx)=[];
+
 %* Form a new IR time series as a weighted sum of the individually measured IRs
 %** scroll through the Calibration IRs
 for jc=1:length(C);

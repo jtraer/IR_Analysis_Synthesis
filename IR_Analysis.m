@@ -10,9 +10,9 @@ clear all; close all; clc
 path(path,'Tools')
 
 %* == Specify Inputs == 
-Input_file='Input_Survey_2';        Sb_fs=1e2; % Frequency of subband envelopes in Hz
-%Input_file='Input_IR_Survey_2_OM';  Sb_fs=1e2; % Frequency of subband envelopes in Hz
-%Input_file='Input_IRSurvey_NatStats'; Sb_fs=1e2;
+Input_file='Input_Survey_2';        Sb_fs=4e2; % Frequency of subband envelopes in Hz
+%Input_file='Input_IR_Survey_2_OM';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
+%Input_file='Input_IRSurvey_NatStats'; Sb_fs=4e2;
 %Input_file='Input_ObjectIRs';      Sb_fs=1e3; 
 eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 
@@ -65,6 +65,7 @@ if ~isempty(Cpth)
         tV=hPrp(tV,[],Nbnds,flm,Sb_fs,ftp);
         H=tV;
         save(sprintf('%s/H_%03dbnds.mat',H.Path,Nbnds),'H');
+        audiowrite(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds),h,H.fs,'BitsPerSample',24); 
         fprintf('Saved to %s\n',H.Path);
         C(length(C)+1)=H;
 

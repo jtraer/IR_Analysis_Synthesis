@@ -211,14 +211,14 @@ H.Spcff=[1:nft/2]*H.fs/nft;
 ndx=min(find(abs(H.h)>prctile(abs(nh),90)));
 cnt=0;
 for jj=1:2:11; cnt=cnt+1;
-    Nft=2^(jj+3);
+    Nft=2^(jj+4);
     tmp=[nh; zeros(2*Nft,1)];
     Bgspc=zeros(Nft/2,1);
-    for jstrt=1:(Nft/4);
+    for jstrt=1:(Nft/8);
         spc_t=tmp(ndx+jstrt-1+[0:(Nft-1)]);
         spc_t=spc_t.*hann(length(spc_t));
         spc=fft(spc_t,Nft); 
-        Bgspc=Bgspc+abs(spc(1:Nft/2))/(Nft/4); 
+        Bgspc=Bgspc+abs(spc(1:Nft/2))/(Nft/8); 
     end
     Attck(cnt).Spc=Bgspc(1:Nft/2);
     Attck(cnt).SpcIntrp=interp1([1:Nft/2]*H.fs/Nft,Bgspc,ff,'spline');

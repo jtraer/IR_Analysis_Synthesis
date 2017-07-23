@@ -52,6 +52,7 @@ if ~isempty(Cpth)
             else
                 H=hPrp(H,[],Nbnds,flm,Sb_fs,ftp);
                 save(sprintf('%s/H_%03dbnds.mat',H.Path,Nbnds),'H');
+                audiowrite(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds),H.h,H.fs,'BitsPerSample',24); 
             end
             %===> coallate a structure 
             C(ccnt)=H;

@@ -71,14 +71,14 @@ if ~isempty(V);
     h=H.h;
     vSpc=V.Attck(3).Spc;
     vff=V.Attck(3).ff;
-    h_Tail_Calibrated=RmvSpkTrnsFn(h,H.fs,vSpc,vff);
+    h_Tail_Calibrated=RmvSpkTrnsFn(H,V);
     dSpc=D.Attck(3).Spc;
     dff=D.Attck(3).ff;
-    h_Direct_Calibrated=RmvSpkTrnsFn(h,H.fs,dSpc,dff);
+    h_Direct_Calibrated=RmvSpkTrnsFn(H,D);
     % splice the two calibrated IR together with a crossfade
     CrssL=10; %crossfade length in ms
-    if CrssL>2*H.Tgs;
-        CrssL=H.Tgs;
+    if CrssL>2*H.Tgs*1e3;
+        CrssL=H.Tgs*1e3;
     end
     Ncrss=ceil(CrssL/1e3*H.fs);
     Ncrss=Ncrss+rem(Ncrss,2);
@@ -94,9 +94,10 @@ if ~isempty(V);
     % repeat this for all the snapshots
     Nsnps=size(H.h_snps,2);
     for js=1:Nsnps;
-        h=H.h_snps(:,js);
-        th_Tail_Calibrated=RmvSpkTrnsFn(h,H.fs,vSpc,vff);
-        th_Direct_Calibrated=RmvSpkTrnsFn(h,H.fs,dSpc,dff);
+        Tmp=H;
+        Tmp.h=H.h_snps(:,js);
+        th_Tail_Calibrated=RmvSpkTrnsFn(Tmp,V);
+        th_Direct_Calibrated=RmvSpkTrnsFn(Tmp,D);
         H.h_snps(:,js)=wn1.*th_Direct_Calibrated+wn2.*th_Tail_Calibrated;
     end
 end

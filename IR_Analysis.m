@@ -19,9 +19,9 @@ eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 %** = Number of cochlear subbands for analysis =
 Nbnds=[4];
 %** = Frequency limits in Hz =
-flm=[50 10e3];
+flm=[50 20e3];
 % Overwrite calibration files (Do this if hPrp or any paths have been changed)
-OvrWrtCAL=0;
+OvrWrtCAL=1;
 %** filetype
 ftp='jpg';
 %ftp='epsc';

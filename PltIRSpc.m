@@ -11,6 +11,7 @@ end
 hold off
 axis tight
 set(gca,'yscale','log')
+set(gca,'ylim',[min(H.ff) max(H.ff)]/1e3);
 ylabel('Frequency (kHz)')
 xlabel('Power (db)');
 

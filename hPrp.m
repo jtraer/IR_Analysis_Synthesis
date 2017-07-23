@@ -11,8 +11,12 @@ if ~isempty(C);
     for jc=1:length(C);
         dndx_t(jc)=length(regexp(C(jc).Name,'Front'));
         vndx_t(jc)=length(regexp(C(jc).Name,'Omni'));
+        chndx_t(jc)=length(regexp(C(jc).Name,'Ch'));
     end
     dndx=find(dndx_t~=0);
+    if isempty(dndx);
+        dndx=find(chndx_t~=0);
+    end
     D=C(dndx);
     D=D(find([D.Channel]==H.Channel));
     vndx=find(vndx_t~=0);

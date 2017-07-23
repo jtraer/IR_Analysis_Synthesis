@@ -141,8 +141,7 @@ for jbn=1:Nbnds;
     % if the section left is too short we can't fit the data. So if we must fit to non-Gaussian data so be it.  The IRs where this will happen will basically be short clicks anyways so this shouldn't cause audible problems
     if length(N2ndx)<20;
         fprintf('Not enough Gaussian points: fitting decay rates to all the data\n')
-        [~,ndx]=max(abs(tmp3));
-        N2ndx=(ndx+1):length(tmp3);
+        N2ndx=1:length(tmp3);
     end
     % Fit an exponential decay model
     tt=[1:length(tmp3)]/sb_fs; 

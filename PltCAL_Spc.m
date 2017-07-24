@@ -7,7 +7,7 @@ for jc=1:length(C);
 end
 hold off
 set(gca,'yscale','log')
-legend(lgnd)
+legend(lgnd,'Location','eastoutside')
 axis tight;
 xlabel('Power (dB)');
 ylabel('Frequency (kHz)');

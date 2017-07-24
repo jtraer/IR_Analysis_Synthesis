@@ -1,7 +1,7 @@
 function hPltStts(Dh,PltPrms,Amnd,fNm);
 
 ftp='png';
-ftp='epsc';
+%ftp='epsc';
 Txt=0;
 
 % scroll through all the parameters we want to investigate
@@ -70,11 +70,11 @@ for jPrm=1:length(PltPrms)
     % plot peak amplitude
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_PkAmp(tDh,PltPrms{jPrm},V)
-    saveas(gcf,sprintf('%s/%s/Amp',fNm,PltPrms{jPrm}),ftp);
+    saveas(gcf,sprintf('%s/%s/Amp_m',fNm,PltPrms{jPrm}),ftp);
     % plot subband peak amplitude
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_SbAmp(tDh,PltPrms{jPrm},V)
-    saveas(gcf,sprintf('%s/%s/AmpSb',fNm,PltPrms{jPrm}),ftp);
+    saveas(gcf,sprintf('%s/%s/Amp',fNm,PltPrms{jPrm}),ftp);
     % plot spectra
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_Spcs(tDh,PltPrms{jPrm},V);
@@ -83,20 +83,23 @@ for jPrm=1:length(PltPrms)
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_RT60(tDh,PltPrms{jPrm},V)
     saveas(gcf,sprintf('%s/%s/RT60',fNm,PltPrms{jPrm}),ftp);
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_mRT60(tDh,PltPrms{jPrm},V)
+    saveas(gcf,sprintf('%s/%s/RT60_m',fNm,PltPrms{jPrm}),ftp);
     % plot DRR
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_DRR(tDh,PltPrms{jPrm},V)
     saveas(gcf,sprintf('%s/%s/DRR',fNm,PltPrms{jPrm}),ftp);
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_mDRR(tDh,PltPrms{jPrm},V)
-    saveas(gcf,sprintf('%s/%s/mDRR',fNm,PltPrms{jPrm}),ftp);
+    saveas(gcf,sprintf('%s/%s/DRR_m',fNm,PltPrms{jPrm}),ftp);
     % plot Kurtosis
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_Krt(tDh,PltPrms{jPrm},V)
     saveas(gcf,sprintf('%s/%s/Krt',fNm,PltPrms{jPrm}),ftp);
     fcnt=fcnt+1; figure(fcnt);
-    PltIRStts_smKrt(tDh,PltPrms{jPrm},V)
-    saveas(gcf,sprintf('%s/%s/smKrt',fNm,PltPrms{jPrm}),ftp);
+    PltIRStts_KrtLn(tDh,PltPrms{jPrm},V)
+    saveas(gcf,sprintf('%s/%s/Krt_ln',fNm,PltPrms{jPrm}),ftp);
     % plot ER spectrum
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_SpcER(tDh,PltPrms{jPrm},V)

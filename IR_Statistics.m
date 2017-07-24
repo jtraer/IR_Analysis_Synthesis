@@ -26,7 +26,7 @@ end
 %** Specify Rejection Criteria
 rcnt=0;
 rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H.DateCreated)<datenum(''23-July-2017'')';
-rcnt=rcnt+1; Rjct(rcnt).Expr='length(H.Attck(3).Spc)~=256';
+%rcnt=rcnt+1; Rjct(rcnt).Expr='length(H.Attck(3).Spc)~=256';
 
 %* ==== Load data  ====
 

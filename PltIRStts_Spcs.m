@@ -18,6 +18,12 @@ for jj=1:length(V)
         plt=interp1(tH(jh).Spcff,plt,Spcff);
         mplt(:,jh)=plt;
     end
+    % smooth and downsample
+    Npts=128;
+    nff=e2freq(linspace(min(tH(1).ff,max(tH(1).ff,Npts))));
+    plt=interp1(Spcff,plt,nff);
+    Spcff=nff;
+    % Plot
     plt=median(mplt,2);
     err=std(mplt,[],2);
     hp=plot(plt,Spcff/1e3,'-');

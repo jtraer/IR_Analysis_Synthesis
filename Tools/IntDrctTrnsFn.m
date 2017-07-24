@@ -19,16 +19,24 @@ for jc=1:length(C);
     th(jc)=str2num(C(jc).Meta.App.PolarAngle_fromTop);
     ph(jc)=str2num(C(jc).Meta.App.AzimuthalAngle_fromFront);
 end
+th=th/180*pi;
+ph=ph/180*pi;
 %** Compute a mesh of azimuths and polar angles
-[Th,Ph]=meshgrid(linspace(0,pi,1e3),linspace(0,2*pi*(1-2e3),2e3));
+[Ph,Th]=meshgrid(linspace(0,2*pi*(1-(1/2e3)),2e3),linspace(0,pi,1e3));
+W=sin(Th);
+W=W/sum(W(:));
 %** Scroll through each gridpoint and assign it to it's closest measurement
 Ndx=zeros(size(Th));
 for jg=1:prod(size(Th));
-    tdf=mod(Th(jg)-th,pi);
-    pdf=mod(Ph(jg)-ph,2*pi);
-    df=sqrt(tdf.^2+pdf.^2); % only strictly true for small angles, but should find teh closest
+    dt=abs(Th(jg)-th);
+    dp=abs(Ph(jg)-ph);
+    dp(find(dp>pi))=2*pi-dp(find(dp>pi));
+    dp=dp.*sin(th);
+    df=sqrt(dt.^2+dp.^2);
+    % great circle distance
+    %df=acos(sin(Th(jg))*sin(th)+cos(Th(jg))*cos(th).*cos(Ph(jg)-ph));
     [~,ndx]=min(abs(df));
-    Ndx(jg)=ndx;
+    Ndx(jg)=ndx(1);
 end
 %** sum the weighted IRs
 %*** find the length of the shortest IR
@@ -39,17 +47,19 @@ for jc=1:length(C);
     Npts=min([Npts length(C(jc).h)]);
     sNpts=min([sNpts size(C(jc).h_snps,1)]);
     Nsnps=min([Nsnps size(C(jc).h_snps,2)]);
-    
 end
 h=zeros(Npts,1);
 h_snps=zeros(sNpts,Nsnps);
+W2=zeros(1,length(C));
 for jc=1:length(C);
     %*** find the weight
-    w=length(find(Ndx==jc))/length(Ndx);
+    ndx=find(Ndx==jc);
+    w=sum(sum(W(ndx)));
+    W2(jc)=w;
     th=C(jc).h;
     h=h+w*th(1:Npts);
     th=C(jc).h_snps;
-    h_snps=h_snps+w*th(sNpts,Nsnps);
+    h_snps=h_snps+w*th(1:sNpts,1:Nsnps);
 end
 V=C(1);
 V.h=h;

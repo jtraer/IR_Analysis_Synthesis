@@ -1,4 +1,4 @@
-function PltIRStts_Krt(Dh,PltPrm,V);
+function PltIRStts_KrtLn(Dh,PltPrm,V);
 
 % preallocate one data point for each class for the legend
 MkLgnd(V,Dh,PltPrm)
@@ -27,8 +27,8 @@ for jj=1:length(V);
     plt=median(krt,2);
     err=std(krt,[],2);
     % downsample
-    plt=resample(plt,1e3,tH(1).fs);
-    tt=resample(tt,1e3,tH(1).fs);
+    plt=resample(plt,1e2,tH(1).fs);
+    tt=resample(tt,1e2,tH(1).fs);
     % plot
     hp=plot(tt,plt,['-']); hold on
     set(hp,'linewidth',1,'markersize',6);
@@ -42,8 +42,8 @@ for jj=1:length(V);
     set(hp,'color',V(jj).cmp);
 end; 
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');
-set(gca,'xscale','log');
-set(gca,'xlim',[2e-3 0.2]);
+%set(gca,'xscale','log');
+%set(gca,'xlim',[2e-3 0.2]);
 set(gca,'yscale','log');ylm=get(gca,'ylim');
 set(gca,'ylim',[1 ylm(2)]);
 % add distance marks 

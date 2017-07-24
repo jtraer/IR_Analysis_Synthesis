@@ -20,7 +20,7 @@ for jj=1:length(V)
     end
     % smooth and downsample
     Npts=128;
-    nff=e2freq(linspace(min(tH(1).ff,max(tH(1).ff,Npts))));
+    nff=e2freq(linspace(freq2e(min(tH(1).ff)),freq2e(max(tH(1).ff)),Npts));
     plt=interp1(Spcff,plt,nff);
     Spcff=nff;
     % Plot

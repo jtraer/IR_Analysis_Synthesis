@@ -18,14 +18,15 @@ for jj=1:length(V)
         plt=interp1(tH(jh).Spcff,plt,Spcff);
         mplt(:,jh)=plt;
     end
+    plt=median(mplt,2);
+    err=std(mplt,[],2);
     % smooth and downsample
     Npts=128;
     nff=e2freq(linspace(freq2e(min(tH(1).ff)),freq2e(max(tH(1).ff)),Npts));
     plt=interp1(Spcff,plt,nff);
+    err=interp1(Spcff,err,nff);
     Spcff=nff;
     % Plot
-    plt=median(mplt,2);
-    err=std(mplt,[],2);
     hp=plot(plt,Spcff/1e3,'-');
     set(hp,'color',V(jj).cmp);
     hold on

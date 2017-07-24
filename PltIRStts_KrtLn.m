@@ -28,6 +28,7 @@ for jj=1:length(V);
     err=std(krt,[],2);
     % downsample
     plt=resample(plt,1e2,tH(1).fs);
+    err=resample(err,1e2,tH(1).fs);
     tt=resample(tt,1e2,tH(1).fs);
     % plot
     hp=plot(tt,plt,['-']); hold on

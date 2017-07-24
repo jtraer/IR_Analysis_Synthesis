@@ -25,9 +25,8 @@ for jj=1:length(V)
     nff=e2freq(linspace(freq2e(min(tH(1).ff)),freq2e(max(tH(1).ff)),Npts));
     plt=interp1(Spcff,plt,nff);
     err=interp1(Spcff,err,nff);
-    Spcff=nff;
     % Plot
-    hp=plot(plt,Spcff/1e3,'-');
+    hp=plot(plt,nff/1e3,'-');
     set(hp,'color',V(jj).cmp);
     hold on
 end; 

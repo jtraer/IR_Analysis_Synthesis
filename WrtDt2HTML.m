@@ -60,18 +60,18 @@ for jIR=[1:length(Dh)]
     fprintf(fid2,',\n"T0":\t%2.3f',median(H.RT60));
     %*** => path to audio
     %**** TODO update this to rescale volumes!!!
-    tDh=dir(sprintf('%s/h_cal_%03d.wav',H.Path,length(H.ff)));
-    t2Dh=dir(sprintf('%s/h_denoised_%03d.wav',H.Path,length(H.ff)));
-    t3Dh=dir(sprintf('%s/h.wav',H.Path));
-    if length(tDh)>0
-        unix(sprintf('cp %s/%s %s/h.wav',H.Path,tDh(1).name,FldrNm));
-        fprintf(fid2,',\n"sound":\t"%s/h.wav"',PthNm);
-    elseif length(t2Dh)>0
-        unix(sprintf('cp %s/%s %s/h.wav',H.Path,t2Dh(1).name,FldrNm));
-        fprintf(fid2,',\n"sound":\t"%s/h.wav"',PthNm);
-    elseif length(t3Dh)>0
-        unix(sprintf('cp %s/%s %s/h.wav',H.Path,t3Dh(1).name,FldrNm));
-        fprintf(fid2,',\n"sound":\t"%s/h.wav"',PthNm);
+    tDh=dir(sprintf('%s/h*.wav',H.Path)); 
+    for jh=1:length(tDh)
+        unix(sprintf('cp %s/%s %s/%s',H.Path,tDh(jh).name,FldrNm,tDh(jh).name));
+    end
+    t2Dh=dir(sprintf('%s/h_cal_%03d.wav',H.Path,length(H.ff))); 
+    t3Dh=dir(sprintf('%s/h_denoised_%03d.wav',H.Path,length(H.ff))); 
+    if length(t2Dh)>0;
+        fprintf(fid2,',\n"sound":\t"%s/h_cal_%03d.wav"',PthNm,length(H.ff));
+    elseif length(t3Dh)>0;
+        fprintf(fid2,',\n"sound":\t"%s/h_denoised_%03d.wav"',PthNm,length(H.ff));
+    else 
+        fprintf(fid2,',\n"sound":\t"%s/h.wav"',PthNm,length(H.ff));
     end
     %*** => copy to a folder of just audio
     %eval(sprintf('! cp %s/%s IRMAudio/Audio/%s.wav',H.Path,tDh(1).name,H.Name));
@@ -165,18 +165,18 @@ fclose(fid2)
 %* == write the HTML file ==
 unix(sprintf('cp %s tmp.html',html_tmp))
 %** Delete current lines in template
-[~,LnNdx]=unix(sprintf('sed -n ''/<img src="IRMAudio/='' tmp.html'));
-LnNdx=str2num(LnNdx);
-for jln=1:length(LnNdx);
-    unix(sprintf('sed -i.bak -e ''%dd'' tmp.html',LnNdx(1)));
-end
+%[~,LnNdx]=unix(sprintf('sed -n ''/<img src="IRMAudio/='' tmp.html'));
+%LnNdx=str2num(LnNdx);
+%for jln=1:length(LnNdx);
+%    unix(sprintf('sed -i.bak -e ''%dd'' tmp.html',LnNdx(1)));
+%end
 %** Write new ones
 [~,LnNdx]=unix('sed -n ''/<div id="Stats">/='' tmp.html');
 LnNdx=str2num(LnNdx);
 for jPlt=1:length(PltPrms);
     Dplt=dir(sprintf('%s/%s/*.png',fNm,PltPrms{jPlt}));
     for jp=1:length(Dplt);
-        unix(sprintf('awk ''NR==%d{print "    <img src=\\"%s/%s\\">"}7'' tmp.html >tmp2.html',LnNdx+1,PltPrms{jPlt},Dplt(jp).name)); 
+        unix(sprintf('awk ''NR==%d{print "    <img src=\\"%s/%s\\" width=\\"300\\">"}7'' tmp.html >tmp2.html',LnNdx+1,PltPrms{jPlt},Dplt(jp).name)); 
         unix('mv tmp2.html tmp.html')
     end
 end

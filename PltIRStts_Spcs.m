@@ -32,7 +32,7 @@ for jj=1:length(V)
 end; 
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');
 set(gca,'xlim',[(1-0.2*sign(xlm(1)))*xlm(1) (1+0.2*sign(xlm(2)))*xlm(2)]);
-%set(gca,'yscale','log')
+set(gca,'yscale','log')
 xlabel('Power (dB)')
 ylabel('Frequency (kHz)')
 title(PltPrm)

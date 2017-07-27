@@ -125,7 +125,7 @@ hPltStts(Dh,Mt,Amnd,fNm);
 fcnt=0;
 fcnt=fcnt+1; Flds{fcnt}='Meta.Env.Class';
 fcnt=fcnt+1; Flds{fcnt}='Meta.Env.SpaceName';
-WrtDt2HTML(Dh,sprintf('%s',fNm),html_tmp,sprintf('IRstts_%s',fNm),Mt,Mt,tmtpth);
+WrtDt2HTML(Dh,sprintf('%s',fNm),html_tmp,sprintf('%s',fNm),Mt,Mt,tmtpth);
 unix(sprintf('cp %s/*.jpg %s/',Cpth(1).Pth,fNm));
 %unix(sprintf('cp IR_Data_%s.html IRMAudio/',Nm));
 %unix(sprintf('mv IRMAudio IRMAudio_%s_%03dbnds',Nm,Nbnds));

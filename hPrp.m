@@ -5,11 +5,13 @@ function H=hPrp(H,C,Nbnds,flm,sb_fs,ftp);
 set(0,'DefaultFigureVisible','off');
 fntsz=15;
 
-
 % find data for Direct (D) and Omnidirectional (V) Speaker IRs
 if ~isempty(C);
     for jc=1:length(C);
         dndx_t(jc)=length(regexp(C(jc).Name,'Front'));
+        if strcmp(H.Meta.App.AzimuthalAngle_fromFront,'180');
+            dndx_t(jc)=length(regexp(C(jc).Name,'Back'));
+        end
         vndx_t(jc)=length(regexp(C(jc).Name,'Omni'));
         chndx_t(jc)=length(regexp(C(jc).Name,'Ch'));
     end
@@ -28,42 +30,15 @@ else
     H.CalibrationFiles=[];
 end
 
-
 %* === Compute kurtosis in windows ===
 BnL=5; % [Length of window in ms]
-%** Find the numbr of points in the bin and make sure it is an even number
-Nbn=ceil(BnL/1e3*H.fs); 
-if Nbn>length(H.h)*2;
-    Nbn=length(H.h)/4;
-end
-Nbn=Nbn+rem(Nbn,2); 
-%** Repeat the first and last sections
-tmp=[H.h(1:Nbn/2); H.h; H.h(end-Nbn/2+1:end)]; 
-%** Scroll through data points
-krt=zeros(length(H.h),1); 
-stndx=0; Nstp=1; 
-while stndx<(length(tmp)/Nstp-Nbn); stndx=stndx+1; 
-    sc=tmp((stndx-1)*Nstp+[1:Nbn]); 
-    krt(stndx,:)=kurtosis(sc); 
-end; 
-H.krt=krt;
-%** Compute the expected variance of kurtosis for samples of Gaussian noise  
-VrKrt=24*Nbn*(Nbn-1)^2/((Nbn-3)*(Nbn-2)*(Nbn+3)*(Nbn+5)); 
-%** Classify data points as "Sparse" or "Noise-like" 
-Sndx=find(krt>3+2*VrKrt);  %Sparse
-Nndx=find(krt<=3+2*VrKrt); %Noise-like
-H.Tail_ndx=Nndx;
-%** Compute the crossover to Gaussian statistics as the point at which there has been as many Gaussian points as sparse (this is a stable measure but it is also arbitrary and crude)
-%*** Find the maximum (preumably this is near the first arrival)
-[~,mxndx]=max(abs(H.h));
-Sndx(find(Sndx<=mxndx))=[];
-Nndx(find(Nndx<=mxndx))=[];
-NGs=0; NER=1; cnt=mxndx; 
-while (NGs<=NER&&cnt<length(krt)); cnt=cnt+1; 
-    NGs=length(find(Nndx<=cnt)); 
-    NER=length(find(Sndx<=cnt)); 
-end; 
-H.Tgs=cnt/H.fs;
+K=IRKrt(H,BnL);
+H.krt=K.krt;
+VrKrt=K.VrKrt;
+Sndx=K.Sndx;
+Nndx=K.Nndx;
+H.Tgs=K.Tgs;
+H.Tail_ndx=K.Nndx;
 
 %* === remove the direct and omnidirectional speaker transfer function from IR time series ===
 H.h_before_removing_speaker_TF=H.h;
@@ -82,7 +57,8 @@ if ~isempty(V);
     end
     Ncrss=ceil(CrssL/1e3*H.fs);
     Ncrss=Ncrss+rem(Ncrss,2);
-    N1=cnt-Ncrss/2;
+    GsNdx=ceil(H.Tgs*H.fs);
+    N1=GsNdx-Ncrss/2;
     N2=length(H.h)-N1-Ncrss;
     wn1=[ones(N1,1); linspace(1,0,Ncrss).'; zeros(N2,1)];
     wn2=[zeros(N1,1); linspace(0,1,Ncrss).'; ones(N2,1)];
@@ -201,6 +177,14 @@ H.h_before_removing_noisefloor=H.h;
 H.h=nh;
 
 %* measure broadband properties
+%* === Now that the noise-floor is removed re-compute the kurtosis ===
+K=IRKrt(H,BnL);
+H.krt=K.krt;
+VrKrt=K.VrKrt;
+Sndx=K.Sndx;
+Nndx=K.Nndx;
+H.Tgs=K.Tgs;
+H.Tail_ndx=K.Nndx;
 %** Spectrum
 tmp=[zeros(size(H.h)); H.h; zeros(size(H.h))];
 nft=2^ceil(log2(length(tmp)));

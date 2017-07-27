@@ -27,9 +27,10 @@ for jj=1:length(V);
     plt=median(krt,2);
     err=std(krt,[],2);
     % downsample
-    plt=resample(plt,1e3,tH(1).fs);
-    err=resample(err,1e3,tH(1).fs);
-    tt=resample(tt,1e3,tH(1).fs);
+    ntt=linspace(min(tt),max(tt),ceil(1e3*max(tt)));
+    plt=interp1(tt,plt,ntt);
+    err=interp1(tt,err,ntt);
+    tt=ntt;
     % plot
     hp=plot(tt,plt,['-']); hold on
     set(hp,'linewidth',1,'markersize',6);

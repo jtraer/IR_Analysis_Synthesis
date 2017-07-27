@@ -13,6 +13,7 @@ path(path,'Tools')
 Input_file='Input_Survey_2';        Sb_fs=4e2; % Frequency of subband envelopes in Hz
 %Input_file='Input_IR_Survey_2_OM';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
 %Input_file='Input_IRSurvey_NatStats'; Sb_fs=4e2;
+Input_file='Input_ACvsBth'; Sb_fs=4e2;
 %Input_file='Input_ObjectIRs';      Sb_fs=1e3; 
 eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 
@@ -28,6 +29,7 @@ ftp='jpg';
 
 %* == Calibrate Apparatus ==
 %** search for calibration files 
+C=[];
 if ~isempty(Cpth)
     %==> Gather a structure of paths
     Dh=[];
@@ -132,6 +134,7 @@ for jh=1:length(Dh);
         end
     end
 end
+fprintf('%d IRs analyzed\n',length(Dh));
 
 %* == Save details about CPU run time
 

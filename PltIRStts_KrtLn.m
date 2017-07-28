@@ -27,7 +27,7 @@ for jj=1:length(V);
     plt=median(krt,2);
     err=std(krt,[],2);
     % downsample
-    ntt=linspace(min(tt),max(tt),max(tt)*1e2);
+    ntt=linspace(min(tt),max(tt),max([max(tt)*1e2 10]));
     plt=interp1(tt,plt,ntt);
     err=interp1(tt,err,ntt);
     tt=ntt;

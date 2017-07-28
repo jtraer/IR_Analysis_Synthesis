@@ -32,7 +32,7 @@ ftp='jpg';
 %* == Calibrate Apparatus ==
 %** search for calibration files 
 C=[];
-if ~isempty(Cpth)
+if ~isempty(Cpth); clear C
     %==> Gather a structure of paths
     Dh=[];
     for jc=1:length(Cpth);

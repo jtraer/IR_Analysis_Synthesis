@@ -132,6 +132,7 @@ for jIR=[1:length(Dh)]
     %** ==> loop over fields in structure and write them to the JSON file (jfld)
     for jf=1:length(PltPrms); 
         fld=PltPrms{jf};
+        fprintf('Trying to extract %s from %s\n',fld,H.Path);
         eval(sprintf('vl=H.%s;',fld));
         ndx=regexp(fld,'\.'); 
         if ~isempty(ndx);

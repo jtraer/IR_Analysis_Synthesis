@@ -81,7 +81,6 @@ if ~isempty(Cpth); clear C
         audiowrite(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds),h,H.fs,'BitsPerSample',24); 
         fprintf('Saved to %s\n',H.Path);
         C(length(C)+1)=H;
-
     end
 
 %	%** save plots of calibration information

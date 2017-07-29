@@ -118,7 +118,7 @@ for jbn=1:Nbnds;
     end
     % Fit an exponential decay model
     tt=[1:length(tmp3)]/sb_fs; 
-    [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3(N2ndx),tt(N2ndx),1,1);
+    [Pft,NsFlr,Test,FVE]=FtPlyDcy(tmp3(N2ndx),tt(N2ndx),1);
     alph=Pft(2); bt=-Pft(1);
     % Do this for all the snapshots
     for jsnp=1:Nsnps
@@ -126,7 +126,7 @@ for jbn=1:Nbnds;
         snp2=abs(hilbert([zeros(1,Npts) snp zeros(1,Npts)]));  
         snp2=snp2(Npts+[1:Npts]);
         snp3=resample(snp2,sb_fs,H.fs);  
-        [sPft,snp_NsFlr,snp_Test,snp_FVE]=FtPlyDcy(snp3(N2ndx),tt(N2ndx),1,1);     
+        [sPft,snp_NsFlr,snp_Test,snp_FVE]=FtPlyDcy(snp3(N2ndx),tt(N2ndx),1);     
         snpB(jsnp)=-sPft(1);
         snpRT60(jsnp)=60/-sPft(1);
         snpDRR(jsnp)=sPft(2);
@@ -224,7 +224,7 @@ for jm=1:length(H.Modes);
     md=md(Npts+[1:Npts]);
     md=interp1([1:Npts]/H.fs,md,tt);
     % measure mode decay properties
-    [Pft,NsFlr,Test,FVE]=FtPlyDcy(md,tt,1,1);
+    [Pft,NsFlr,Test,FVE]=FtPlyDcy(md,tt,1);
     H.Modes(jm).OnPwr=Pft(2);
     H.Modes(jm).RT60=60/abs(Pft(1));
     H.Modes(jm).MnPwr=mean(20*log10(md));

@@ -11,6 +11,9 @@ path(path,'Tools')
 %* == Specify Inputs == 
 Input_file='Input_IRSurvey_NatStats';
 Input_file='Input_Survey_2';
+%Input_file='Input_IR_Survey_2';
+%Input_file='Input_IR_ControlION'; Nm='CntrlION'
+%Input_file='Input_IR_Control'; Nm='CntrlZpp'
 %Input_file='Input_ACvsBth';
 %Input_file='Input_UtahReverb';
 %Input_file='Input_ObjectIRs';

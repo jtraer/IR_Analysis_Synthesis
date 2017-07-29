@@ -115,6 +115,11 @@ for jbn=1:Nbnds;
     if length(N2ndx)<20;
         fprintf('Not enough Gaussian points: fitting decay rates to all the data\n')
         N2ndx=1:length(tmp3);
+        if length(tmp3)<20;
+            fprintf('Not enough points in time series: fitting the data at audio sampling frequency\n')
+            tmp3=tmp2;
+            sb_fs=H.fs;
+        end
     end
     % Fit an exponential decay model
     tt=[1:length(tmp3)]/sb_fs; 

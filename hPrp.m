@@ -118,6 +118,7 @@ for jbn=1:Nbnds;
         if length(tmp3)<20;
             fprintf('Not enough points in time series: fitting the data at audio sampling frequency\n')
             tmp3=tmp2;
+            N2ndx=1:length(tmp3);
             sb_fs=H.fs;
         end
     end

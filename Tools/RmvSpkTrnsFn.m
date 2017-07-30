@@ -7,10 +7,12 @@ for jc=length(C);
 end
 [Nf,ndx]=min(Nf);
 cff=C(ndx(1)).Spcff;
-cSpc=zeros(1,Nf);
+cSpc=zeros(Nf,1);
 for jc=1:length(C);
     spc=interp1([0 C(jc).Spcff C(jc).fs],[0; C(jc).spc; 0],cff);
-    cSpc=cSpc+spc/length(C);
+    size(cSpc)
+    size(spc)
+    cSpc=cSpc+spc(:)/length(C);
 end
 
 % the IRs have been filtered to remove all signal above and below the frequency bands of note (specified in Sb_fs).  Thus we cannot use these frequencies in filtering for they will explode for trivial reasons (i.e. they have been filtered out of the Calibration IRs). We will filter these away at the end anyways

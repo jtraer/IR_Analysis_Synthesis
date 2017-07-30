@@ -5,11 +5,15 @@ fs=H.fs;
 for jc=length(C);
     Nf(jc)=length(C(jc).spc);
 end
+Nf(find(Nf==0))=[]; % remove the omnidirectional IR
 [Nf,ndx]=min(Nf);
+    C(ndx(1)).Path
+    Nf
 cff=C(ndx(1)).Spcff;
 cSpc=zeros(Nf,1);
 for jc=1:length(C);
     spc=interp1([0 C(jc).Spcff C(jc).fs],[0; C(jc).spc; 0],cff);
+    C(jc).Path
     size(cSpc)
     size(spc)
     cSpc=cSpc+spc(:)/length(C);

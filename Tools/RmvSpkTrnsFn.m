@@ -2,7 +2,7 @@ function h=RmvSpkTrnsFn(H,C);
 
 h=H.h;
 fs=H.fs;
-for jc=length(C);
+for jc=1:length(C);
     Nf(jc)=length(C(jc).spc);
 end
 Nf(find(Nf==0))=[]; % remove the omnidirectional IR

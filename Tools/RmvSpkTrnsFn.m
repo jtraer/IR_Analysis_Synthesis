@@ -21,10 +21,10 @@ end
 
 % the IRs have been filtered to remove all signal above and below the frequency bands of note (specified in Sb_fs).  Thus we cannot use these frequencies in filtering for they will explode for trivial reasons (i.e. they have been filtered out of the Calibration IRs). We will filter these away at the end anyways
 % enforce the lower frequency values of the Calibration IR to have moderate values (such that they won't explode). 
-lndx=find(cff<min(C.ff)); 
+lndx=find(cff<min(C(1).ff)); 
 cSpc(lndx)=cSpc(max(lndx)+1).*(10.^linspace(2,0,length(lndx)));
 % and the upper frequencies
-undx=find(cff>max(C.ff)); 
+undx=find(cff>max(C(1).ff)); 
 cSpc(undx)=cSpc(min(undx)-1).*(10.^linspace(0,2,length(undx)));
 
 % divide the Measured IR by the Calibration IR in the frequency domain

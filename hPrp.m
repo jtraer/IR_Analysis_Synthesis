@@ -8,11 +8,11 @@ fntsz=15;
 % find data for Direct (D) and Omnidirectional (V) Speaker IRs
 if ~isempty(C);
     for jc=1:length(C);
-        dndx_t(jc)=length(regexp(C(jc).Name,'Front'));
+        dndx_t(jc)=length(regexp(C(jc).Name,'Front'))+length(regexp(C(jc).Name,'front'));
         if strcmp(H.Meta.App.AzimuthalAngle_fromFront,'180');
-            dndx_t(jc)=length(regexp(C(jc).Name,'Back'));
+            dndx_t(jc)=length(regexp(C(jc).Name,'Back'))+length(regexp(C(jc).Name,'back'));
         end
-        vndx_t(jc)=length(regexp(C(jc).Name,'Omni'));
+        vndx_t(jc)=length(regexp(C(jc).Name,'Omni'))+length(regexp(C(jc).Name,'omni'));
         chndx_t(jc)=length(regexp(C(jc).Name,'Ch'));
     end
     dndx=find(dndx_t~=0);

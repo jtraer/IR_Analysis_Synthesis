@@ -25,7 +25,7 @@ Nbnds=[4];
 %** = Frequency limits in Hz =
 flm=[50 20e3];
 % Overwrite calibration files (Do this if hPrp or any paths have been changed)
-OvrWrtCAL=0;
+OvrWrtCAL=1;
 %** filetype
 ftp='jpg';
 %ftp='epsc';

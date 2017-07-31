@@ -14,7 +14,7 @@ set(gca,'yscale','log')
 set(gca,'ylim',[min(H.ff) max(H.ff)]/1e3);
 ylabel('Frequency (kHz)')
 xlabel('Power (db)');
-title(sprintf('Total IR with zeropads - IR is %2.2fms start-to-finish',length(H.h)/H.fs*1e3));
+title(sprintf('Total IR - IR is %2.2fms start-to-finish',length(H.h)/H.fs*1e3));
 
 Nsc=length(H.Attck);
 for js=1:Nsc;

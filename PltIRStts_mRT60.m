@@ -42,6 +42,7 @@ for jj=1:length(V);
     hp=text(jj+0.1,plt+2,1.001,V(jj).name); 
     set(hp,'color',V(jj).cmp);
 end; hold off 
+set(gca,'yscale','log');
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');
 %set(gca,'xlim',[0.5*xlm(1) 1.2*xlm(2)]);
 xlabel('Class')

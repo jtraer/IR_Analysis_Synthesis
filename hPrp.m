@@ -185,27 +185,28 @@ Nndx=K.Nndx;
 H.Tgs=K.Tgs;
 H.Tail_ndx=K.Nndx;
 %** Spectrum
-tmp=[zeros(size(H.h)); H.h; zeros(size(H.h))];
-nft=2^ceil(log2(length(tmp)));
-spc=fft(tmp,nft);
-H.spc=spc(1:end/2);
-H.Spcff=[1:nft/2]*H.fs/nft;
+%tmp=[zeros(size(H.h)); H.h; zeros(size(H.h))];
+%nft=2^floor(log2(length(tmp)));
+%nft=nft/8;
+tmp=[ H.h ];
+nft=128;
+[spc,spcff]=pwelch(tmp,nft,nft/4,nft,H.fs);
+H.spc=spc;
+H.Spcff=spcff;
+%spc=fft(tmp,nft);
+%H.spc=spc(1:end/2);
+%H.Spcff=[1:nft/2]*H.fs/nft;
 %* Compute the spectrum in time windows
 ndx=min(find(abs(H.h)>prctile(abs(nh),90)));
 cnt=0;
 for jj=1:2:11; cnt=cnt+1;
     Nft=2^(jj+4);
-    tmp=[nh; zeros(2*Nft,1)];
-    Bgspc=zeros(Nft/2,1);
-    for jstrt=1:(Nft/8);
-        spc_t=tmp(ndx+jstrt-1+[0:(Nft-1)]);
-        spc_t=spc_t.*hann(length(spc_t));
-        spc=fft(spc_t,Nft); 
-        Bgspc=Bgspc+abs(spc(1:Nft/2))/(Nft/8); 
-    end
-    Attck(cnt).Spc=Bgspc(1:Nft/2);
-    Attck(cnt).SpcIntrp=interp1([1:Nft/2]*H.fs/Nft,Bgspc,ff,'spline');
-    Attck(cnt).ff=[1:Nft/2]*H.fs/Nft;
+    tmp=[H.h; zeros(2*Nft,1)];
+    spc_t=tmp(ndx-1+[0:(Nft-1)]);
+    [spc,spcff]=pwelch(spc_t,Nft/8,Nft/16,Nft,H.fs);
+    Attck(cnt).Spc=spc;
+    Attck(cnt).SpcIntrp=interp1(spcff,spc,ff,'spline');
+    Attck(cnt).ff=spcff;
     Attck(cnt).T=Nft/H.fs;
 end
 H.Attck=Attck;

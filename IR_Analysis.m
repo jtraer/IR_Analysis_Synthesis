@@ -12,8 +12,8 @@ path(path,'Tools')
 %* == Specify Inputs == 
 Input_file='Input_Survey_2';        Sb_fs=4e2; % Frequency of subband envelopes in Hz
 %Input_file='Input_IR_Survey_2_OM';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
-%Input_file='Input_IR_ControlION';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
-%Input_file='Input_IR_Control';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
+Input_file='Input_IR_ControlION';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
+Input_file='Input_IR_Control';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
 %Input_file='Input_ACvsBth';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
 %Input_file='Input_IRSurvey_NatStats'; Sb_fs=4e2;
 %Input_file='Input_ObjectIRs';      Sb_fs=1e3; 
@@ -25,7 +25,7 @@ Nbnds=[4];
 %** = Frequency limits in Hz =
 flm=[50 20e3];
 % Overwrite calibration files (Do this if hPrp or any paths have been changed)
-OvrWrtCAL=0;
+OvrWrtCAL=1;
 %** filetype
 ftp='jpg';
 %ftp='epsc';

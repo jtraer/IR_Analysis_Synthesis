@@ -202,7 +202,7 @@ cnt=0;
 for jj=1:2:11; cnt=cnt+1;
     Nft=2^(jj+4);
     tmp=[H.h; zeros(2*Nft,1)];
-    spc_t=tmp(ndx-1+[0:(Nft-1)]);
+    spc_t=tmp(ndx+[0:(Nft-1)]);
     [spc,spcff]=pwelch(spc_t,Nft/8,Nft/16,Nft,H.fs);
     Attck(cnt).Spc=spc;
     Attck(cnt).SpcIntrp=interp1(spcff,spc,ff,'spline');

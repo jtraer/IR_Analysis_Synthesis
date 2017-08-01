@@ -210,9 +210,6 @@ for jj=1:2:11; cnt=cnt+1;
     Attck(cnt).T=Nft/H.fs;
 end
 H.Attck=Attck;
-if ~isempty(regexp(H.Path,'Delta'))
-    keyboard
-end
 
 %Search for modes
 fprintf('searching for Modes...\n')

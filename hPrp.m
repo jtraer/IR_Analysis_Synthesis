@@ -77,26 +77,28 @@ end
 Npts=length(H.h);
 [fltbnk,ff,erbff]=make_erb_cos_filters(3*Npts,H.fs,Nbnds,flm(1),flm(2));
 Cgrm=generate_subbands([zeros(Npts,1); H.h; zeros(Npts,1)].',fltbnk);
+Bgrm=Cgrm;
 Cgrm=Cgrm(Npts+[1:Npts],:).'; 
 %** Remove the extreme bands
-Cgrm=Cgrm([2:(end-1)],:);
+%Cgrm=Cgrm([2:(end-1)],:);
 H.off=ff;
-H.ff=ff([2:(end-1)]);
+%H.ff=ff([2:(end-1)]);
+H.ff=ff;
 %** Repeat this for the snapshots
 Nsnps=size(H.h_snps,2);
 SnpCgrm=zeros(size(Cgrm,1),size(Cgrm,2),Nsnps);
 for jsnp=1:Nsnps;
     sCgrm=generate_subbands([zeros(Npts,1); H.h_snps(:,jsnp); zeros(Npts,1)].',fltbnk);
     sCgrm=sCgrm(Npts+[1:Npts],:).'; 
-    sCgrm=sCgrm([2:(end-1)],:);
+    %sCgrm=sCgrm([2:(end-1)],:);
     SnpCgrm(:,:,jsnp)=sCgrm;
 end
 
 %* == Scroll through cochlear channels ==
 unix(sprintf('! mkdir -p %s/Subbands_%d',H.Path,Nbnds));
-BdBndsFlg=zeros(1,Nbnds);
-for jbn=1:Nbnds; 
-    fprintf('%s: Band %d/%d\n',H.Path,jbn,Nbnds);
+BdBndsFlg=zeros(1,Nbnds+2);
+for jbn=1:(Nbnds+2); 
+    fprintf('%s: Band %d/%d\n',H.Path,jbn,(Nbnds+2));
     % Extract the subband
     tmp=Cgrm(jbn,:);
     %** record the subband peak amplitude
@@ -147,7 +149,7 @@ for jbn=1:Nbnds;
     infndx=ceil(Test*H.fs);
     if infndx>length(tmp); infndx=length(tmp)-1; end
     ntmp=tmp.*([ones(1,infndx) 10.^((-bt*[1:(length(tmp)-infndx)]/H.fs)/20)]); 
-    nCgrm(jbn,:)=ntmp;
+    Bgrm(:,jbn)=Bgrm(:,jbn).*([ones(Npts+infndx,1); 10.^((-bt*[1:(2*Npts-infndx)].'/H.fs)/20)]);
     %** compute subband properties
     %*** spectrum of the early reflections and diffuse section 
     %*** (for only the sections where the IR is above the noise floor)
@@ -168,10 +170,8 @@ for jbn=1:Nbnds;
 end
 H.BdBndsFlg=find(H.BdBndsFlg==1);
 % resynthesize the new denoised IR estimate
-nCgrm=[zeros(1,size(nCgrm,2)); nCgrm; zeros(1,size(nCgrm,2))];
-nh=collapse_subbands([zeros(size(nCgrm)) nCgrm zeros(size(nCgrm))].',fltbnk);
+nh=collapse_subbands(Bgrm,fltbnk);
 nh=nh(Npts+[1:Npts]);
-nCgrm=nCgrm(2:(end-1),:);
 H.h_before_removing_noisefloor=H.h;
 H.h=nh;
 
@@ -210,6 +210,9 @@ for jj=1:2:11; cnt=cnt+1;
     Attck(cnt).T=Nft/H.fs;
 end
 H.Attck=Attck;
+if ~isempty(regexp(H.Path,'Delta'))
+    keyboard
+end
 
 %Search for modes
 fprintf('searching for Modes...\n')

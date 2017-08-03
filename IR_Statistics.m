@@ -121,6 +121,8 @@ end
 %%print(gcf,'-depsc',sprintf('IRMFigs/Lgnd%dIRs_%s',length(BH),nw));
 %saveas(gcf,sprintf('IRMFigs/Lgnd%dIRs_%s',length(BH),nw));
 
+Meta=Meta{1:end-1};
+
 %** Write Data
 fNm=sprintf('IRstts_%s_%03d',Nm,Nbnds);
 unix(sprintf('mkdir -p %s',fNm));

@@ -121,13 +121,15 @@ end
 %%print(gcf,'-depsc',sprintf('IRMFigs/Lgnd%dIRs_%s',length(BH),nw));
 %saveas(gcf,sprintf('IRMFigs/Lgnd%dIRs_%s',length(BH),nw));
 
-Meta=Meta{1:end-1};
 
 %** Write Data
 fNm=sprintf('IRstts_%s_%03d',Nm,Nbnds);
 unix(sprintf('mkdir -p %s',fNm));
 unix(sprintf('rm -rf %s/*',fNm));
 hPltStts(Dh,Mt,Amnd,fNm);
+
+Mt=Mt{1:end-1}; % this is because WrtDt2HTML bugs if we have FileName in it
+
 %* == Write an html file to display all the data
 %** clear the output folders
 fcnt=0;

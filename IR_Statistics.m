@@ -90,7 +90,7 @@ for jh=1:length(Dh)
     M=orderfields(M);
     Dh(jh).Meta=M.Meta;
     % add a Name
-    Dh(jh).Meta.FileName=Dh(jh).name;
+    Dh(jh).Meta.FileName=Dh(jh).PthStm;
     %Mflds=fields(M);
     %for jfld=1:length(Mflds)
     %    if ~strcmp(Mflds{jfld},'Path')
@@ -128,7 +128,7 @@ unix(sprintf('mkdir -p %s',fNm));
 unix(sprintf('rm -rf %s/*',fNm));
 hPltStts(Dh,Mt,Amnd,fNm);
 
-Mt=Mt{1:end-1}; % this is because WrtDt2HTML bugs if we have FileName in it
+Mt=Mt(1:end-1); % this is because WrtDt2HTML bugs if we have FileName in it
 
 %* == Write an html file to display all the data
 %** clear the output folders

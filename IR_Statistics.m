@@ -89,6 +89,8 @@ for jh=1:length(Dh)
     M=GtMtDt(sprintf('%s/Meta.txt',Dh(jh).PthStm(1:end-4)),Mt);
     M=orderfields(M);
     Dh(jh).Meta=M.Meta;
+    % add a Name
+    Dh(jh).Meta.FileName=Dh(jh).name;
     %Mflds=fields(M);
     %for jfld=1:length(Mflds)
     %    if ~strcmp(Mflds{jfld},'Path')
@@ -96,6 +98,7 @@ for jh=1:length(Dh)
     %    end
     %end
 end
+Mt{length(Mt)+1}='Meta.FileName';
 
 %** Normalize amplitudes
 for jh=1:length(Dh)

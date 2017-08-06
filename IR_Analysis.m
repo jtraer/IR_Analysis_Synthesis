@@ -15,6 +15,7 @@ Input_file='Input_Survey_2';        Sb_fs=4e2; % Frequency of subband envelopes 
 Input_file='Input_IR_ControlION';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
 Input_file='Input_IR_Control';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
 %Input_file='Input_ACvsBth';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
+%Input_file='Input_ShrtvsLng';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
 %Input_file='Input_IRSurvey_NatStats'; Sb_fs=4e2;
 %Input_file='Input_ObjectIRs';      Sb_fs=1e3; 
 %Input_file='Input_ObjectIRs_Ext';      Sb_fs=1e3; 
@@ -25,7 +26,7 @@ Nbnds=[4];
 %** = Frequency limits in Hz =
 flm=[50 20e3];
 % Overwrite calibration files (Do this if hPrp or any paths have been changed)
-OvrWrtCAL=1;
+OvrWrtCAL=0;
 %** filetype
 ftp='jpg';
 %ftp='epsc';
@@ -131,6 +132,13 @@ for jh=1:length(Dh);
         h=[zeros(ceil(H.fs/5),1); h; zeros(ceil(H.fs/2),1)];
         if ~isempty(H.CalibrationFiles)
             audiowrite(sprintf('%s/h_cal_%03d.wav',H.Path,Nbnds),h,H.fs,'BitsPerSample',24);
+            for jsnp=1:size(H.h_snps,2);
+                h=H.h_snps(:,jsnp);
+                MaxAmp=max(abs(h));
+                h=h/MaxAmp*(1-1e-6);
+                h=[zeros(ceil(H.fs/5),1); h; zeros(ceil(H.fs/2),1)];
+                audiowrite(sprintf('%s/h_snp%03d_cal_%03dbnds.wav',H.Path,jsnp,Nbnds),h,H.fs,'BitsPerSample',24);
+            end
         else 
             audiowrite(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds),h,H.fs,'BitsPerSample',24); 
         end

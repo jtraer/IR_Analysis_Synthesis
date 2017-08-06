@@ -7,8 +7,6 @@ for jc=1:length(C);
 end
 Nf(find(Nf==0))=[]; % remove the omnidirectional IR
 [Nf,ndx]=min(Nf);
-    C(ndx(1)).Path
-    Nf
 cff=C(ndx(1)).Spcff;
 cSpc=zeros(Nf,1);
 for jc=1:length(C);
@@ -35,7 +33,9 @@ tff=[1:nft]/nft*fs;
 NH=fft(h,nft);
 NH=NH(1:nft/2);
 T=interp1([cff(:); tff(end)],[cSpc(:); cSpc(end) ],tff(1:nft/2));
-fNH=NH./abs(T(:))*mean(abs(T));
+T2=medfilt1(T,ceil(length(T)/(4*length(C(1).ff)))); % smooth to avoid deep notches in the calibration which will create audible artifacts in the output 
+T=max([T; T2]);
+fNH=NH./abs(sqrt(T(:)))*mean(abs(T)); % the sqrt is because we compute the spectrum with pwelch which computes power (i.e. amplitude squared)
 h_cal=ifft([fNH; 0; flipud(conj(fNH(2:end)))]);
 h_cal=h_cal(1:Npd);
 h=h_cal;

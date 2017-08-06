@@ -26,6 +26,10 @@ for jj=1:length(V)
     MdR=MdR(srt);
     ndx=find(diff(MdP)==0);
     MdP(ndx+1)=MdP(ndx+1)+1e-3*rand(size(ndx));
+    % sometimes OnPwr is NaN (which is not good)
+    bndx=unique([find(isnan(MdP)) find(isnan(MdR))]);
+    MdP(bndx)=[];
+    MdR(bndx)=[];
     RR=interp1(MdP,MdR,PP);
     % plot this class
     hp=plot(MdR,MdP,V(jj).mrk);

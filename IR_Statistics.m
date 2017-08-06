@@ -12,8 +12,9 @@ set(0,'DefaultFigureVisible','Off');
 Input_file='Input_Survey_2'; Nm='Tst';
 %Input_file='Input_IRSurvey_NatStats'; Nm='NtStts';
 %Input_file='Input_IR_Survey_2_OM'; Nm='RvrbStrct'
-%Input_file='Input_IR_ControlION'; Nm='CntrlION'
-Input_file='Input_IR_Control'; Nm='CntrlZpp'
+Input_file='Input_IR_ControlION'; Nm='CntrlION'
+Input_file='Input_ShrtvsLng';  Nm='ShrtvsLng'
+%Input_file='Input_IR_Control'; Nm='CntrlZpp'
 %Input_file='Input_ObjIRs'; Nm='ObjIRs'
 eval(sprintf('[Rpth,Cpth,Mt,Amnd,html_tmp]=%s;',Input_file));
 

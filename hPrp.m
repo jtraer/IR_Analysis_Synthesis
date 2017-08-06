@@ -89,6 +89,7 @@ Nsnps=size(H.h_snps,2);
 SnpCgrm=zeros(size(Cgrm,1),size(Cgrm,2),Nsnps);
 for jsnp=1:Nsnps;
     sCgrm=generate_subbands([zeros(Npts,1); H.h_snps(:,jsnp); zeros(Npts,1)].',fltbnk);
+    SnpBgrm(:,:,jsnp)=sCgrm;
     sCgrm=sCgrm(Npts+[1:Npts],:).'; 
     %sCgrm=sCgrm([2:(end-1)],:);
     SnpCgrm(:,:,jsnp)=sCgrm;
@@ -135,6 +136,7 @@ for jbn=1:(Nbnds+2);
         snpB(jsnp)=-sPft(1);
         snpRT60(jsnp)=60/-sPft(1);
         snpDRR(jsnp)=sPft(2);
+        TTest(jsnp)=snp_Test;
     end
     %** Get variances
     sdB=std(snpB);
@@ -150,6 +152,12 @@ for jbn=1:(Nbnds+2);
     if infndx>length(tmp); infndx=length(tmp)-1; end
     ntmp=tmp.*([ones(1,infndx) 10.^((-bt*[1:(length(tmp)-infndx)]/H.fs)/20)]); 
     Bgrm(:,jbn)=Bgrm(:,jbn).*([ones(Npts+infndx,1); 10.^((-bt*[1:(2*Npts-infndx)].'/H.fs)/20)]);
+    % and remove the noise floor from the snapshots
+    for jsnp=1:Nsnps
+        infndx=ceil(TTest(jsnp)*H.fs);
+        if infndx>length(tmp); infndx=length(tmp)-1; end
+        nSnpCgrm(:,jbn,jsnp)=SnpBgrm(:,jbn,jsnp).*([ones(Npts+infndx,1); 10.^((-bt*[1:(2*Npts-infndx)].'/H.fs)/20)]); 
+    end
     %** compute subband properties
     %*** spectrum of the early reflections and diffuse section 
     %*** (for only the sections where the IR is above the noise floor)
@@ -174,6 +182,11 @@ nh=collapse_subbands(Bgrm,fltbnk);
 nh=nh(Npts+[1:Npts]);
 H.h_before_removing_noisefloor=H.h;
 H.h=nh;
+for jsnp=1:Nsnps;
+    nsnp=collapse_subbands(nSnpCgrm(:,:,jsnp),fltbnk);
+    nsnp=nsnp(Npts+[1:Npts]);
+    H.h_snps(:,jsnp)=nsnp;
+end
 
 %* measure broadband properties
 %* === Now that the noise-floor is removed re-compute the kurtosis ===

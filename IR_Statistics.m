@@ -16,6 +16,7 @@ Input_file='Input_IR_ControlION'; Nm='CntrlION'
 %Input_file='Input_ShrtvsLng';  Nm='ShrtvsLng'
 Input_file='Input_IR_Control'; Nm='CntrlZpp'
 %Input_file='Input_ObjIRs'; Nm='ObjIRs'
+%Input_file='Input_ObjIRs_Ext'; Nm='ObjIRs_Ext'
 eval(sprintf('[Rpth,Cpth,Mt,Amnd,html_tmp]=%s;',Input_file));
 
 Nbnds=4;

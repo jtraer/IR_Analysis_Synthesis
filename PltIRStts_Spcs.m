@@ -27,14 +27,14 @@ for jj=1:length(V)
     %plt=interp1(Spcff,plt,nff);
     %err=interp1(Spcff,err,nff);
     % Plot
-    plt=20*log10(abs(plt));
+    plt=10*log10(abs(plt));
     hp=plot(plt,nff/1e3,'-');
     set(hp,'color',V(jj).cmp);
     hold on
-    plt=20*log10(abs(plt+err));
+    plt=10*log10(abs(plt+err));
     hp=plot(plt,nff/1e3,':');
     set(hp,'color',V(jj).cmp);
-    plt=20*log10(abs(plt-err));
+    plt=10*log10(abs(plt-err));
     hp=plot(plt,nff/1e3,':');
     set(hp,'color',V(jj).cmp);
 end; 

@@ -13,8 +13,8 @@ Input_file='Input_Survey_2'; Nm='Tst';
 %Input_file='Input_IRSurvey_NatStats'; Nm='NtStts';
 %Input_file='Input_IR_Survey_2_OM'; Nm='RvrbStrct'
 Input_file='Input_IR_ControlION'; Nm='CntrlION'
-Input_file='Input_ShrtvsLng';  Nm='ShrtvsLng'
-%Input_file='Input_IR_Control'; Nm='CntrlZpp'
+%Input_file='Input_ShrtvsLng';  Nm='ShrtvsLng'
+Input_file='Input_IR_Control'; Nm='CntrlZpp'
 %Input_file='Input_ObjIRs'; Nm='ObjIRs'
 eval(sprintf('[Rpth,Cpth,Mt,Amnd,html_tmp]=%s;',Input_file));
 
@@ -83,6 +83,7 @@ for jr=1:length(Rjct);
     end
     fprintf('%d/%d IRs rejected for %s\n',rcnt,length(Dh)+rcnt,Rjct(jr).Expr);
 end
+fprintf('%d IRs left\n',length(Dh));
 
 %* Label the Path structures
 for jh=1:length(Dh)
@@ -91,7 +92,7 @@ for jh=1:length(Dh)
     M=orderfields(M);
     Dh(jh).Meta=M.Meta;
     % add a Name
-    Dh(jh).Meta.FileName=Dh(jh).PthStm;
+    %Dh(jh).Meta.FileName=Dh(jh).PthStm;
     %Mflds=fields(M);
     %for jfld=1:length(Mflds)
     %    if ~strcmp(Mflds{jfld},'Path')
@@ -99,7 +100,7 @@ for jh=1:length(Dh)
     %    end
     %end
 end
-Mt{length(Mt)+1}='Meta.FileName';
+%Mt{length(Mt)+1}='Meta.FileName';
 
 %** Normalize amplitudes
 for jh=1:length(Dh)
@@ -122,14 +123,13 @@ end
 %%print(gcf,'-depsc',sprintf('IRMFigs/Lgnd%dIRs_%s',length(BH),nw));
 %saveas(gcf,sprintf('IRMFigs/Lgnd%dIRs_%s',length(BH),nw));
 
-
 %** Write Data
 fNm=sprintf('IRstts_%s_%03d',Nm,Nbnds);
 unix(sprintf('mkdir -p %s',fNm));
 unix(sprintf('rm -rf %s/*',fNm));
 hPltStts(Dh,Mt,Amnd,fNm);
 
-Mt=Mt(1:end-1); % this is because WrtDt2HTML bugs if we have FileName in it
+%Mt=Mt(1:end-1); % this is because WrtDt2HTML bugs if we have FileName in it
 
 %* == Write an html file to display all the data
 %** clear the output folders

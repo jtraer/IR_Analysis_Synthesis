@@ -39,26 +39,26 @@ H.Tail_ndx=K.Nndx;
 
 %* === remove the direct and omnidirectional speaker transfer function from IR time series ===
 H.h_before_removing_speaker_TF=H.h;
+CrssL=10; %crossfade length in ms
+if CrssL>2*H.Tgs*1e3;
+    CrssL=H.Tgs*1e3;
+end
+Ncrss=ceil(CrssL/1e3*H.fs);
+Ncrss=Ncrss+rem(Ncrss,2);
+GsNdx=ceil(H.Tgs*H.fs);
+N1=GsNdx-Ncrss/2;
+N2=length(H.h)-N1-Ncrss;
+wn1=[ones(N1,1); linspace(1,0,Ncrss).'; zeros(N2,1)];
+wn2=[zeros(N1,1); linspace(0,1,Ncrss).'; ones(N2,1)];
+if length(wn1)>length(H.h); % as might be the case if Tgs is the length of the IR
+    wn1=wn1(1:length(H.h));
+    wn2=wn2(1:length(H.h));
+end
 if ~isempty(V);
     h=H.h;
     h_Tail_Calibrated=RmvSpkTrnsFn(H,V);
     h_Direct_Calibrated=RmvSpkTrnsFn(H,D);
     % splice the two calibrated IR together with a crossfade
-    CrssL=10; %crossfade length in ms
-    if CrssL>2*H.Tgs*1e3;
-        CrssL=H.Tgs*1e3;
-    end
-    Ncrss=ceil(CrssL/1e3*H.fs);
-    Ncrss=Ncrss+rem(Ncrss,2);
-    GsNdx=ceil(H.Tgs*H.fs);
-    N1=GsNdx-Ncrss/2;
-    N2=length(H.h)-N1-Ncrss;
-    wn1=[ones(N1,1); linspace(1,0,Ncrss).'; zeros(N2,1)];
-    wn2=[zeros(N1,1); linspace(0,1,Ncrss).'; ones(N2,1)];
-    if length(wn1)>length(h); % as might be the case if Tgs is the length of the IR
-        wn1=wn1(1:length(h));
-        wn2=wn2(1:length(h));
-    end
     H.h=wn1.*h_Direct_Calibrated+wn2.*h_Tail_Calibrated;
     % repeat this for all the snapshots
     Nsnps=size(H.h_snps,2);
@@ -182,10 +182,13 @@ nh=collapse_subbands(Bgrm,fltbnk);
 nh=nh(Npts+[1:Npts]);
 H.h_before_removing_noisefloor=H.h;
 H.h=nh;
+% save a time series of the tail only
+H.tl=nh.*wn2;
 for jsnp=1:Nsnps;
     nsnp=collapse_subbands(nSnpCgrm(:,:,jsnp),fltbnk);
     nsnp=nsnp(Npts+[1:Npts]);
     H.h_snps(:,jsnp)=nsnp;
+    H.tl_snps(:,jsnp)=nsnp.*wn2;
 end
 
 %* measure broadband properties

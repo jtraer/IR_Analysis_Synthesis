@@ -93,6 +93,13 @@ for jPrm=1:length(PltPrms)
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_mDRR(tDh,PltPrms{jPrm},V)
     saveas(gcf,sprintf('%s/%s/DRR_m',fNm,PltPrms{jPrm}),ftp);
+    % plot RT60 vs DRR
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_RT60vDRR(tDh,PltPrms{jPrm},V)
+    saveas(gcf,sprintf('%s/%s/RT60vDRR',fNm,PltPrms{jPrm}),ftp);
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_mRT60vDRR(tDh,PltPrms{jPrm},V)
+    saveas(gcf,sprintf('%s/%s/RT60vDRR_m',fNm,PltPrms{jPrm}),ftp);
     % plot Kurtosis
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_Krt(tDh,PltPrms{jPrm},V)
@@ -100,6 +107,9 @@ for jPrm=1:length(PltPrms)
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_KrtLn(tDh,PltPrms{jPrm},V)
     saveas(gcf,sprintf('%s/%s/Krt_ln',fNm,PltPrms{jPrm}),ftp);
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_Tgs(tDh,PltPrms{jPrm},V)
+    saveas(gcf,sprintf('%s/%s/Tgs',fNm,PltPrms{jPrm}),ftp);
     % plot ER spectrum
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_SpcER(tDh,PltPrms{jPrm},V)
@@ -135,6 +145,14 @@ for jPrm=1:length(PltPrms)
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdSpcs(tDh,PltPrms{jPrm},V);
     saveas(gcf,sprintf('%s/%s/ModeSpc',fNm,PltPrms{jPrm}),ftp);
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_MdJntDts(tDh,PltPrms{jPrm},V);
+    saveas(gcf,sprintf('%s/%s/ModeJntDst',fNm,PltPrms{jPrm}),ftp);
+
+    % Check the recording quality
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_NsFlr(tDh,PltPrms{jPrm},V);
+    saveas(gcf,sprintf('%s/%s/NsFlr',fNm,PltPrms{jPrm}),ftp);
 
 %    % plot spectral entropy vs mean(RT60)
 %    % Plot spcER

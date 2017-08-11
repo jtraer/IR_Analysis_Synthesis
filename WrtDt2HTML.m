@@ -40,12 +40,19 @@ fprintf(fid2,'var stimList = [\n')
 %** => start loop over IRs (jIR)
 for jIR=[1:length(Dh)]
     load(sprintf('%s/%s',Dh(jIR).PthStm,Dh(jIR).name)); 
+    %Nbnds=length(H.ff);
+    Nbnds=length(H.ff)-2;
 
     %** =>  make a folder to save images and audio to
     FldrNm=sprintf('%s/%s',fNm,H.Path); % where to copy files
     PthNm=sprintf('%s/%s',H.Path); % what to write in the html file (which will be a level below where we are now)
     unix(sprintf('! mkdir -p %s',FldrNm));
     unix(sprintf('cp %s/*.jpg %s',H.Path,FldrNm));
+    % copy the meta-files
+    Pth2=H.Path;
+    sndx=regexp(Pth2,'/');
+    Pth2=Pth2(1:sndx(end));
+    unix(sprintf('cp %s/Meta.txt %s',Pth2,FldrNm));
 
     %** => add a comma to separate indices in the JSON
     if jIR~=1;
@@ -58,23 +65,24 @@ for jIR=[1:length(Dh)]
     %*** => This should be fixed when we want to generalize this code to other stimuli
     %*** => T0
     fprintf(fid2,',\n"T0":\t%2.3f',median(H.RT60));
+    fprintf(fid2,',\n"ch":\t%2.3f',H.Channel);
     %*** => path to audio
     %**** TODO update this to rescale volumes!!!
     tDh=dir(sprintf('%s/h*.wav',H.Path)); 
     for jh=1:length(tDh)
         unix(sprintf('cp %s/%s %s/%s',H.Path,tDh(jh).name,FldrNm,tDh(jh).name));
     end
-    t2Dh=dir(sprintf('%s/h_cal_%03d.wav',H.Path,length(H.ff))); 
-    t3Dh=dir(sprintf('%s/h_denoised_%03d.wav',H.Path,length(H.ff))); 
+    t2Dh=dir(sprintf('%s/h_cal_%03d.wav',H.Path,Nbnds)); 
+    t3Dh=dir(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds)); 
     if length(t2Dh)>0;
-        fprintf(fid2,',\n"sound":\t"%s/h_cal_%03d.wav"',PthNm,length(H.ff));
-    elseif length(t3Dh)>0;
-        fprintf(fid2,',\n"sound":\t"%s/h_denoised_%03d.wav"',PthNm,length(H.ff));
-    else 
-        fprintf(fid2,',\n"sound":\t"%s/h.wav"',PthNm,length(H.ff));
+        fprintf(fid2,',\n"sound":\t"%s/h_cal_%03d.wav"',PthNm,Nbnds);
+    else
+        if length(t3Dh)>0;
+            fprintf(fid2,',\n"sound":\t"%s/h_denoised_%03d.wav"',PthNm,Nbnds);
+        else 
+            fprintf(fid2,',\n"sound":\t"%s/h.wav"',PthNm,Nbnds);
+        end
     end
-    %*** => copy to a folder of just audio
-    %eval(sprintf('! cp %s/%s IRMAudio/Audio/%s.wav',H.Path,tDh(1).name,H.Name));
 
     %*** => convolve with a TIMIT sentence
     if length(Ds)>0;

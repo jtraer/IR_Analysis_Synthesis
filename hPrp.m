@@ -184,6 +184,7 @@ H.h_before_removing_noisefloor=H.h;
 H.h=nh;
 % save a time series of the tail only
 H.tl=nh.*wn2;
+H.tl_snps=zeros(length(nh),Nsnps);
 for jsnp=1:Nsnps;
     nsnp=collapse_subbands(nSnpCgrm(:,:,jsnp),fltbnk);
     nsnp=nsnp(Npts+[1:Npts]);

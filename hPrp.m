@@ -21,7 +21,7 @@ if ~isempty(C);
     vndx=find(vndx_t~=0);
     V=C(vndx);
     V=V(find([V.Channel]==H.Channel));
-    H.CalibrationFiles=V(1).Path;
+    H.CalibrationFiles=C(1).Path;
 else
     D=[]; V=[];
     H.CalibrationFiles=[];

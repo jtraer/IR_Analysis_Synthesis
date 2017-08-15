@@ -172,7 +172,7 @@ fprintf(fid2,'\n]');
 fclose(fid2)
 
 %* == write the HTML file ==
-unix(sprintf('cp %s %s.html',html_tmp))
+unix(sprintf('cp %s %s/%s.html',html_tmp,fNm,hNm))
 %** Delete current lines in template
 %[~,LnNdx]=unix(sprintf('sed -n ''/<img src="IRMAudio/='' tmp.html'));
 %LnNdx=str2num(LnNdx);

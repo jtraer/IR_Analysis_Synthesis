@@ -134,6 +134,13 @@ for jIR=[1:length(Dh)]
     fprintf(fid2,',\n"RT60":\t"%s/RT60.png"',PthNm);
     
     %%*** => plot spectrum
+    if strcmp(ici(1:3),'/om')
+        unix(sprintf('convert %s/Spc.jpg %s/Spc.png',H.Path,FldrNm));
+    else
+        unix(sprintf('sips -s format png %s/Spc.jpg --out %s/Spc.png',H.Path,FldrNm));
+    end
+    fprintf(fid2,',\n"RT60":\t"%s/Spc.png"',PthNm);
+
 %    unix(sprintf('sips -s format png %s/IR_AttckSpc.jpg --out %s/Spc.png',H.Path,FldrNm));
 %    fprintf(fid2,',\n"Spc":\t"%s/Spc.png"',PthNm);
 

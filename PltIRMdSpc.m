@@ -1,4 +1,4 @@
-function PltIRMdSpc(H,C)
+function PltIRMdSpc(H)
 
 % plot the spectrum
 nft=2^ceil(log2(length(H.h)));

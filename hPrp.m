@@ -205,8 +205,8 @@ H.Tail_ndx=K.Nndx;
 %tmp=[zeros(size(H.h)); H.h; zeros(size(H.h))];
 %nft=2^floor(log2(length(tmp)));
 %nft=nft/8;
-tmp=[ H.h ];
-nft=128;
+tmp=[ H.h; zeros(1024,1) ];
+nft=1024;
 [spc,spcff]=pwelch(tmp,nft,nft/4,nft,H.fs);
 H.spc=spc;
 H.Spcff=spcff;
@@ -376,8 +376,10 @@ saveas(gcf,sprintf('%s/DRR',H.Path),ftp);
 %*** Rtt
 fcnt=fcnt+1; figure(fcnt)
 PltIRMds(H,C);
-%set(gca,'fontsize',fntsz);
 saveas(gcf,sprintf('%s/Modes',H.Path),ftp);
+fcnt=fcnt+1; figure(fcnt)
+PltIRMdSpc(H,C);
+saveas(gcf,sprintf('%s/ModeSpc',H.Path),ftp);
 
 %** => plot IR phase
 fcnt=fcnt+1;figure(fcnt)

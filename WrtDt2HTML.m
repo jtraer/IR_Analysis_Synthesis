@@ -172,24 +172,25 @@ fprintf(fid2,'\n]');
 fclose(fid2)
 
 %* == write the HTML file ==
-unix(sprintf('cp %s tmp.html',html_tmp))
+unix(sprintf('cp %s %s.html',html_tmp))
 %** Delete current lines in template
 %[~,LnNdx]=unix(sprintf('sed -n ''/<img src="IRMAudio/='' tmp.html'));
 %LnNdx=str2num(LnNdx);
 %for jln=1:length(LnNdx);
 %    unix(sprintf('sed -i.bak -e ''%dd'' tmp.html',LnNdx(1)));
 %end
-%** Write new ones
-[~,LnNdx]=unix('sed -n ''/<div id="Stats">/='' tmp.html');
-LnNdx=str2num(LnNdx);
-for jPlt=1:length(PltPrms);
-    Dplt=dir(sprintf('%s/%s/*.png',fNm,PltPrms{jPlt}));
-    for jp=1:length(Dplt);
-        unix(sprintf('awk ''NR==%d{print "    <img src=\\"%s/%s\\" width=\\"300\\">"}7'' tmp.html >tmp2.html',LnNdx+1,PltPrms{jPlt},Dplt(jp).name)); 
-        unix('mv tmp2.html tmp.html')
-    end
-end
-unix(sprintf('mv tmp.html %s/%s.html',fNm,hNm))
+
+%** Write new ones (for now we comment this out but this was actually an useful stretch of code to automatically write images into the html)
+%[~,LnNdx]=unix('sed -n ''/<div id="Stats">/='' tmp.html');
+%LnNdx=str2num(LnNdx);
+%for jPlt=1:length(PltPrms);
+%    Dplt=dir(sprintf('%s/%s/*.png',fNm,PltPrms{jPlt}));
+%    for jp=1:length(Dplt);
+%        unix(sprintf('awk ''NR==%d{print "    <img src=\\"%s/%s\\" width=\\"300\\">"}7'' tmp.html >tmp2.html',LnNdx+1,PltPrms{jPlt},Dplt(jp).name)); 
+%        unix('mv tmp2.html tmp.html')
+%    end
+%end
+%unix(sprintf('mv tmp.html %s/%s.html',fNm,hNm))
 
 %* == TODO: Save this code to a summary file
 %eval(sprintf('! grep "%%\\*" %s.m > tmp.org',cfl))

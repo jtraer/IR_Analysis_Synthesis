@@ -134,9 +134,9 @@ hPltStts(Dh,Mt,Amnd,fNm);
 
 %* == Write an html file to display all the data
 %** clear the output folders
-fcnt=0;
-fcnt=fcnt+1; Flds{fcnt}='Meta.Env.Class';
-fcnt=fcnt+1; Flds{fcnt}='Meta.Env.SpaceName';
+%fcnt=0;
+%fcnt=fcnt+1; Flds{fcnt}='Meta.Env.Class';
+%fcnt=fcnt+1; Flds{fcnt}='Meta.Env.SpaceName';
 WrtDt2HTML(Dh,sprintf('%s',fNm),html_tmp,sprintf('%s',fNm),Mt,Mt,tmtpth);
 if length(Cpth)>0;
     unix(sprintf('cp %s/*.jpg %s/',Cpth(1).Pth,fNm));

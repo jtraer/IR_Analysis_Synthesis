@@ -1,4 +1,4 @@
-function H=hSynth(H,ftp);
+function hSynth(H);
 set(0,'DefaultFigureVisible','off');
 %* == hSynth.m i.e. Make synthetics ==
 %* Takes a structure of IR properties (i.e. H, output by hPrp.m), and makes a family of synthetics

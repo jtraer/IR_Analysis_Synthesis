@@ -114,6 +114,7 @@ for jh=1:length(Dh);
 end
 
 %* == add synthetic IRs
+hSynth(H);
 %* == Plot Data
 %** == TODO: specify a colormap for the global IRs to be used in plots
 %*** == TODO: rank and label

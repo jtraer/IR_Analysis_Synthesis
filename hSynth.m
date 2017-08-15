@@ -48,7 +48,7 @@ fntsz=15;
 Npts=length(H.h);
 Nbnds=length(H.ff);
 [fltbnk,ff,erbff]=make_erb_cos_filters(3*Npts,H.fs,Nbnds,H.ff(1),H.ff(end));
-Cgrm=generate_subbands([zeros(Npts,1); H.nh; zeros(Npts,1)].',fltbnk);
+Cgrm=generate_subbands([zeros(Npts,1); H.h; zeros(Npts,1)].',fltbnk);
 Cgrm=Cgrm(Npts+[1:Npts],:).'; 
 %** Remove the extreme bands
 Cgrm=Cgrm([2:(end-1)],:);
@@ -58,7 +58,7 @@ H.ff=ff([2:(end-1)]);
 CgrmP=sum(Cgrm.^2,2);
 [~,Pordr]=sort(CgrmP,'descend');
 
-tt=[1:length(H.nh)]/H.fs;
+tt=[1:length(H.h)]/H.fs;
 %* == Scroll through cochlear channels ==
 for jbn=1:Nbnds; 
     % Extract the subband
@@ -68,7 +68,7 @@ for jbn=1:Nbnds;
     tmp2=tmp2(Npts+[1:Npts]);
     % compute a new altered subband
     for jr=1:length(R)
-        R(jr).Name
+        R(jr).Name;
         %** Spectrally constant
         if strcmp('R_SpcCnst',R(jr).Name);
             Dcy=60/(H.RT60(jbn));
@@ -457,12 +457,12 @@ for js=1:length(S)
 end
 
 %* == Plot ==
-P1.h=H.nh;
+P1.h=H.h;
 P1.Name='RW';
 P1.cmp='Blues9';
 P1.Cgrm=Cgrm;
 
-sPth=sprintf('%s/Synth%03dBnds',H.Path,Nbnds);
+sPth=sprintf('%s/Synth%03dBnds',H.Path,Nbnds-2);
 unix(sprintf('mkdir -p %s',sPth));
 
 P=[orderfields(P1) orderfields(R) orderfields(S)];

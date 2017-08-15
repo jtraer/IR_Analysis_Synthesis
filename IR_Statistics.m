@@ -14,7 +14,7 @@ Input_file='Input_Survey_2'; Nm='Tst';
 %Input_file='Input_IR_Survey_2_OM'; Nm='RvrbStrct'
 Input_file='Input_IR_ControlION'; Nm='CntrlION'
 %Input_file='Input_ShrtvsLng';  Nm='ShrtvsLng'
-Input_file='Input_IR_Control'; Nm='CntrlZpp'
+%Input_file='Input_IR_Control'; Nm='CntrlZpp'
 %Input_file='Input_ObjIRs'; Nm='ObjIRs'
 %Input_file='Input_ObjIRs_Ext'; Nm='ObjIRs_Ext'
 eval(sprintf('[Rpth,Cpth,Mt,Amnd,html_tmp]=%s;',Input_file));
@@ -114,7 +114,11 @@ for jh=1:length(Dh);
 end
 
 %* == add synthetic IRs
-hSynth(H);
+for jh=1:length(Dh)
+    load(sprintf('%s/%s',Dh(jh).PthStm,Dh(jh).name))
+    fprintf('synthesizing IRs for %s\n',H.Path)
+    hSynth(H);
+end
 %* == Plot Data
 %** == TODO: specify a colormap for the global IRs to be used in plots
 %*** == TODO: rank and label

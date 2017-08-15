@@ -72,6 +72,7 @@ for jIR=[1:length(Dh)]
     for jh=1:length(tDh)
         unix(sprintf('cp %s/%s %s/%s',H.Path,tDh(jh).name,FldrNm,tDh(jh).name));
     end
+    unix(sprintf('cp -r %s/Synth%03dBnds %s/',H.Path,Nbnds,FldrNm))
     t2Dh=dir(sprintf('%s/h_cal_%03d.wav',H.Path,Nbnds)); 
     t3Dh=dir(sprintf('%s/h_denoised_%03d.wav',H.Path,Nbnds)); 
     if length(t2Dh)>0;

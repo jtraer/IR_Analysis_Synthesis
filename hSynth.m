@@ -1,45 +1,42 @@
 function H=hSynth(H,ftp);
+set(0,'DefaultFigureVisible','off');
 %* == hSynth.m i.e. Make synthetics ==
 %* Takes a structure of IR properties (i.e. H, output by hPrp.m), and makes a family of synthetics
 
-fprintf('We should add something here to manimpualte modes');
-
-set(0,'DefaultFigureVisible','off');
-
 rcnt=0;
-rcnt=rcnt+1; R(rcnt).Name='R_SpcCnst';    R(rcnt).cmp='BuPu3';
-rcnt=rcnt+1; R(rcnt).Name='R_SpcRot';    R(rcnt).cmp='BuPu3';
-rcnt=rcnt+1; R(rcnt).Name='R_Lng2';    R(rcnt).cmp='BuPu3';
-rcnt=rcnt+1; R(rcnt).Name='R_Lng3';    R(rcnt).cmp='BuPu3';
-rcnt=rcnt+1; R(rcnt).Name='R_Lng4';    R(rcnt).cmp='BuPu3';
-rcnt=rcnt+1; R(rcnt).Name='R_Lng5';    R(rcnt).cmp='BuPu3';
+%rcnt=rcnt+1; R(rcnt).Name='R_SpcCnst';    R(rcnt).cmp='BuPu3';
+%rcnt=rcnt+1; R(rcnt).Name='R_SpcRot';    R(rcnt).cmp='BuPu3';
+%rcnt=rcnt+1; R(rcnt).Name='R_Lng2';    R(rcnt).cmp='BuPu3';
+%rcnt=rcnt+1; R(rcnt).Name='R_Lng3';    R(rcnt).cmp='BuPu3';
+%rcnt=rcnt+1; R(rcnt).Name='R_Lng4';    R(rcnt).cmp='BuPu3';
+%rcnt=rcnt+1; R(rcnt).Name='R_Lng5';    R(rcnt).cmp='BuPu3';
 rcnt=rcnt+1; R(rcnt).Name='R_Shrt';    R(rcnt).cmp='BuPu3';
 %rcnt=rcnt+1; R(rcnt).Name='R_NoMod';      R(rcnt).cmp='YlGn3';
-rcnt=rcnt+1; R(rcnt).Name='R_Lin';        R(rcnt).cmp='Reds3';
-rcnt=rcnt+1; R(rcnt).Name='R_MrSym';        R(rcnt).cmp='BuPu9';
-rcnt=rcnt+1; R(rcnt).Name='R_LssSym';        R(rcnt).cmp='Reds3';
-rcnt=rcnt+1; R(rcnt).Name='R_HiSpc';        R(rcnt).cmp='BuPu9';
-rcnt=rcnt+1; R(rcnt).Name='R_LoSpc';        R(rcnt).cmp='Reds3';
-rcnt=rcnt+1; R(rcnt).Name='R_Sn';        R(rcnt).cmp='Reds3';
-rcnt=rcnt+1; R(rcnt).Name='R_Tp10';        R(rcnt).cmp='Reds3';
-rcnt=rcnt+1; R(rcnt).Name='R_Tp5';        R(rcnt).cmp='Reds3';
-rcnt=rcnt+1; R(rcnt).Name='R_RmvMds';        R(rcnt).cmp='Reds3';
-rcnt=rcnt+1; R(rcnt).Name='R_AddMds';        R(rcnt).cmp='Reds3';
+%rcnt=rcnt+1; R(rcnt).Name='R_Lin';        R(rcnt).cmp='Reds3';
+%rcnt=rcnt+1; R(rcnt).Name='R_MrSym';        R(rcnt).cmp='BuPu9';
+%rcnt=rcnt+1; R(rcnt).Name='R_LssSym';        R(rcnt).cmp='Reds3';
+%rcnt=rcnt+1; R(rcnt).Name='R_HiSpc';        R(rcnt).cmp='BuPu9';
+%rcnt=rcnt+1; R(rcnt).Name='R_LoSpc';        R(rcnt).cmp='Reds3';
+%rcnt=rcnt+1; R(rcnt).Name='R_Sn';        R(rcnt).cmp='Reds3';
+%rcnt=rcnt+1; R(rcnt).Name='R_Tp10';        R(rcnt).cmp='Reds3';
+%rcnt=rcnt+1; R(rcnt).Name='R_Tp5';        R(rcnt).cmp='Reds3';
+%rcnt=rcnt+1; R(rcnt).Name='R_RmvMds';        R(rcnt).cmp='Reds3';
+%rcnt=rcnt+1; R(rcnt).Name='R_AddMds';        R(rcnt).cmp='Reds3';
 
 scnt=0;
 scnt=scnt+1; S(scnt).Name='S_Exp';        S(scnt).cmp='Greens9';
 scnt=scnt+1; S(scnt).Name='S_Mds';        S(scnt).cmp='Greens9';
-scnt=scnt+1; S(scnt).Name='S_SbMds';        S(scnt).cmp='Greens9';
-scnt=scnt+1; S(scnt).Name='S_MvMds';        S(scnt).cmp='Greens9';
-scnt=scnt+1; S(scnt).Name='S_MdsSpcCnst';        S(scnt).cmp='Greens9';
-scnt=scnt+1; S(scnt).Name='S_MdsRndAmp';        S(scnt).cmp='Greens9';
-scnt=scnt+1; S(scnt).Name='S_MdsRndDcy';        S(scnt).cmp='Greens9';
-scnt=scnt+1; S(scnt).Name='S_FtMds';        S(scnt).cmp='Greens9';
-scnt=scnt+1; S(scnt).Name='S_LngMds2';        S(scnt).cmp='Greens9';
-scnt=scnt+1; S(scnt).Name='S_LngMds3';        S(scnt).cmp='Greens9';
-scnt=scnt+1; S(scnt).Name='S_LngMds4';        S(scnt).cmp='Greens9';
-scnt=scnt+1; S(scnt).Name='S_LwMds';        S(scnt).cmp='Greens9';
-scnt=scnt+1; S(scnt).Name='S_HiMds';        S(scnt).cmp='Greens9';
+%scnt=scnt+1; S(scnt).Name='S_SbMds';        S(scnt).cmp='Greens9';
+%scnt=scnt+1; S(scnt).Name='S_MvMds';        S(scnt).cmp='Greens9';
+%scnt=scnt+1; S(scnt).Name='S_MdsSpcCnst';        S(scnt).cmp='Greens9';
+%scnt=scnt+1; S(scnt).Name='S_MdsRndAmp';        S(scnt).cmp='Greens9';
+%scnt=scnt+1; S(scnt).Name='S_MdsRndDcy';        S(scnt).cmp='Greens9';
+%scnt=scnt+1; S(scnt).Name='S_FtMds';        S(scnt).cmp='Greens9';
+%scnt=scnt+1; S(scnt).Name='S_LngMds2';        S(scnt).cmp='Greens9';
+%scnt=scnt+1; S(scnt).Name='S_LngMds3';        S(scnt).cmp='Greens9';
+%scnt=scnt+1; S(scnt).Name='S_LngMds4';        S(scnt).cmp='Greens9';
+%scnt=scnt+1; S(scnt).Name='S_LwMds';        S(scnt).cmp='Greens9';
+%scnt=scnt+1; S(scnt).Name='S_HiMds';        S(scnt).cmp='Greens9';
 %scnt=scnt+1; S(scnt).Name='S_LinEnd';     S(scnt).cmp='Reds9';
 %scnt=scnt+1; S(scnt).Name='S_LinStrt';    S(scnt).cmp='Oranges9';
 %scnt=scnt+1; S(scnt).Name='S_SpcCnst';    S(scnt).cmp='BuPu9';
@@ -48,7 +45,7 @@ fntsz=15;
 
 %* == Compute the cochleagram ==
 %** zeropad to avoid edge effects
-Npts=length(H.nh);
+Npts=length(H.h);
 Nbnds=length(H.ff);
 [fltbnk,ff,erbff]=make_erb_cos_filters(3*Npts,H.fs,Nbnds,H.ff(1),H.ff(end));
 Cgrm=generate_subbands([zeros(Npts,1); H.nh; zeros(Npts,1)].',fltbnk);

@@ -10,7 +10,7 @@ plot(10*log10(abs(spc)),Spcff/1e3);
 hold on;
 for jm=1:length(H.Modes)
     [~,ndx]=min(abs(Spcff-H.Modes(jm).cf));
-    plot(10*log10([min(abs(spc) abs(spc(ndx)))]),Spcff(ndx)*ones(1,2),'r-');
+    plot(10*log10([min(abs(spc)) abs(spc(ndx))]),Spcff(ndx)*ones(1,2),'r-');
 end
 
 xlabel('Power (db)');

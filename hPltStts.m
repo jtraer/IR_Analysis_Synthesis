@@ -148,6 +148,9 @@ for jPrm=1:length(PltPrms)
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdJntDts(tDh,PltPrms{jPrm},V);
     saveas(gcf,sprintf('%s/%s/ModeJntDst',fNm,PltPrms{jPrm}),ftp);
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_MdJntDstSb(tDh,PltPrms{jPrm},V);
+    saveas(gcf,sprintf('%s/%s/ModeJntDstSb',fNm,PltPrms{jPrm}),ftp);
 
     % Check the recording quality
     fcnt=fcnt+1; figure(fcnt);

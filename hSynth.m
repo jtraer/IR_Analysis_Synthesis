@@ -4,39 +4,39 @@ set(0,'DefaultFigureVisible','off');
 %* Takes a structure of IR properties (i.e. H, output by hPrp.m), and makes a family of synthetics
 
 rcnt=0;
-%rcnt=rcnt+1; R(rcnt).Name='R_SpcCnst';    R(rcnt).cmp='BuPu3';
+rcnt=rcnt+1; R(rcnt).Name='R_SpcCnst';    R(rcnt).cmp='BuPu3';
 %rcnt=rcnt+1; R(rcnt).Name='R_SpcRot';    R(rcnt).cmp='BuPu3';
-%rcnt=rcnt+1; R(rcnt).Name='R_Lng2';    R(rcnt).cmp='BuPu3';
-%rcnt=rcnt+1; R(rcnt).Name='R_Lng3';    R(rcnt).cmp='BuPu3';
-%rcnt=rcnt+1; R(rcnt).Name='R_Lng4';    R(rcnt).cmp='BuPu3';
-%rcnt=rcnt+1; R(rcnt).Name='R_Lng5';    R(rcnt).cmp='BuPu3';
+rcnt=rcnt+1; R(rcnt).Name='R_Lng2';    R(rcnt).cmp='BuPu3';
+rcnt=rcnt+1; R(rcnt).Name='R_Lng3';    R(rcnt).cmp='BuPu3';
+rcnt=rcnt+1; R(rcnt).Name='R_Lng4';    R(rcnt).cmp='BuPu3';
+rcnt=rcnt+1; R(rcnt).Name='R_Lng5';    R(rcnt).cmp='BuPu3';
 rcnt=rcnt+1; R(rcnt).Name='R_Shrt';    R(rcnt).cmp='BuPu3';
 %rcnt=rcnt+1; R(rcnt).Name='R_NoMod';      R(rcnt).cmp='YlGn3';
-%rcnt=rcnt+1; R(rcnt).Name='R_Lin';        R(rcnt).cmp='Reds3';
+rcnt=rcnt+1; R(rcnt).Name='R_Lin';        R(rcnt).cmp='Reds3';
 %rcnt=rcnt+1; R(rcnt).Name='R_MrSym';        R(rcnt).cmp='BuPu9';
 %rcnt=rcnt+1; R(rcnt).Name='R_LssSym';        R(rcnt).cmp='Reds3';
-%rcnt=rcnt+1; R(rcnt).Name='R_HiSpc';        R(rcnt).cmp='BuPu9';
-%rcnt=rcnt+1; R(rcnt).Name='R_LoSpc';        R(rcnt).cmp='Reds3';
-%rcnt=rcnt+1; R(rcnt).Name='R_Sn';        R(rcnt).cmp='Reds3';
-%rcnt=rcnt+1; R(rcnt).Name='R_Tp10';        R(rcnt).cmp='Reds3';
-%rcnt=rcnt+1; R(rcnt).Name='R_Tp5';        R(rcnt).cmp='Reds3';
-%rcnt=rcnt+1; R(rcnt).Name='R_RmvMds';        R(rcnt).cmp='Reds3';
-%rcnt=rcnt+1; R(rcnt).Name='R_AddMds';        R(rcnt).cmp='Reds3';
+rcnt=rcnt+1; R(rcnt).Name='R_HiSpc';        R(rcnt).cmp='BuPu9';
+rcnt=rcnt+1; R(rcnt).Name='R_LoSpc';        R(rcnt).cmp='Reds3';
+rcnt=rcnt+1; R(rcnt).Name='R_Sn';        R(rcnt).cmp='Reds3';
+rcnt=rcnt+1; R(rcnt).Name='R_Tp10';        R(rcnt).cmp='Reds3';
+rcnt=rcnt+1; R(rcnt).Name='R_Tp5';        R(rcnt).cmp='Reds3';
+rcnt=rcnt+1; R(rcnt).Name='R_RmvMds';        R(rcnt).cmp='Reds3';
+rcnt=rcnt+1; R(rcnt).Name='R_AddMds';        R(rcnt).cmp='Reds3';
 
 scnt=0;
 scnt=scnt+1; S(scnt).Name='S_Exp';        S(scnt).cmp='Greens9';
 scnt=scnt+1; S(scnt).Name='S_Mds';        S(scnt).cmp='Greens9';
-%scnt=scnt+1; S(scnt).Name='S_SbMds';        S(scnt).cmp='Greens9';
-%scnt=scnt+1; S(scnt).Name='S_MvMds';        S(scnt).cmp='Greens9';
-%scnt=scnt+1; S(scnt).Name='S_MdsSpcCnst';        S(scnt).cmp='Greens9';
-%scnt=scnt+1; S(scnt).Name='S_MdsRndAmp';        S(scnt).cmp='Greens9';
-%scnt=scnt+1; S(scnt).Name='S_MdsRndDcy';        S(scnt).cmp='Greens9';
-%scnt=scnt+1; S(scnt).Name='S_FtMds';        S(scnt).cmp='Greens9';
-%scnt=scnt+1; S(scnt).Name='S_LngMds2';        S(scnt).cmp='Greens9';
-%scnt=scnt+1; S(scnt).Name='S_LngMds3';        S(scnt).cmp='Greens9';
-%scnt=scnt+1; S(scnt).Name='S_LngMds4';        S(scnt).cmp='Greens9';
-%scnt=scnt+1; S(scnt).Name='S_LwMds';        S(scnt).cmp='Greens9';
-%scnt=scnt+1; S(scnt).Name='S_HiMds';        S(scnt).cmp='Greens9';
+scnt=scnt+1; S(scnt).Name='S_SbMds';        S(scnt).cmp='Greens9';
+scnt=scnt+1; S(scnt).Name='S_MvMds';        S(scnt).cmp='Greens9';
+scnt=scnt+1; S(scnt).Name='S_MdsSpcCnst';        S(scnt).cmp='Greens9';
+scnt=scnt+1; S(scnt).Name='S_MdsRndAmp';        S(scnt).cmp='Greens9';
+scnt=scnt+1; S(scnt).Name='S_MdsRndDcy';        S(scnt).cmp='Greens9';
+scnt=scnt+1; S(scnt).Name='S_FtMds';        S(scnt).cmp='Greens9';
+scnt=scnt+1; S(scnt).Name='S_LngMds2';        S(scnt).cmp='Greens9';
+scnt=scnt+1; S(scnt).Name='S_LngMds3';        S(scnt).cmp='Greens9';
+scnt=scnt+1; S(scnt).Name='S_LngMds4';        S(scnt).cmp='Greens9';
+scnt=scnt+1; S(scnt).Name='S_LwMds';        S(scnt).cmp='Greens9';
+scnt=scnt+1; S(scnt).Name='S_HiMds';        S(scnt).cmp='Greens9';
 %scnt=scnt+1; S(scnt).Name='S_LinEnd';     S(scnt).cmp='Reds9';
 %scnt=scnt+1; S(scnt).Name='S_LinStrt';    S(scnt).cmp='Oranges9';
 %scnt=scnt+1; S(scnt).Name='S_SpcCnst';    S(scnt).cmp='BuPu9';
@@ -267,8 +267,8 @@ for jr=1:length(R)
     if strcmp('R_RmvMds',R(jr).Name)
         h=R(jr).h;
         for jm=1:length(H.Modes);
-            if H.Modes(jm).cf-H.Modes(jm).Wd/2>0;
-                [b,a]=iirnotch(H.Modes(jm).cf/(H.fs/2),H.Modes(jm).Wd/2/(H.fs/2));
+            if H.Modes(jm).cf-H.Modes(jm).bw/2>0;
+                [b,a]=iirnotch(H.Modes(jm).cf/(H.fs/2),H.Modes(jm).bw/2/(H.fs/2));
                 h=filtfilt(b,a,h);
             end
         end

@@ -35,8 +35,11 @@ for jj=1:length(V)
     hp=plot(MdR,MdP,V(jj).mrk);
     set(hp,'color',V(jj).cmp);
     hold on
-    hp=plot(RR,PP,'-');
-    set(hp,'color',V(jj).cmp);
+    % plot the mean
+    hp=plot(mean(MdR),mean(MdP),V(jj).mrk);
+    set(hp,'linewidth',3,'markersize',6);
+    %hp=plot(RR,PP,'-');
+    %set(hp,'color',V(jj).cmp);
 end; 
 hold off
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');

@@ -73,7 +73,7 @@ for jj=1:length(V)
     set(gca,'xscale','log')
 end;
 xlabel('Mode Onset Power (dB)')
-subplot(length(V),2,jj-1)
+subplot(length(V),2,2*jj-1)
 xlabel('Mode RT60 (s)')
 ylabel('Mode Frequency (kHz)')
 

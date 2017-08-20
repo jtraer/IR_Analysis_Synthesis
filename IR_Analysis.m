@@ -123,7 +123,7 @@ for jh=1:length(Dh);
         save(sprintf('%s/H_%03dbnds.mat',H.Path,Nbnds),'H');
         fprintf('Data saved to %s_%dBnds\n',H.Path,Nbnds);   
         %*** => Make synthetic IRs
-        %tH=hSynth(tH,ftp);
+        hSynth(H);
         %*** => save plots of IR information
         %*** => save audio
         h=H.h;

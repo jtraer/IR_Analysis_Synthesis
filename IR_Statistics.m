@@ -113,12 +113,6 @@ for jh=1:length(Dh);
     Dh(jh).MaxAmp=Dh(jh).MaxAmp/Mx;
 end
 
-%* == add synthetic IRs
-for jh=1:length(Dh)
-    load(sprintf('%s/%s',Dh(jh).PthStm,Dh(jh).name))
-    fprintf('synthesizing IRs for %s\n',H.Path)
-    hSynth(H);
-end
 %* == Plot Data
 %** == TODO: specify a colormap for the global IRs to be used in plots
 %*** == TODO: rank and label

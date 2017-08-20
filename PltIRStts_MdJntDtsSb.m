@@ -3,7 +3,7 @@ function PltIRStts_MdJntDst(Dh,PltPrm,V)
 %subplot(1,2,1); MkLgnd(V,Dh,PltPrm); hold on
 
 % Joint distribution of Mode frequencie and RT60s
-Npts=50;
+Npts=10;
 JntDst=zeros(Npts,Npts,2);
 % scroll through classes
 for jj=1:length(V)
@@ -29,14 +29,14 @@ for jj=1:length(V)
     MdOP(ndx)=[];
     % compute histogram
     JDff=e2freq(linspace(freq2e(tH(1).ff(1)),freq2e(10e3),Npts));
-    JDR=(logspace(-2,0.5,Npts));
+    JDR=(logspace(-2,0.1,Npts));
     JDOP=(linspace(-100,20,Npts));
     for jmd=1:length(Mdf);
         [~,fndx]=min(abs(JDff-Mdf(jmd)));
         [~,Rndx]=min(abs(JDR-MdR(jmd)));
         [~,OPndx]=min(abs(JDOP-MdOP(jmd)));
         JntDst(fndx,Rndx,1)=JntDst(fndx,Rndx,1)+1;
-        JntDst(fndx,Rndx,2)=JntDst(fndx,OPndx,2)+1;
+        JntDst(fndx,OPndx,2)=JntDst(fndx,OPndx,2)+1;
     end
     for jp=1:2;
         JntDst(:,:,jp)=medfilt2(JntDst(:,:,jp),[2 2]);

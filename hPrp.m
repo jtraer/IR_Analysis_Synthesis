@@ -230,8 +230,7 @@ H.Attck=Attck;
 
 %Search for modes
 fprintf('searching for Modes...\n')
-%H.Modes=hExtrctMds(H,2048);
-H.Modes=hExtrctMds(H,1024); % for now this is faster
+H.Modes=hExtrctMds(H,2048);
 fprintf('%d modes found.\n',length(H.Modes))
 unix(sprintf('! mkdir -p %s/Modes_%d',H.Path,Nbnds));
 %** fit decay properties of modes
@@ -257,6 +256,15 @@ for jm=1:length(H.Modes);
     title(sprintf('%2.2kHz, FV=%2.2f',Md.cf/1e3,Md.FV))
     saveas(gcf,sprintf('%s/Modes_%d/%03d',H.Path,Nbnds,jm),'jpg'); 
 end
+%** fit a Gaussian to mode properties
+%*** frequency of modes
+H.MdStts.pdf_f=fitdist([H.Modes.cf].','Normal');
+%*** Onset power
+H.MdStts.pdf_OP=fitdist([H.Modes.OnPwr].','Normal');
+%*** RT60
+H.MdStts.pdf_RT60=fitdist([H.Modes.RT60].','Normal');
+%*** RT60
+H.MdStts.pdf_bw=fitdist([H.Modes.bw].','Normal');
 
 % and compute spectrograms to find modes
 %[NsSgrm,Nsff,Nstt]=spectrogram(nh,32,16,32,H.fs);

@@ -49,7 +49,7 @@ for jj=1:length(V)
     [fndx2,OPndx]=ind2sub([Npts,Npts],ndx);
     % plot this class
     subplot(1,2,1)
-    contour(JDR,JDff/1e3,JntDst(:,:,1),[0.25:0.25:1]*max(max(JntDst(:,:,1))),'linecolor',V(jj).cmp)
+    contour(JDR,JDff/1e3,JntDst(:,:,1),[0.2:0.2:1]*max(max(JntDst(:,:,1))),'linecolor',V(jj).cmp)
     hold on;
     hp=plot(JDR(Rndx),JDff(fndx)/1e3,V(jj).mrk);
     set(hp,'color',V(jj).cmp);
@@ -57,12 +57,12 @@ for jj=1:length(V)
     set(hp,'color',V(jj).cmp);
     
     subplot(1,2,2)
-    contour(JDOP,JDff/1e3,JntDst(:,:,2),[0.25:0.25:1]*max(max(JntDst(:,:,1))),'linecolor',V(jj).cmp)
+    contour(JDOP,JDff/1e3,JntDst(:,:,2),[0.2:0.2:1]*max(max(JntDst(:,:,1))),'linecolor',V(jj).cmp)
     hold on;
     hp=plot(JDOP(OPndx),JDff(fndx2)/1e3,V(jj).mrk);
     set(hp,'color',V(jj).cmp);
     hp=text(JDOP(OPndx),JDff(fndx2)/1e3,1.001,V(jj).name); 
-    set(hp,'color',V(jj).cmp);
+    set(hp,'color',V(jj).cmp);    keyboard
 end;
 subplot(1,2,1)
 hold off

@@ -1,4 +1,4 @@
-function PltIRStts_MdJntDst(Dh,PltPrm,V)
+function PltIRStts_MdJntDts(Dh,PltPrm,V)
 % preallocate one data point for each class for the legend
 %subplot(1,2,1); MkLgnd(V,Dh,PltPrm); hold on
 
@@ -62,7 +62,7 @@ for jj=1:length(V)
     hp=plot(JDOP(OPndx),JDff(fndx2)/1e3,V(jj).mrk);
     set(hp,'color',V(jj).cmp);
     hp=text(JDOP(OPndx),JDff(fndx2)/1e3,1.001,V(jj).name); 
-    set(hp,'color',V(jj).cmp);    keyboard
+    set(hp,'color',V(jj).cmp);    
 end;
 subplot(1,2,1)
 hold off

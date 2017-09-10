@@ -48,6 +48,7 @@ hold on;
 hp=plot(JDR(Rndx),JDff(fndx)/1e3);
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');
 set(gca,'yscale','log')
+set(gca,'xscale','log')
 xlabel('Mode RT60 (s)')
 ylabel('Mode Frequency (kHz)')
 
@@ -58,6 +59,5 @@ hp=plot(JDOP(OPndx),JDff(fndx2)/1e3);
 hold off
 axis tight; xlm=get(gca,'xlim'); ylm=get(gca,'ylim');
 set(gca,'yscale','log')
-set(gca,'xscale','log')
 xlabel('Mode Onset Power (dB)')
 

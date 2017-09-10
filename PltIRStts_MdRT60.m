@@ -33,6 +33,8 @@ for jj=1:length(V)
     % plot the mean
     hp=plot(mean(MdR),mean(Mdf)/1e3,V(jj).mrk);
     set(hp,'linewidth',3,'markersize',6);
+    set(hp,'color',V(jj).cmp);
+
     %hp=plot(RR,ff/1e3,'-');
     %set(hp,'color',V(jj).cmp);
     %set(hp,'linewidth',3,'markersize',6);

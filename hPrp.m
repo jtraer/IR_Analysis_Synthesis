@@ -386,9 +386,15 @@ fcnt=fcnt+1; figure(fcnt)
 PltIRMds(H,C);
 saveas(gcf,sprintf('%s/Modes',H.Path),ftp);
 fcnt=fcnt+1; figure(fcnt)
+PltIRMd_pdf(H);
+saveas(gcf,sprintf('%s/Modes_Gs',H.Path),ftp);
+fcnt=fcnt+1; figure(fcnt)
 %PltIRMdSpc(H,C);
 PltIRMdSpc(H);
 saveas(gcf,sprintf('%s/ModeSpc',H.Path),ftp);
+fcnt=fcnt+1; figure(fcnt)
+PltIRMdJntDst(H);
+saveas(gcf,sprintf('%s/ModeJntDst',H.Path),ftp);
 
 %** => plot IR phase
 fcnt=fcnt+1;figure(fcnt)

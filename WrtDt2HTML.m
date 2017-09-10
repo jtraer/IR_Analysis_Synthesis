@@ -1,7 +1,7 @@
 %* == function WrtDt2HTML.m : Takes stimuli/IRs stored in a structure BH and makes a set of plots to be arranged in an interactive html  
 %** Written by James Traer - jtraer@mit.edu
 
-function WrtDt2HTML(Dh,fNm,html_tmp,hNm,PltPrms,Flds,tmtpth)
+function WrtDt2HTML(Dh,fNm,html_tmp,hNm,PltPrms,Flds,tmtpth,H_FLG)
 if nargin<5;
     tmtpth=[];
 end
@@ -84,6 +84,15 @@ for jIR=[1:length(Dh)]
             fprintf(fid2,',\n"sound":\t"%s/h.wav"',PthNm,Nbnds);
         end
     end
+
+    % if requested, copy the mat file
+    if H_FLG==1;
+      for jh=1:length(tDh)
+        unix(sprintf('cp %s/H.mat %s/',H.Path,FldrNm));
+      end
+    end
+
+
 
     %*** => convolve with a TIMIT sentence
     if length(Ds)>0;

@@ -9,6 +9,7 @@ for jj=1:length(H.Modes);
     hp=plot(H.Modes(jj).RT60*ones(1,2),(H.Modes(jj).cf+[-1 1]/2*H.Modes(jj).bw)/1e3,'-');
 end
 set(gca,'yscale','log','xscale','log');
+set(gca,'xlim',[1e-2 3])
 hold on
 hold off;
 axis tight;
@@ -24,6 +25,7 @@ for jj=1:length(H.Modes);
     hp=plot(H.Modes(jj).OnPwr*ones(1,2),(H.Modes(jj).cf+[-1 1]/2*H.Modes(jj).bw)/1e3,'-');
 end
 set(gca,'yscale','log');
+set(gca,'xlim',[-60 20])
 hold on
 hold off;
 axis tight;
@@ -35,6 +37,9 @@ subplot(2,3,3);
 hp=plot([H.Modes.RT60],[H.Modes.OnPwr],'o');
 pclr=get(hp,'color');
 set(hp,'linewidth',3);
+set(gca,'xscale','log');
+set(gca,'xlim',[0 3])
+set(gca,'ylim',[-60 0])
 hold on
 hold off;
 axis tight;

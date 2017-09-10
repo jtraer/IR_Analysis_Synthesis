@@ -20,6 +20,7 @@ Input_file='Input_IR_ControlION'; Nm='CntrlION'
 eval(sprintf('[Rpth,Cpth,Mt,Amnd,html_tmp]=%s;',Input_file));
 
 Nbnds=4;
+H_FLG=1; % if 1 this copies the H.mat files into the output folder (warning this might make a huge and unwieldy directory)
 
 pth=pwd;
 if strcmp(pth(1:3),'/om')
@@ -136,7 +137,7 @@ hPltStts(Dh,Mt,Amnd,fNm);
 %fcnt=0;
 %fcnt=fcnt+1; Flds{fcnt}='Meta.Env.Class';
 %fcnt=fcnt+1; Flds{fcnt}='Meta.Env.SpaceName';
-WrtDt2HTML(Dh,sprintf('%s',fNm),html_tmp,sprintf('%s',fNm),Mt,Mt,tmtpth);
+WrtDt2HTML(Dh,sprintf('%s',fNm),html_tmp,sprintf('%s',fNm),Mt,Mt,tmtpth,H_FLG);
 if length(Cpth)>0;
     unix(sprintf('cp %s/*.jpg %s/',Cpth(1).Pth,fNm));
 end

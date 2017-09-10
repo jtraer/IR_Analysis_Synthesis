@@ -22,8 +22,8 @@ Input_file='Input_OculusCAL'; Nm='OculusCAL'
 %Input_file='Input_Msq';
 %Input_file='Input_ShrtvsLng';
 %Input_file='Input_UtahReverb';
-%Input_file='Input_ObjectIRs';
-%Input_file='Input_ObjectIRs_Ext';
+%Input_file='Input_ObjIRs';
+%Input_file='Input_ObjIRs_Ext';
 eval(sprintf('[R,C,Mt]=%s;',Input_file));
 %==> R is a structure of recordings
 %==> C is a structure of calibration recordings

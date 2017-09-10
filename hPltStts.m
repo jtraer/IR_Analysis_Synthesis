@@ -131,11 +131,19 @@ for jPrm=1:length(PltPrms)
     PltIRStts_MdRT60(tDh,PltPrms{jPrm},V);
     saveas(gcf,sprintf('%s/%s/ModeRT60',fNm,PltPrms{jPrm}),ftp);
     fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_MdmRT60(tDh,PltPrms{jPrm},V);
+    saveas(gcf,sprintf('%s/%s/Mode_mRT60',fNm,PltPrms{jPrm}),ftp);
+    fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdRT60Pk(tDh,PltPrms{jPrm},V);
     saveas(gcf,sprintf('%s/%s/ModeRT60Pk',fNm,PltPrms{jPrm}),ftp);
+
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdOnPwr(tDh,PltPrms{jPrm},V);
     saveas(gcf,sprintf('%s/%s/ModeOnPwr',fNm,PltPrms{jPrm}),ftp);
+    fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_MdmOnPwr(tDh,PltPrms{jPrm},V);
+    saveas(gcf,sprintf('%s/%s/Mode_mOnPwr',fNm,PltPrms{jPrm}),ftp);
+
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdFrqHst(tDh,PltPrms{jPrm},V);
     saveas(gcf,sprintf('%s/%s/ModeHst',fNm,PltPrms{jPrm}),ftp);
@@ -143,14 +151,19 @@ for jPrm=1:length(PltPrms)
     PltIRStts_MdOPvsRT60(tDh,PltPrms{jPrm},V);
     saveas(gcf,sprintf('%s/%s/ModeOPvsRT60',fNm,PltPrms{jPrm}),ftp);
     fcnt=fcnt+1; figure(fcnt);
+    PltIRStts_MdmOvR(tDh,PltPrms{jPrm},V);
+    saveas(gcf,sprintf('%s/%s/Mode_mOPvsRT60',fNm,PltPrms{jPrm}),ftp);
+
+
+    fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdSpcs(tDh,PltPrms{jPrm},V);
     saveas(gcf,sprintf('%s/%s/ModeSpc',fNm,PltPrms{jPrm}),ftp);
     fcnt=fcnt+1; figure(fcnt);
     PltIRStts_MdJntDts(tDh,PltPrms{jPrm},V);
     saveas(gcf,sprintf('%s/%s/ModeJntDst',fNm,PltPrms{jPrm}),ftp);
     fcnt=fcnt+1; figure(fcnt);
-    PltIRStts_MdJntDtsSb(tDh,PltPrms{jPrm},V);
-    saveas(gcf,sprintf('%s/%s/ModeJntDstSb',fNm,PltPrms{jPrm}),ftp);
+%    PltIRStts_MdJntDtsSb(tDh,PltPrms{jPrm},V);
+%    saveas(gcf,sprintf('%s/%s/ModeJntDstSb',fNm,PltPrms{jPrm}),ftp);
 
     % Check the recording quality
     fcnt=fcnt+1; figure(fcnt);

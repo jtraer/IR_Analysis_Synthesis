@@ -51,7 +51,7 @@ set(gca,'yscale','log')
 xlabel('Mode RT60 (s)')
 ylabel('Mode Frequency (kHz)')
 
-subplot(1,2,1)
+subplot(1,2,2)
 contour(JDOP,JDff/1e3,JntDst(:,:,2))
 hold on;
 hp=plot(JDOP(OPndx),JDff(fndx2)/1e3);

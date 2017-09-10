@@ -41,7 +41,7 @@ for jj=1:length(V)
     hp=plot(mean(MdR)*ones(1,2),(mean(MdP)+[-1 1])*std(MdP)/2/1e3,'-');
     set(hp,'linewidth',1);
     set(hp,'color',V(jj).cmp);
-    hp=plot(mean(MdR)+[-1 1]*std(MdR/2),(mean(MdP)/1e3*ones(1,2),'-');
+    hp=plot(mean(MdR)+[-1 1]*std(MdR/2),mean(MdP)/1e3*ones(1,2),'-');
     set(hp,'linewidth',1);
     set(hp,'color',V(jj).cmp);
 end; 

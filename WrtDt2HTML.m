@@ -88,7 +88,7 @@ for jIR=[1:length(Dh)]
     % if requested, copy the mat file
     if H_FLG==1;
       for jh=1:length(tDh)
-        unix(sprintf('cp %s/H.mat %s/',H.Path,FldrNm));
+        unix(sprintf('cp %s/H_%03dbnds.mat %s/',H.Path,Nbnds,FldrNm));
       end
     end
 

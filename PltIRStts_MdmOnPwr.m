@@ -34,7 +34,7 @@ for jj=1:length(V)
     set(hp,'color',V(jj).cmp);
     hold on
     % and the standard deviation
-    hp=plot(mean(MdR)*ones(1,2),(mean(Mdf)+[-1 1])*std(Mdf)/2/1e3,'-');
+    hp=plot(mean(MdR)*ones(1,2),(mean(Mdf)+[-1 1]*std(Mdf)/2)/1e3,'-');
     set(hp,'linewidth',1);
     set(hp,'color',V(jj).cmp);
     hp=plot(mean(MdR)+[-1 1]*std(MdR/2),mean(Mdf)/1e3*ones(1,2),'-');

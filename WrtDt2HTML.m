@@ -48,6 +48,7 @@ for jIR=[1:length(Dh)]
     PthNm=sprintf('%s/%s',H.Path); % what to write in the html file (which will be a level below where we are now)
     unix(sprintf('! mkdir -p %s',FldrNm));
     unix(sprintf('cp %s/*.jpg %s',H.Path,FldrNm));
+    unix(sprintf('cp %s/*.eps %s',H.Path,FldrNm));
     % copy the meta-files
     Pth2=H.Path;
     sndx=regexp(Pth2,'/');

@@ -19,11 +19,14 @@ Input_file='Input_Cntrl2_ION'; Nm='Cntrl2ION'
 Input_file='Input_Cntrl2_Zipp'; Nm='Cntrl2Zpp'
 Input_file='Input_OculusCAL'; Nm='OculusCAL'
 %Input_file='Input_ACvsBth';
+Input_file='Input_Spkr';
+Input_file='Input_SpkrTst';
 %Input_file='Input_Msq';
 %Input_file='Input_ShrtvsLng';
 %Input_file='Input_UtahReverb';
 %Input_file='Input_ObjIRs';
 %Input_file='Input_ObjIRs_Ext';
+%Input_file='Input_BrdDrps';
 eval(sprintf('[R,C,Mt]=%s;',Input_file));
 %==> R is a structure of recordings
 %==> C is a structure of calibration recordings
@@ -64,15 +67,19 @@ for jh=1:length(Dh);
     fprintf('Extracting %s\n',Fllnm);
 	%*** => read the audio file
 	[rc,fr]=audioread(sprintf('%s/%s.wav',Dh(jh).PthStm,fnm));
-    %* == Load golay sequence ==
+                                %* == Load golay sequence ==
+  if ~isempty(Dh(jh).Gpth)
     load(sprintf('%s.mat',Dh(jh).Gpth)); %G
-	%*** => Check golay and recorded audio have the same sampling frequency
-	ChckSm(fr,G.fs,'fs of Golay and recording');
+    %*** => Check golay and recorded audio have the same sampling frequency
+	  ChckSm(fr,G.fs,'fs of Golay and recording');
+  else
+    G=[]
+  end
 	%*** => Scroll through channels of recording
 	for jch=1:size(rc,2); hcnt=hcnt+1;
         Fllnm_ch=sprintf('%s/ch%d',Fllnm,jch);
         eval(sprintf('!mkdir -p %s',Fllnm_ch));
-		H=hExtrct(rc(:,jch),G,Fllnm_ch);
+		H=hExtrct(rc(:,jch),fr,G,Fllnm_ch);
 		H.Name=fnm;
 		H.Path=sprintf('%s/ch%d',Fllnm,jch);
 		H.Channel=jch;

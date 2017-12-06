@@ -15,10 +15,13 @@ Input_file='Input_Survey_2';        Sb_fs=4e2; % Frequency of subband envelopes 
 Input_file='Input_IR_ControlION';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
 Input_file='Input_IR_Control';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
 Input_file='Input_ACvsBth';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
+Input_file='Input_Spkr';
+Input_file='Input_SpkrTst'; Sb_fs=4e2; 
 %Input_file='Input_ShrtvsLng';  Sb_fs=4e2; % Frequency of subband envelopes in Hz
 %Input_file='Input_IRSurvey_NatStats'; Sb_fs=4e2;
 %Input_file='Input_ObjIRs';      Sb_fs=1e3; 
 %Input_file='Input_ObjIRs_Ext';      Sb_fs=1e3; 
+%Input_file='Input_BrdDrps';      Sb_fs=1e3; 
 eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 
 %** = Number of cochlear subbands for analysis =

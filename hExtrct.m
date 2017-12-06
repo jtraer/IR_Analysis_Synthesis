@@ -1,61 +1,69 @@
-function H=hExtrct(rc,G,Pth);
+function H=hExtrct(rc,fr,G,Pth);
 %* == hExtrt.m i.e. IR extract ==
 %* Takes a waveform of recorded audio and a structure G of a golay sequence and properties and extracts the environmental IR.
 %** If no path is specified make it an empty string
-if nargin<3; Pth=''; end
+if nargin<4; Pth=''; end
 
 set(0,'DefaultFigureVisible','off');
 
-%* Match lengths of audio
-%** Find numberof completed Golay cycles and truncate accordingly
-Nrps=floor(length(rc)/G.Ng/2);
-rc=rc(1:Nrps*G.Ng*2);
+G
+isempty(G)
 
-%* Split recorded audio into sections
-rcnt=0;
-for jrp=1:Nrps
-	sc=rc((jrp-1)*2*G.Ng+[1:(2*G.Ng)]);
-	
-	%** Truncate large peaks in recorded audio
-    %*** IRs recorded in absence of noise have kurtosis ~3 (empirically determined).  Higher values are likely due to extraneous noise -- which can be more sparse.
-    cnt=0; fprintf('Rep %d: Removing large peaks...',jrp)
-    while kurtosis(sc)>5; 
-        cnt=cnt+1;
-        %*** => find peaks (probably due to noise)
-        thrsh=prctile(abs(sc),99.99-1e-4*cnt); % gradually increase the number of points to be shrunk
-        I=find(abs(sc)>thrsh); 
-        %*** => decrease magnitude of peaks ito the median value so that the noise is reduced 
-        sc(I)=sign(sc(I)).*rand(size(I))*prctile(abs(sc),50);  
-    end; fprintf('done\n')
-    %** save sections to reconstitute a de-noised time-series
-    rc_dn((jrp-1)*2*G.Ng+[1:2*G.Ng])=sc;
+if ~isempty(G)
+                %* Match lengths of audio
+  %** Find numberof completed Golay cycles and truncate accordingly
+  Nrps=floor(length(rc)/G.Ng/2);
+  rc=rc(1:Nrps*G.Ng*2);
+  %* Split recorded audio into sections
+  rcnt=0;
+  for jrp=1:Nrps
+    sc=rc((jrp-1)*2*G.Ng+[1:(2*G.Ng)]);
 
-	%* Split into complementary sections
-	scA=sc(1:G.Ng);
-	scB=sc(G.Ng+[1:G.Ng]);
+    %** Truncate large peaks in recorded audio
+      %*** IRs recorded in absence of noise have kurtosis ~3 (empirically determined).  Higher values are likely due to extraneous noise -- which can be more sparse.
+      cnt=0; fprintf('Rep %d: Removing large peaks...',jrp)
+      while kurtosis(sc)>5; 
+          cnt=cnt+1;
+          %*** => find peaks (probably due to noise)
+          thrsh=prctile(abs(sc),99.99-1e-4*cnt); % gradually increase the number of points to be shrunk
+          I=find(abs(sc)>thrsh); 
+          %*** => decrease magnitude of peaks ito the median value so that the noise is reduced 
+          sc(I)=sign(sc(I)).*rand(size(I))*prctile(abs(sc),50);  
+      end; fprintf('done\n')
+      %** save sections to reconstitute a de-noised time-series
+      rc_dn((jrp-1)*2*G.Ng+[1:2*G.Ng])=sc;
 
-	%* Extract IR snapshots
-    %** Fourier transform
-    A=fft(G.a(:),G.Ng);    
-    Ap=fft(scA(:),G.Ng);
-    B=fft(G.b(:),G.Ng);    
-    Bp=fft(scB(:),G.Ng);
-	%** Cross correlate (if the recorded signals [Ap,Bp] are conjugated the IR is flipped backwards in time)
-    AA=Ap.*conj(A);
-    BB=Bp.*conj(B);
-    aa=ifft(AA);
-    bb=ifft(BB);
-    %** Combine sequences to eliminate self-noise
-    h_snp(:,jrp)=aa+bb;
+    %* Split into complementary sections
+    scA=sc(1:G.Ng);
+    scB=sc(G.Ng+[1:G.Ng]);
+
+    %* Extract IR snapshots
+      %** Fourier transform
+      A=fft(G.a(:),G.Ng);    
+      Ap=fft(scA(:),G.Ng);
+      B=fft(G.b(:),G.Ng);    
+      Bp=fft(scB(:),G.Ng);
+    %** Cross correlate (if the recorded signals [Ap,Bp] are conjugated the IR is flipped backwards in time)
+      AA=Ap.*conj(A);
+      BB=Bp.*conj(B);
+      aa=ifft(AA);
+      bb=ifft(BB);
+      %** Combine sequences to eliminate self-noise
+      h_snp(:,jrp)=aa+bb;
+  end
+  fprintf('%s: raw IR extracted.  Saving...\n',Pth)
+else
+  % if G is empty then the raw recoridng is an IR
+  h_snp=rc(:);
+  Nrps=1;
+  rc_dn=[];
 end
-fprintf('%s: raw IR extracted.  Saving...\n',Pth)
 
 %* Average over snapshots and measure variability
 H.h=mean(h_snp,2);
 H.h_var=std(h_snp,[],2);
 H.h_snps=h_snp;
-H.fs=G.fs;
-
+H.fs=fr;
 
 %* Estimate the region that likely contains signal (beginning and end are usually noise)
 %** Plot and query user for the start and end times of the IR
@@ -165,6 +173,10 @@ H.Spcff=[1:nft/2]*H.fs/nft;
 %* Save metadata
 H.DateCreated=date;
 H.No_of_snapshots=Nrps;
+if isempty(G);
+  G.Name='';
+  G.fs=fr;
+end
 H.Golay_Code=G.Name;
 
 %* Plot and save (if a path was given)
@@ -176,7 +188,9 @@ if length(Pth)>0;
     plot([1:length(rc)]/G.fs,rc);
     %** => plot de-noised recording
     hold on
-    plot([1:length(rc)]/G.fs,rc_dn);
+    if ~isempty(rc_dn)
+      plot([1:length(rc)]/G.fs,rc_dn);
+    end 
     xlabel('Time (s)');
     ylabel('Waveform amplitude')
     title([Pth ': Recording'])

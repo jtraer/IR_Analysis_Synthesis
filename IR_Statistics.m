@@ -10,9 +10,10 @@ set(0,'DefaultFigureVisible','Off');
 
 %* == Specify Inputs == 
 Input_file='Input_Survey_2'; Nm='Tst';
-%Input_file='Input_IRSurvey_NatStats'; Nm='NtStts';
+Input_file='Input_IRSurvey_NatStats'; Nm='NtStts';
 %Input_file='Input_IR_Survey_2_OM'; Nm='RvrbStrct'
-Input_file='Input_IR_ControlION'; Nm='CntrlION'
+%Input_file='Input_IR_ControlION'; Nm='CntrlION'
+%Input_file='Input_Spkr'; Nm='Spkr';
 %Input_file='Input_ShrtvsLng';  Nm='ShrtvsLng'
 %Input_file='Input_IR_Control'; Nm='CntrlZpp'
 %Input_file='Input_ObjIRs'; Nm='ObjIRs'
@@ -26,12 +27,12 @@ pth=pwd;
 if strcmp(pth(1:3),'/om')
     tmtpth='../timit'
 else
-    tmtpth='/Users/jtraer/LabBook/ThereIsScienceToBeDone/Projects/ReverbAndPerception/timit';
+    tmtpth='~/multigore/Labbook/Projects/ReverbAndPerception/timit';
 end
 
 %** Specify Rejection Criteria
 rcnt=0;
-rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H.DateCreated)<datenum(''23-July-2017'')';
+rcnt=rcnt+1; Rjct(rcnt).Expr='datenum(H.DateCreated)<datenum(''23-July-2015'')';
 %rcnt=rcnt+1; Rjct(rcnt).Expr='length(H.Attck(3).Spc)~=256';
 
 %* ==== Load data  ====

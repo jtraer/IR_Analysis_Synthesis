@@ -7,13 +7,13 @@
 %must be compatible with playback/recording hardware
 fs=96000;       
 fs=44100;       
-fs=192000;       
+%fs=192000;       
 %** Desired length of a single Golay sequence in s.  
 %This should be longer than any IRs to be recorded.
-Lg=1;
+Lg=6;
 %** Number of repetitions
 % Noise floor in IRs due to background noise and electrical noise should decrease as \sqrt{Nrp}
-Nrp=4;
+Nrp=8;
 %** Bits per sample
 %must be compatible with playback/recording hardware
 Bts=24;

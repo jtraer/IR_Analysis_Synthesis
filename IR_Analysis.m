@@ -22,6 +22,7 @@ Input_file='Input_SpkrTst'; Sb_fs=4e2;
 %Input_file='Input_ObjIRs';      Sb_fs=1e3; 
 %Input_file='Input_ObjIRs_Ext';      Sb_fs=1e3; 
 %Input_file='Input_BrdDrps';      Sb_fs=1e3; 
+Input_file='Input_DropIRs';      Sb_fs=1e3; 
 eval(sprintf('[Rpth,Cpth,Mt]=%s;',Input_file));
 
 %** = Number of cochlear subbands for analysis =

@@ -27,6 +27,7 @@ Input_file='Input_SpkrTst';
 %Input_file='Input_ObjIRs';
 %Input_file='Input_ObjIRs_Ext';
 %Input_file='Input_BrdDrps';
+Input_file='Input_DropIRs';
 eval(sprintf('[R,C,Mt]=%s;',Input_file));
 %==> R is a structure of recordings
 %==> C is a structure of calibration recordings
